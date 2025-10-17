@@ -9,7 +9,15 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected function casts()
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'domain',
+        'status',
+    ];
+
+    protected function casts(): array
     {
         return [
             'status' => 'boolean',
