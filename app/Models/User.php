@@ -87,9 +87,8 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasDefau
         return $this->latestTeam;
     }
 
-    public function latestTeam(): BelongsTo
-    {
-        return $this->belongsTo(Team::class, 'latest_team_id');
+    public function currentTeam() {
+        return $this->belongsToMany(Team::class)->latest()->first(); // Or use session-based
     }
 
     public function canAccessTenant(Model $tenant): bool
