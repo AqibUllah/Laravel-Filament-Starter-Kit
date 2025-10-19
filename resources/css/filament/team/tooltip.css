@@ -1,0 +1,103 @@
+.es-tooltip .tippy-arrow {
+    border-color: inherit;
+}
+
+.es-tooltip .tippy-box > .tippy-arrow::before {
+    transform: scale(1.75);
+}
+
+.es-tooltip .tippy-box > .tippy-arrow::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 8px;
+    transform: scale(1.75);
+}
+
+.es-tooltip .tippy-box[data-placement^='right'] > .tippy-arrow::after {
+    left: -11px;
+    top: 0;
+    border-width: 8px 8px 8px 0;
+    border-right-color: inherit;
+}
+
+.es-tooltip .tippy-box[data-placement^='left'] > .tippy-arrow::after {
+    right: -11px;
+    top: 0;
+    border-width: 8px 0 8px 8px;
+    border-right-color: transparent;
+    border-left-color: inherit;
+}
+
+.es-tooltip .tippy-box[data-placement^='top'] > .tippy-arrow::after {
+    bottom: -11px;
+    left: 0;
+    border-width: 8px 8px 0;
+    border-right-color: transparent;
+    border-top-color: inherit;
+}
+
+.es-tooltip .tippy-box[data-placement^='bottom'] > .tippy-arrow::after {
+    top: -11px;
+    left: 0;
+    border-width: 0 8px 8px;
+    border-right-color: transparent;
+    border-bottom-color: inherit;
+}
+
+.es-tooltip .tippy-box {
+    border-radius: 8px;
+}
+
+.es-tooltip .tippy-box[data-theme~='light'] {
+    border: 1px solid #d4dde3;
+}
+
+.es-tooltip .tippy-box[data-theme~='dark'] {
+    border: 1px solid #555555;
+}
+
+.es-close-tooltip {
+    cursor: pointer;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 16px;
+    height: 16px;
+    border: 0;
+    background: none;
+    padding: 0;
+
+    &::before {
+        transform: rotate(45deg);
+    }
+
+    &::after {
+        transform: rotate(-45deg);
+    }
+
+    &::before, &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 7px;
+        width: 2px;
+        height: 12px;
+        background-color: #92a0aa;
+        transition: background-color 0.2s;
+    }
+}
+
+.es-close-tooltip:hover::before, .es-close-tooltip:hover::after {
+    background-color: #707070;
+}
+
+:is(.dark) .es-close-tooltip::before, :is(.dark) .es-close-tooltip::after {
+    background-color: #dddddd;
+}
+
+:is(.dark) .es-close-tooltip:hover::before, :is(.dark) .es-close-tooltip:hover::after {
+    background-color: #bbbbbb;
+}
