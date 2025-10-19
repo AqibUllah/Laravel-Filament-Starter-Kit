@@ -13,7 +13,9 @@ return new class extends Migration {
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('domain')->nullable();
-            $table->boolean('status');
+            $table->boolean('status')->default(true);
+            $table->text('logo')->nullable();
+            $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
