@@ -18,8 +18,11 @@ class TeamUserFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
-            'team_id' => Team::factory(),
-            'user_id' => User::factory(),
+            'user_id' => User::first()->id,
+            'team_id' => Team::factory()->create([
+                'name' => 'Super Admin Team',
+                'slug' => 'super-admin-team',
+            ]),
         ];
     }
 }

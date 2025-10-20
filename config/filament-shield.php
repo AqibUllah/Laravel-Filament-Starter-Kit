@@ -36,7 +36,7 @@ return [
     |
     */
 
-    'tenant_model' => 'App\Models\Team',
+    'tenant_model' => \App\Models\Team::class,
 
     /*
     |--------------------------------------------------------------------------

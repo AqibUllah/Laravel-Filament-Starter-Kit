@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Permission;
 use App\Models\Role;
@@ -24,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         app(\Spatie\Permission\PermissionRegistrar::class)
             ->setPermissionClass(Permission::class)
             ->setRoleClass(Role::class);
-
+        FilamentShield::prohibitDestructiveCommands($this->app->isProduction());
         //
     }
 }

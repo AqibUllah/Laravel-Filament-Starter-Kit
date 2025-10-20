@@ -18,6 +18,7 @@ class TeamFactory extends Factory
             'description' => $this->faker->text(),
             'domain' => $this->faker->word(),
             'status' => $this->faker->boolean(),
+            'owner_id' => 1,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
