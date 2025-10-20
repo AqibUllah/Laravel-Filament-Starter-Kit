@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->brandName('Laravel Filament Saas Starter Kit')
             ->id('admin')
             ->path('admin')
             ->login()
