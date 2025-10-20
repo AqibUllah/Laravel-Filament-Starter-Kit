@@ -12,6 +12,8 @@ class TeamUser extends Model
 {
     use HasFactory;
 
+    protected $table = 'team_user';
+
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
