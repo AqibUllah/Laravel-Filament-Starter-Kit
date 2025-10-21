@@ -49,8 +49,8 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/team/theme.css')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                TaskStatsWidget::class,
                 TimeTrackingWidget::class, // Add this
+                TaskStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
