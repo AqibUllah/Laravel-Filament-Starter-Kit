@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Team extends Model
 {
@@ -26,6 +27,49 @@ class Team extends Model
         return [
             'status' => 'boolean',
         ];
+    }
+
+    // ... existing code ...
+
+    public function subscription(): HasOne
+    {
+        return $this->hasOne(Subscription::class);
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscription && $this->subscription->isActive();
+    }
+
+    public function isOnTrial(): bool
+    {
+        return $this->subscription && $this->subscription->isOnTrial();
+    }
+
+    public function canAccessFeature(string $feature): bool
+    {
+        if (!$this->subscription) {
+            return false;
+        }
+
+        $planFeature = $this->subscription->plan->features()
+            ->where('name', $feature)
+            ->first();
+
+        if (!$planFeature) {
+            return false;
+        }
+
+        return (bool) $planFeature->value;
+    }
+
+    public function getRemainingTrialDays(): int
+    {
+        if (!$this->isOnTrial()) {
+            return 0;
+        }
+
+        return $this->subscription->trial_ends_at->diffInDays(now());
     }
 
     public function owner()
