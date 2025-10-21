@@ -17,7 +17,10 @@ class TeamUserFactory extends Factory
 
         $team = Team::firstOrCreate(
             ['slug' => 'super-admin-team'], // Search by unique attribute
-            ['name' => 'Super Admin Team'] // Fields to fill if not found
+            [
+                'name' => 'Super Admin Team',
+                'owner_id' => 1,
+            ] // Fields to fill if not found
         );
 
         return [
