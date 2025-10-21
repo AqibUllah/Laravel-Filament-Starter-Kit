@@ -3,9 +3,12 @@
 namespace App\Providers\Filament;
 
 use Alizharb\FilamentThemesManager\FilamentThemesManagerPlugin;
+use App\Filament\Pages\Plans;
 use App\Filament\Pages\Team\Profile as TeamProfile;
 use App\Filament\Resources\Tasks\Widgets\TimeTrackingWidget;
 use App\Filament\Widgets\TaskStatsWidget;
+use App\Http\Middleware\RedirectIfUserNotSubscribedMiddleware;
+use App\Providers\StripeBillingProvider;
 use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use App\Filament\Pages\Tenancy\RegisterTeam;
@@ -19,8 +22,6 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -38,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->spa()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -45,6 +47,13 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,
+                Plans::class
+            ])
+            ->navigationItems([
+                \Filament\Navigation\NavigationItem::make('Billing')
+                    ->url(fn (): string => route('filament.plans'))
+                    ->icon('heroicon-o-credit-card')
+                    ->sort(3),
             ])
             ->viteTheme('resources/css/filament/team/theme.css')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
@@ -62,6 +71,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+//                RedirectIfUserNotSubscribedMiddleware::class
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
@@ -76,6 +86,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->tenantBillingProvider(new StripeBillingProvider())
             ->simplePageMaxContentWidth(Width::ExtraLarge)
             ->tenant(Team::class)
             ->tenantProfile(TeamProfile::class)
