@@ -40,11 +40,14 @@
 .fi-sidebar-item:hover {
     background: rgba(255, 255, 255, 0.1) !important;
     transform: translateX(5px);
+    @apply border-l-primary-400 border-l-2;
+
 }
 
 .fi-sidebar-item-active {
     background: rgba(255, 255, 255, 0.25) !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    @apply border-l-primary-400 border-l-2;
 }
 
 .fi-sidebar-item::before {
@@ -65,6 +68,7 @@
 
 .fi-sidebar-item:hover .fi-sidebar-item-icon {
     transform: scale(1.1) rotate(5deg);
+    @apply text-primary-400;
 }
 
 .fi-sidebar-nav {
