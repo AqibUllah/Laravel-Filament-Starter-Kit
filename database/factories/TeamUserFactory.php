@@ -14,15 +14,18 @@ class TeamUserFactory extends Factory
 
     public function definition(): array
     {
+
+        $team = Team::firstOrCreate(
+            ['slug' => 'super-admin-team'], // Search by unique attribute
+            ['name' => 'Super Admin Team'] // Fields to fill if not found
+        );
+
         return [
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
-            'user_id' => User::first()->id,
-            'team_id' => Team::factory()->create([
-                'name' => 'Super Admin Team',
-                'slug' => 'super-admin-team',
-            ]),
+            'user_id' => random_int(1,10),
+            'team_id' => $team->id,
         ];
     }
 }

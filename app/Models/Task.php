@@ -83,6 +83,11 @@ class Task extends Model
         return $query->where('assigned_to', $userId);
     }
 
+    public function scopeForMe($query)
+    {
+        return $query->where('assigned_to', auth()->id());
+    }
+
     // Helper methods
     public function isOverdue(): bool
     {
