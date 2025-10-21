@@ -67,22 +67,22 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
 > 📷 **Demo Screenshot**
 >
 ### 🏠 Dashboard
-![Dashboard Screenshot](public/demo.png)
+![Dashboard Screenshot](/public/demo.png)
 
 ### 🏠 Team Profile
-![Dashboard Screenshot](public/11.JPG)
+![Team Screenshot](public/11.JPG)
 
-### 📋 Create Tasks
-![Tasks Screenshot](public/33.JPG)
+### 📋 Create Task
+![Create Task Screenshot](public/33.JPG)
 
 ### ⚙️ Roles & Permissions
 ![Roles Screenshot](public/55.JPG)
 
 ### 📋 Tasks
-![Roles Screenshot](public/44.JPG)
+![Tasks Screenshot](public/44.JPG)
 
 ### ⚙️ Theme Manager
-![Roles Screenshot](public/66.JPG)
+![Theme Manager Screenshot](public/66.JPG)
 
 ---
 
