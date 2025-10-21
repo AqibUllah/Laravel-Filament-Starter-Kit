@@ -3,5 +3,6 @@
 return [
     App\Providers\AppServiceProvider::class,
     App\Providers\Filament\AdminPanelProvider::class,
-    \CodeWithDennis\SimpleAlert\SimpleAlertServiceProvider::class
+//    App\Providers\StripeBillingProvider::class,
+    CodeWithDennis\SimpleAlert\SimpleAlertServiceProvider::class,
 ];
