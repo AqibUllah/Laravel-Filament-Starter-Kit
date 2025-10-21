@@ -4,13 +4,13 @@
 <h1 align="center">🚀 Laravel Filament SaaS Starter Kit</h1>
 
 <p align="center">
-  A powerful and extendable multi-tenant SaaS starter built with <strong>Laravel</strong> and <strong>Filament</strong> 3.x.
+  A powerful and extendable multi-tenant SaaS starter built with <strong>Laravel 12</strong> and <strong>Filament</strong> 4.x.
 </p>
 
 <p align="center">
   <img alt="PHP" src="https://img.shields.io/badge/PHP-^8.2-blue">
-  <img alt="Laravel" src="https://img.shields.io/badge/Laravel-10-red">
-  <img alt="Filament" src="https://img.shields.io/badge/Filament-^3.x-orange">
+  <img alt="Laravel" src="https://img.shields.io/badge/Laravel-12-red">
+  <img alt="Filament" src="https://img.shields.io/badge/Filament-^4.x-orange">
 </p>
 
 ---
@@ -51,8 +51,8 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
   - Fine-grained access control per team
 
 - 🧰 **Developer-Friendly**
-  - Uses Laravel's latest features (v10+)
-  - Built with Filament (v3+) — fast, beautiful admin UI
+  - Uses Laravel's latest features (v12+)
+  - Built with Filament (v4+) — fast, beautiful admin UI
   - Easily extendable with custom widgets, panels, and resources
 
 - 🌐 **Future-Proof**
@@ -66,7 +66,23 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
 
 > 📷 **Demo Screenshot**
 >
-> Replace `demo.png` with your actual UI image from `/resources/images/demo.png`
+### 🏠 Dashboard
+![Dashboard Screenshot](public/demo.png)
+
+### 🏠 Team Profile
+![Dashboard Screenshot](public/11.JPG)
+
+### 📋 Create Tasks
+![Tasks Screenshot](public/33.JPG)
+
+### ⚙️ Roles & Permissions
+![Roles Screenshot](public/55.JPG)
+
+### 📋 Tasks
+![Roles Screenshot](public/44.JPG)
+
+### ⚙️ Theme Manager
+![Roles Screenshot](public/66.JPG)
 
 ---
 
