@@ -18,8 +18,8 @@ class TimeTrackingWidget extends StatsOverviewWidget
             return [];
         }
 
-        $totalEstimated = Task::where('team_id', $currentTeam->id)->sum('estimated_hours');
-        $totalActual = Task::where('team_id', $currentTeam->id)->sum('actual_hours');
+        $totalEstimated = Task::where('team_id', $currentTeam->id)->forMe()->sum('estimated_hours');
+        $totalActual = Task::where('team_id', $currentTeam->id)->forMe()->sum('actual_hours');
         $completedTasksWithTime = Task::where('team_id', $currentTeam->id)
             ->where('status', TaskStatusEnum::Completed)
             ->whereNotNull('actual_hours')

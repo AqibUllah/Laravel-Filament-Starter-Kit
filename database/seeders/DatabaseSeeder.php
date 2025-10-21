@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TeamUserSeeder::class,
             RolePermissionSeeder::class,
+            TaskSeeder::class,
         ]);
 
     }
