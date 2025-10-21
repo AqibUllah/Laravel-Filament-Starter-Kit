@@ -67,7 +67,7 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
 > 📷 **Demo Screenshot**
 >
 ### 🏠 Dashboard
-![Dashboard Screenshot](/public/demo.png)
+![Dashboard Screenshot](https://github.com/AqibUllah/Laravel-Filament-Starter-Kit/public/demo.png)
 
 ### 🏠 Team Profile
 ![Team Screenshot](public/11.JPG)
