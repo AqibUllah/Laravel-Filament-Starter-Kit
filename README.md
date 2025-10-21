@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/AqibUllah/Laravel-Filament-Starter-Kit/images/demo.JPG" alt="Laravel Filament SaaS Starter Kit Screenshot" width="100%" />
+  <img src="public/images/demo.JPG" alt="Laravel Filament SaaS Starter Kit Screenshot" width="100%" />
 </p>
 <h1 align="center">🚀 Laravel Filament SaaS Starter Kit</h1>
 
@@ -73,13 +73,12 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
 
 ## 🛠 Tech Stack
 
-- **Laravel** 10+
-- **Filament** 3.x (Admin UI)
+- **Laravel** 12+
+- **Filament** 4.x (Admin UI)
 - **Spatie Laravel Permission** (Roles & Permissions)
 - **Filament Shield** (Permission generator)
 - **Livewire** (Dynamic components)
 - **Tailwind CSS** (Frontend)
-- **Alpine.js** (JS Interactivity)
 - **MySQL / PostgreSQL** (DB)
 
 ---
