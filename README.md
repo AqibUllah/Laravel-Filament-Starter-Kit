@@ -67,22 +67,22 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
 > 📷 **Demo Screenshot**
 >
 ### 🏠 Dashboard
-![Dashboard Screenshot](https://github.com/AqibUllah/Laravel-Filament-Starter-Kit/public/demo.png)
+![Dashboard Screenshot](public/images/demo.png)
 
 ### 🏠 Team Profile
-![Team Screenshot](public/11.JPG)
+![Team Screenshot](public/images/11.JPG)
 
 ### 📋 Create Task
-![Create Task Screenshot](public/33.JPG)
+![Create Task Screenshot](public/images/33.JPG)
 
 ### ⚙️ Roles & Permissions
-![Roles Screenshot](public/55.JPG)
+![Roles Screenshot](public/images/55.JPG)
 
 ### 📋 Tasks
-![Tasks Screenshot](public/44.JPG)
+![Tasks Screenshot](public/images/44.JPG)
 
 ### ⚙️ Theme Manager
-![Theme Manager Screenshot](public/66.JPG)
+![Theme Manager Screenshot](public/images/66.JPG)
 
 ---
 
