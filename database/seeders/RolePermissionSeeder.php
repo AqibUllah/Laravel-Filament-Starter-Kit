@@ -2,11 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
+use BezhanSalleh\FilamentShield\Support\Utils;
+use Filament\Facades\Filament;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -16,7 +20,7 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
 
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $team = Team::first();
 
@@ -24,18 +28,23 @@ class RolePermissionSeeder extends Seeder
             $this->command->error('No team found. Please seed or create a team first.');
             return;
         }
+        $admin = User::first();
+
+        // Set tenant and permissions team context to match the target team
+        app()[PermissionRegistrar::class]->setPermissionsTeamId($team->id);
 
         $super_admin_role = Role::firstOrCreate([
-            'name' => 'Super Admin',
-            'team_id' => Team::first()->id,
+            'name' => 'super_admin',
+            'team_id' => $team->id,
             'guard_name' => 'web'
         ]);
 
-        $this->command->info('✅Super Admin created successfully!');
-        $this->command->info('Email: superadmin@example.com');
-        $this->command->info('Password: password');
 
-        $admin = User::first();
+        // After creating $super_admin_role and assigning it to $admin
+        $super_admin_role->givePermissionTo(Permission::all());
+
+
+
         if (! $admin) {
             $this->command->error('No user found. Please create a user first.');
             return;
@@ -47,5 +56,15 @@ class RolePermissionSeeder extends Seeder
         if (! $team->members()->where('user_id', $admin->id)->exists()) {
             $team->members()->attach($admin->id);
         }
+
+        $this->command->info('✅Super Admin created successfully!');
+        $this->command->info('Email: superadmin@example.com');
+        $this->command->info('Password: password');
+
+        setPermissionsTeamId($team->id);
+        $super_admin_role->syncPermissions(Utils::getPermissionModel()::pluck('id'));
+
+        // Optional: Reset context (not strictly needed in a seeder)
+        app()[PermissionRegistrar::class]->setPermissionsTeamId(null);
     }
 }

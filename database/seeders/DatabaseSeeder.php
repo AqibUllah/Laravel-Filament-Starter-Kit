@@ -19,11 +19,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+        // Delete the super_admin role with null team_id created by shield:generate
+        Role::withoutGlobalScopes()
+        ->whereNull('team_id')
+        ->where('name', 'super_admin')
+        ->delete();
+
         $this->call([
             UserSeeder::class,
             TeamUserSeeder::class,
-//            RolePermissionSeeder::class,
-        Artisan::call('shield:generate --all')
+            RolePermissionSeeder::class,
         ]);
 
     }
