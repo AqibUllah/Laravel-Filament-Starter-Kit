@@ -50,6 +50,10 @@
     @apply border-l-primary-400 border-l-2;
 }
 
+.fi-active > a{
+    @apply border-l-primary-400 border-l-2;
+
+}
 .fi-sidebar-item::before {
     content: '';
     position: absolute;
