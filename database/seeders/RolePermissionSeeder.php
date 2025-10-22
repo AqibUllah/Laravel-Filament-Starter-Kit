@@ -33,6 +33,19 @@ class RolePermissionSeeder extends Seeder
         // Set tenant and permissions team context to match the target team
         app()[PermissionRegistrar::class]->setPermissionsTeamId($team->id);
 
+        $roles = [
+            'starter_member','pro_member','business_member',
+            'enterprise_member','pro_yearly_member','business_yearly_member',
+        ];
+
+        foreach ($roles as $key => $role) {
+            Role::create([
+                'name'  => $role,
+                'team_id'  => $team->id,
+                'guard_name'  => 'web',
+            ])
+        }
+
         $super_admin_role = Role::firstOrCreate([
             'name' => 'super_admin',
             'team_id' => $team->id,

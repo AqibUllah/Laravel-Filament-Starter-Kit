@@ -16,6 +16,17 @@ return new class extends Migration {
             $table->boolean('status')->default(true);
             $table->text('logo')->nullable();
             $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
+
+            // Plan Limits
+            $table->unsignedInteger('max_users')->default(3);
+            $table->unsignedInteger('max_projects')->default(5);
+            $table->unsignedBigInteger('max_storage_db')->default(104857600); // 100MB in bytes
+
+            // Feature Toggles (boolean flags)
+            $table->boolean('feature_chat')->default(false);
+            $table->boolean('feature_api_access')->default(false);
+            $table->boolean('feature_custom_domain')->default(false);
+
             $table->timestamps();
         });
     }
