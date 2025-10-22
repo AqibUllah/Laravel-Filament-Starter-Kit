@@ -24,8 +24,8 @@ class PlanSeeder extends Seeder
                 'sort_order' => 1,
                 'is_active' => true,
                 'is_featured' => false,
-                'stripe_product_id' => null,
-                'stripe_price_id' => null,
+                'stripe_product_id' => 'prod_THIE1sdI6LpM7g',
+                'stripe_price_id' => 'price_1SKjdpCdDYiPm1gGYh3L07ID',
             ],
             [
                 'name' => 'Pro',
@@ -37,8 +37,8 @@ class PlanSeeder extends Seeder
                 'sort_order' => 2,
                 'is_active' => true,
                 'is_featured' => true,
-                'stripe_product_id' => 'prod_pro_123', // Replace with actual Stripe IDs
-                'stripe_price_id' => 'price_pro_monthly_123',
+                'stripe_product_id' => 'prod_THHtCcSB1Nzife', // Replace with actual Stripe IDs
+                'stripe_price_id' => 'price_1SKjJTCdDYiPm1gGarSniU5z',
             ],
             [
                 'name' => 'Business',
