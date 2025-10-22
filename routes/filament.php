@@ -9,4 +9,4 @@ Route::get('/plans', \App\Filament\Pages\Plans::class)->name('plans');
 //Route::get('/subscription/cancel', [\App\Http\Controllers\SubscriptionController::class, 'cancel'])->name('subscription.cancel');
 
 // Webhook route
-//Route::post('/stripe/webhook', [\App\Http\Controllers\WebhookController::class, 'handleWebhook']);
+Route::post('/stripe/webhook', [\App\Http\Controllers\WebhookController::class, 'handleWebhook']);
