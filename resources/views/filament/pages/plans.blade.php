@@ -25,7 +25,7 @@
                 <x-filament::button
                     color="gray"
                     tag="a"
-                    href="{{ route('filament.admin.pages.billing') }}">
+                    href="{{ route('filament.admin.tenant.billing',['tenant' => filament()->getTenant()]) }}">
                     Manage Billing
                 </x-filament::button>
             </div>
@@ -66,11 +66,17 @@
                 <ul class="space-y-2 mb-6">
                     @foreach($plan->features as $feature)
                         <li class="flex items-center">
-                            <x-heroicon-o-check class="h-5 w-5 text-success-500 mr-2" />
-                            <span class="text-sm">
-                                {{ $feature->name }}:
+
+                            <span class="text-sm flex justify-between w-100">
+                                <span>
+                                    {{ $feature->name }}:
+                                </span>
                                 @if(is_bool($feature->value))
-                                    {{ $feature->value ? 'Yes' : 'No' }}
+                                    @if ( is_bool($feature->value) and $feature->value == 'Yes')
+                                        <x-heroicon-o-check-circle class="h-5 w-5 text-success-500" />
+                                    @elseif (is_bool($feature->value) and !$feature->value == 'No')
+                                        <x-heroicon-o-x-circle class="h-5 w-5 text-danger-500" />
+                                    @endif
                                 @else
                                     {{ $feature->value }}
                                 @endif
