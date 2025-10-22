@@ -43,7 +43,7 @@ class RolePermissionSeeder extends Seeder
                 'name'  => $role,
                 'team_id'  => $team->id,
                 'guard_name'  => 'web',
-            ])
+            ]);
         }
 
         $super_admin_role = Role::firstOrCreate([
