@@ -46,59 +46,64 @@
         {{ $this->getBillingPortalAction }}
         </x-slot>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        @foreach($this->plans as $plan)
-            <div class="border rounded-lg p-6 {{ $plan->is_featured ? 'border-primary-500 ring-2 ring-primary-500 bg-primary-100 dark:bg-gray-900' : 'border-gray-200 bg-gray-200 dark:bg-gray-800 dark:border-gray-700' }}">
-                @if($plan->is_featured)
-                    <div class="bg-primary-500 text-white text-sm font-medium px-3 py-1 rounded-full inline-block mb-4">
-                        Most Popular
-                    </div>
-                @endif
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach($this->plans as $plan)
+                <div class="{{ $this->isCurrentPlan($plan->id) ? 'rounded-3xl p-px bg-gradient-to-b from-blue-300 to-pink-300 dark:from-blue-800 dark:to-purple-800' : '' }}">
+                    <div class="border relative rounded-[calc(1.5rem-1px)] p-5 h-full flex flex-col {{ $plan->is_featured ? 'border-primary-500 ring-2 ring-primary-500 bg-primary-100 dark:bg-gray-900' : ($this->isCurrentPlan($plan->id) ? 'border-gray-200 dark:border-gray-700' : 'border-gray-200 bg-gray-200 dark:bg-gray-800 dark:border-gray-700') }}">
+                        @if($plan->is_featured)
+                            <div class="bg-primary-500 text-white text-sm font-medium px-3 py-1 rounded-full inline-block mb-4">
+                                Most Popular
+                            </div>
+                        @endif
 
-                <h3 class="text-xl font-bold">{{ $plan->name }}</h3>
-                <p class="text-gray-600 dark:text-gray-300">{{ $plan->description }}</p>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold">{{ $plan->name }}</h3>
+                            <p class="text-gray-600 dark:text-gray-300">{{ $plan->description }}</p>
 
-                <div class="my-4">
-                    <span class="text-3xl font-bold">${{ $plan->price }}</span>
-                    <span class="text-gray-600">/{{ $plan->interval }}</span>
-                </div>
+                            <div class="my-4">
+                                <span class="text-3xl font-bold">${{ $plan->price }}</span>
+                                <span class="text-gray-600">/{{ $plan->interval }}</span>
+                            </div>
 
-                <ul class="space-y-2 mb-6">
-                    @foreach($plan->features as $feature)
-                        <li class="flex items-center">
-
-                            <span class="text-sm flex justify-between w-100">
-                                <span>
-                                    {{ $feature->name }}:
-                                </span>
-                                @if(is_bool($feature->value))
-                                    @if ( is_bool($feature->value) and $feature->value == 'Yes')
-                                        <x-heroicon-o-check-circle class="h-5 w-5 text-success-500" />
-                                    @elseif (is_bool($feature->value) and !$feature->value == 'No')
-                                        <x-heroicon-o-x-circle class="h-5 w-5 text-danger-500" />
+                            <ul class="space-y-2 mb-6">
+                                @foreach($plan->features as $feature)
+                                    <li class="flex items-center">
+                                <span class="text-sm flex justify-between w-full">
+                                    <span>
+                                        {{ $feature->name }}:
+                                    </span>
+                                    @if(is_bool($feature->value))
+                                        @if (is_bool($feature->value) && $feature->value)
+                                            <x-heroicon-o-check-circle class="h-5 w-5 text-success-500" />
+                                        @else
+                                            <x-heroicon-o-x-circle class="h-5 w-5 text-danger-500" />
+                                        @endif
+                                    @else
+                                        {{ $feature->value }}
                                     @endif
-                                @else
-                                    {{ $feature->value }}
-                                @endif
-                            </span>
-                        </li>
-                    @endforeach
-                </ul>
+                                </span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
 
-                <x-filament::button
-                    wire:click="subscribe({{ $plan->id }})"
-                    class="w-full"
-                    color="{{ $plan->is_featured ? 'primary' : 'gray' }}"
-                    size="lg"
-                    :disabled="$this->isCurrentPlan($plan->id)">
-                    @if($this->isCurrentPlan($plan->id))
-                        Current Plan
-                    @else
-                        {{ $this->currentSubscription ? 'Switch Plan' : 'Get Started' }}
-                    @endif
-                </x-filament::button>
-            </div>
-        @endforeach
-    </div>
+                        <div class="mt-auto pt-4">
+                            <x-filament::button
+                                wire:click="subscribe({{ $plan->id }})"
+                                class="w-full"
+                                color="{{ $plan->is_featured ? 'primary' : 'gray' }}"
+                                size="lg"
+                                :disabled="$this->isCurrentPlan($plan->id)">
+                                @if($this->isCurrentPlan($plan->id))
+                                    Current Plan
+                                @else
+                                    {{ $this->currentSubscription ? 'Switch Plan' : 'Get Started' }}
+                                @endif
+                            </x-filament::button>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </x-filament::section>
 </x-filament-panels::page>

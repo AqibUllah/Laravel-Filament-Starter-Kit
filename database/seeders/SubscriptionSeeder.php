@@ -38,7 +38,7 @@ class SubscriptionSeeder extends Seeder
                 'team_id' => $team->id,
                 'plan_id' => $plan->id,
                 'stripe_subscription_id' => 'sub_' . Str::random(14),
-                'stripe_customer_id' => 'cus_' . Str::random(14),
+                'stripe_customer_id' => 'cus_THILz9Qx4zKqlN',
                 'status' => $status,
                 'trial_ends_at' => $status === 'trialing' ? Carbon::now()->addDays(7) : null,
                 'ends_at' => $status === 'past_due' ? Carbon::now()->addDays(15) : null,
