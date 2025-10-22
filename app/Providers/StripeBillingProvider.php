@@ -58,7 +58,7 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
 
             return redirect($session->url);
         } catch (\Exception $e) {
-            return redirect()->route('filament.admin.pages.plans')
+            return redirect()->route('filament.admin.pages.plans',['tenant' => filament()->getTenant()])
                 ->with('error', 'Unable to access billing portal: ' . $e->getMessage());
         }
     }
