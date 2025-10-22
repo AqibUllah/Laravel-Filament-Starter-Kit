@@ -23,7 +23,7 @@ class SubscriptionsTable
                     ->searchable(),
                TextColumn::make('status')
                     ->badge()
-                    ->color(fn (TaskStatusEnum $state): string => $state->getColor()),
+                    ->color(TaskStatusEnum::class),
                TextColumn::make('trial_ends_at')
                     ->dateTime()
                     ->sortable(),
