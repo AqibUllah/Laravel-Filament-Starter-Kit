@@ -226,7 +226,9 @@ return [
     |
     */
 
-    'custom_permissions' => [],
+    'custom_permissions' => [
+        'view_advanced_analytics'
+    ],
 
     /*
     |--------------------------------------------------------------------------
