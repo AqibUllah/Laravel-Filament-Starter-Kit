@@ -56,7 +56,7 @@
                 @endif
 
                 <h3 class="text-xl font-bold">{{ $plan->name }}</h3>
-                <p class="text-gray-600 mt-2">{{ $plan->description }}</p>
+                <p class="text-gray-600 dark:text-gray-300">{{ $plan->description }}</p>
 
                 <div class="my-4">
                     <span class="text-3xl font-bold">${{ $plan->price }}</span>
