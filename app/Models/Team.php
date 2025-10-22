@@ -20,6 +20,7 @@ class Team extends Model
         'status',
         'logo',
         'owner_id',
+        'current_plan_id',
     ];
 
     protected function casts(): array
@@ -31,9 +32,17 @@ class Team extends Model
 
     // ... existing code ...
 
+    // ... existing code ...
+
+    public function currentPlan()
+    {
+        return $this->belongsTo(Plan::class, 'current_plan_id');
+    }
+
     public function subscription(): HasOne
     {
-        return $this->hasOne(Subscription::class);
+        return $this->hasOne(Subscription::class)
+            ->where('status', 'active');
     }
 
     public function hasActiveSubscription(): bool

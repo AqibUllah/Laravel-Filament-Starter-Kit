@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->boolean('status')->default(true);
             $table->text('logo')->nullable();
             $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('current_plan_id')->nullable()->constrained('plans');
 
             // Plan Limits
             $table->unsignedInteger('max_users')->default(3);

@@ -9,7 +9,6 @@ use App\Models\Plan;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Stripe\Webhook;
-use Stripe\Customer;
 use Stripe\Subscription as StripeSubscription;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Exception\SignatureVerificationException;
@@ -18,6 +17,11 @@ class WebhookController extends Controller
 {
     public function handleWebhook(Request $request)
     {
+        if (app()->environment('local')) {
+            Log::info('Webhook skipped in local environment');
+            return response()->json(['status' => 'skipped_local']);
+        }
+
         $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
         $endpoint_secret = config('services.stripe.webhook_secret');
@@ -27,10 +31,8 @@ class WebhookController extends Controller
                 $payload, $sig_header, $endpoint_secret
             );
         } catch (\UnexpectedValueException $e) {
-            // Invalid payload
             return response()->json(['error' => 'Invalid payload'], Response::HTTP_BAD_REQUEST);
         } catch (SignatureVerificationException $e) {
-            // Invalid signature
             return response()->json(['error' => 'Invalid signature'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -49,14 +51,6 @@ class WebhookController extends Controller
             case 'customer.subscription.deleted':
                 $this->handleSubscriptionDeleted($event->data->object);
                 break;
-
-            case 'invoice.payment_succeeded':
-                $this->handleInvoicePaymentSucceeded($event->data->object);
-                break;
-
-            case 'invoice.payment_failed':
-                $this->handleInvoicePaymentFailed($event->data->object);
-                break;
         }
 
         return response()->json(['status' => 'success']);
@@ -66,9 +60,7 @@ class WebhookController extends Controller
     {
         Log::info('Checkout session completed', ['session_id' => $session->id]);
 
-        // Get subscription from session
         $subscription = StripeSubscription::retrieve($session->subscription);
-
         $this->handleSubscriptionUpdated($subscription);
     }
 
@@ -77,9 +69,7 @@ class WebhookController extends Controller
         $teamId = $stripeSubscription->metadata->team_id ?? null;
 
         if (!$teamId) {
-            Log::error('Webhook: No team_id in subscription metadata', [
-                'subscription_id' => $stripeSubscription->id
-            ]);
+            Log::error('Webhook: No team_id in subscription metadata');
             return;
         }
 
@@ -90,22 +80,35 @@ class WebhookController extends Controller
             return;
         }
 
-        // Find plan by Stripe price ID
         $priceId = $stripeSubscription->items->data[0]->price->id;
         $plan = Plan::where('stripe_price_id', $priceId)->first();
 
         if (!$plan) {
-            Log::error('Webhook: Plan not found for price_id', [
-                'price_id' => $priceId
-            ]);
+            Log::error('Webhook: Plan not found for price_id', ['price_id' => $priceId]);
             return;
+        }
+
+        // Check if team already has an active subscription
+        $existingActiveSubscription = Subscription::where('team_id', $team->id)
+            ->where('status', 'active')
+            ->first();
+
+        if ($existingActiveSubscription && $existingActiveSubscription->stripe_subscription_id !== $stripeSubscription->id) {
+            // Cancel the old active subscription in database
+            $existingActiveSubscription->update([
+                'status' => 'canceled',
+                'ends_at' => now(),
+                'canceled_at' => now(),
+            ]);
         }
 
         // Create or update subscription
         $subscription = Subscription::updateOrCreate(
-            ['stripe_subscription_id' => $stripeSubscription->id],
             [
-                'team_id' => $team->id,
+                'stripe_subscription_id' => $stripeSubscription->id,
+                'team_id' => $team->id
+            ],
+            [
                 'plan_id' => $plan->id,
                 'stripe_customer_id' => $stripeSubscription->customer,
                 'status' => $stripeSubscription->status,
@@ -118,14 +121,17 @@ class WebhookController extends Controller
             ]
         );
 
-        // Apply plan features to team (role/permission updates)
+        // Update team's current plan
+        $team->update(['current_plan_id' => $plan->id]);
+
+        // Apply plan features to team
         $this->applyPlanFeaturesToTeam($team, $plan);
 
-        Log::info('Webhook: Subscription updated and features applied', [
+        Log::info('Webhook: Subscription updated', [
             'team_id' => $team->id,
             'plan_id' => $plan->id,
-            'subscription_id' => $subscription->id,
-            'status' => $stripeSubscription->status
+            'status' => $stripeSubscription->status,
+            'was_plan_switch' => $existingActiveSubscription ? true : false
         ]);
     }
 
