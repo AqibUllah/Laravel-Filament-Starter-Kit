@@ -47,7 +47,7 @@ protected static string $layout = 'components.team.layout.custom-simple';
             'guard_name'  => 'web',
         ]);
 
-        $starter_plan = Plan::isFree()->first();
+        $starter_plan = Plan::where('price',0)->active()->first();
 
         // dd($starter_plan);
 
@@ -56,7 +56,7 @@ protected static string $layout = 'components.team.layout.custom-simple';
             'plan_id' => $starter_plan->id,
             'stripe_subscription_id' => null,
             'stripe_customer_id' => null,
-            'status' => true,
+            'status' => 'active',
             'trial_ends_at' => null,
             'ends_at' => null,
             'canceled_at' => null,

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Subscription extends Model
 {
@@ -26,14 +27,14 @@ class Subscription extends Model
         'canceled_at' => 'datetime',
     ];
 
-    public function team()
+    public function team():BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
-    public function plan()
+    public function plan():BelongsTo
     {
-        return $this->belongsTo(Plan::class);
+        return $this->belongsTo(Plan::class)->withoutGlobalScopes();
     }
 
     public function isActive(): bool
