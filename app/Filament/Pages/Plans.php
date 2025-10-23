@@ -66,19 +66,19 @@ class Plans extends Page implements HasActions
                 });
     }
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Action::make('billing_portal')
-                ->label('Manage Billing')
-                ->color('gray')
-                ->visible(fn () => $this->currentSubscription && $this->currentSubscription->stripe_customer_id)
-                ->action(function () {
-                    $billingProvider = app(StripeBillingProvider::class);
-                    return $billingProvider->getRouteAction();
-                })
-        ];
-    }
+//    protected function getHeaderActions(): array
+//    {
+//        return [
+//            Action::make('billing_portal')
+//                ->label('Manage Billing')
+//                ->color('gray')
+//                ->visible(fn () => $this->currentSubscription && $this->currentSubscription->stripe_customer_id)
+//                ->action(function () {
+//                    $billingProvider = app(StripeBillingProvider::class);
+//                    return $billingProvider->getRouteAction();
+//                })
+//        ];
+//    }
 
     public function subscribe($planId): void
     {

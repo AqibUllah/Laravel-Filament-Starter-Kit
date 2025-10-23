@@ -2,15 +2,16 @@
 
 namespace App\Providers;
 
+use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
 use Filament\Billing\Providers\Contracts\BillingProvider;
 use Filament\Facades\Filament;
 use Illuminate\Support\ServiceProvider;
+use Stripe\BillingPortal\Session;
 use Stripe\Stripe;
 use App\Models\Plan;
 use App\Models\Subscription;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Stripe\Checkout\Session;
 use Stripe\Customer;
 class StripeBillingProvider extends ServiceProvider implements BillingProvider
 {
@@ -34,8 +35,10 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
             $team = Filament::getTenant();
 
             if (!$team || !$team->subscription || !$team->subscription->stripe_customer_id) {
+
                 // Redirect to plans page if no subscription
-                return redirect()->route('filament.admin.pages.plans');
+                return redirect()->route('filament.admin.pages.plans')
+                    ->with(['warning' => 'error here']);
             }
 
             // Redirect to Stripe Customer Portal
@@ -55,9 +58,10 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
                 'customer' => $team->subscription->stripe_customer_id,
                 'return_url' => Filament::getUrl(), // Return to Filament dashboard
             ]);
-
             return redirect($session->url);
         } catch (\Exception $e) {
+            SimpleAlert::make('example')
+                ->description('This is the description');
             return redirect()->route('filament.admin.pages.plans',['tenant' => filament()->getTenant()])
                 ->with('error', 'Unable to access billing portal: ' . $e->getMessage());
         }
