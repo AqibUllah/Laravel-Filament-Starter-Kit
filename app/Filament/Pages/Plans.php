@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Plan;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Providers\StripeBillingProvider;
 use BackedEnum;
@@ -38,28 +39,18 @@ class Plans extends Page implements HasActions
 
     public function mount(): void
     {
-        // $this->plans = Plan::where('is_active', true)
-        //     ->orderBy('sort_order')
-        //     ->get();
-
-        $this->plans = DB::table('plans')
-        ->select(
-            'plans.*',
-            DB::raw('JSON_ARRAYAGG(JSON_OBJECT("id", plan_features.id, "name", plan_features.name, "value", plan_features.value)) as features')
-        )
-        ->leftJoin('plan_features', 'plans.id', '=', 'plan_features.plan_id')
-        ->where('plans.is_active', true)
-        ->groupBy('plans.id')
-        ->orderBy('plans.sort_order')
-        ->get();
-
-
-            // dd($this->plans);
+         $this->plans = Plan::with(['features'])
+            ->where('is_active', true)
+             ->orderBy('sort_order')
+             ->get();
 
         // Get current team's subscription
         $team = Filament::getTenant();
+
         if ($team) {
-            $this->currentSubscription = $team->subscription;
+            $this->currentSubscription = Subscription::where('team_id',$team->id)
+                ->where('status','active')
+                ->first();
         }
     }
 
@@ -68,7 +59,7 @@ class Plans extends Page implements HasActions
           return  Action::make('billing_portal')
                 ->label('Manage Billing')
                 ->color('gray')
-//                ->visible(fn () => $this->currentSubscription && $this->currentSubscription->stripe_customer_id)
+                ->visible(fn () => $this->currentSubscription && $this->currentSubscription->stripe_customer_id)
                 ->action(function () {
                     $billingProvider = app(StripeBillingProvider::class);
                     return $billingProvider->getRouteAction();
@@ -106,7 +97,6 @@ class Plans extends Page implements HasActions
         try {
             $billingProvider = app(StripeBillingProvider::class);
             $checkoutSession = $billingProvider->createCheckoutSession($plan, $team, $user);
-
             // Redirect to Stripe Checkout
             $this->redirect($checkoutSession->url);
 
