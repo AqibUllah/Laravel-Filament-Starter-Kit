@@ -14,7 +14,9 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Concerns\InteractsWithHeaderActions;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use UnitEnum;
 
 class Plans extends Page implements HasActions
@@ -25,6 +27,10 @@ class Plans extends Page implements HasActions
     protected static bool $shouldRegisterNavigation = true;
     protected static string | UnitEnum | null $navigationGroup = 'Billing';
 
+    protected static bool $isScopedToTenant = false;
+
+    // \Filament\Resource\Resource::scopeToTenant(false);
+
     protected string $view = 'filament.pages.plans';
 
     public $plans;
@@ -32,9 +38,23 @@ class Plans extends Page implements HasActions
 
     public function mount(): void
     {
-        $this->plans = Plan::where('is_active', true)
-            ->orderBy('sort_order')
-            ->get();
+        // $this->plans = Plan::where('is_active', true)
+        //     ->orderBy('sort_order')
+        //     ->get();
+
+        $this->plans = DB::table('plans')
+        ->select(
+            'plans.*',
+            DB::raw('JSON_ARRAYAGG(JSON_OBJECT("id", plan_features.id, "name", plan_features.name, "value", plan_features.value)) as features')
+        )
+        ->leftJoin('plan_features', 'plans.id', '=', 'plan_features.plan_id')
+        ->where('plans.is_active', true)
+        ->groupBy('plans.id')
+        ->orderBy('plans.sort_order')
+        ->get();
+
+
+            // dd($this->plans);
 
         // Get current team's subscription
         $team = Filament::getTenant();

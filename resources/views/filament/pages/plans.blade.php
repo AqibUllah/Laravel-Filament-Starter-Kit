@@ -66,7 +66,7 @@
                             </div>
 
                             <ul class="space-y-2 mb-6">
-                                @foreach($plan->features as $feature)
+                                @foreach(json_decode($plan->features) as $feature)
                                     <li class="flex items-center">
                                 <span class="text-sm flex justify-between w-full">
                                     <span>

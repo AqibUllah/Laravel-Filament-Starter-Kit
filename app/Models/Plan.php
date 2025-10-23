@@ -44,10 +44,16 @@ class Plan extends Model
         return $this->belongsTo(Team::class);
     }
 
-    public function isFree(): bool
+    public function scopeIsFree($query)
     {
-        return $this->price == 0;
+        return $query->where('price', '==', 0)
+        ->where('is_active','=',true);
     }
+
+    // public function isFree($query): bool
+    // {
+    //     return $this->price == 0 && $this->is_active;
+    // }
 
     public function getPriceInCents(): int
     {
