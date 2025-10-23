@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\PlanWithoutTenantScope;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
+#[ScopedBy([PlanWithoutTenantScope::class])]
 class Plan extends Model
 {
     use HasFactory;
@@ -31,7 +37,7 @@ class Plan extends Model
 
     public function features(): HasMany
     {
-        return $this->hasMany(PlanFeature::class);
+        return $this->hasMany(PlanFeature::class)->withoutGlobalScopes();
     }
 
     public function subscriptions(): HasMany
@@ -44,10 +50,16 @@ class Plan extends Model
         return $this->belongsTo(Team::class);
     }
 
-    public function scopeIsFree($query)
+    #[Scope]
+    public function isFree(Builder $query): void
     {
-        return $query->where('price', '==', 0)
-        ->where('is_active','=',true);
+        $query->where('price', 0);
+    }
+
+    #[Scope]
+    public function active(Builder $query): void
+    {
+        $query->where('is_active',true);
     }
 
     // public function isFree($query): bool
