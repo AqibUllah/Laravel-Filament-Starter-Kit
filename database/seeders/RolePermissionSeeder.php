@@ -41,14 +41,14 @@ class RolePermissionSeeder extends Seeder
         foreach ($roles as $key => $role) {
             Role::create([
                 'name'  => $role,
-                'team_id'  => $team->id,
+                // 'team_id'  => $team->id,
                 'guard_name'  => 'web',
             ]);
         }
 
         $super_admin_role = Role::firstOrCreate([
             'name' => 'super_admin',
-            'team_id' => $team->id,
+            // 'team_id' => $team->id,
             'guard_name' => 'web'
         ]);
 

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         // Delete the super_admin role with null team_id created by shield:generate
         Role::withoutGlobalScopes()
-        ->whereNull('team_id')
+        // ->whereNull('team_id')
         ->where('name', 'super_admin')
         ->delete();
 
