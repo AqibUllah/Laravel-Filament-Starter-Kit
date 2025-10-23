@@ -42,7 +42,7 @@ class Team extends Model
     public function subscription(): HasOne
     {
         return $this->hasOne(Subscription::class)
-            ->where('status', 'active');
+            ->where('status', 'active')->withoutGlobalScopes();
     }
 
     public function hasActiveSubscription(): bool
