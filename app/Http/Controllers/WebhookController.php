@@ -196,7 +196,7 @@ class WebhookController extends Controller
     private function applyPlanFeaturesToTeam(Team $team, Plan $plan)
     {
         // Get plan features
-        $features = $plan->features()->pluck(column: 'value', 'name');
+        $features = $plan->features()->pluck( 'value', 'name');
 
         // Update team limits based on plan features
         $team->update([
