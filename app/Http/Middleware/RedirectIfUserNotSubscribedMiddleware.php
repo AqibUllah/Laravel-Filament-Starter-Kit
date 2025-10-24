@@ -20,6 +20,7 @@ class RedirectIfUserNotSubscribedMiddleware
         }
 
         $team = Filament::getTenant();
+        setPermissionsTeamId($team->id);
 
         // Allow access if team has active subscription or is on trial
         if ($team->hasActiveSubscription() || $team->isOnTrial()) {
@@ -41,6 +42,6 @@ class RedirectIfUserNotSubscribedMiddleware
         ->body('Please subscribe to access the features.')->send();
 
         // Redirect to plans page if not subscribed
-        return redirect()->route('filament.admin.pages.plans',['tenant' => filament()->getTenant()])->with('error', 'Please subscribe to access the features.');
+        return redirect()->route('filament.admin.pages.plans',['tenant' => $team])->with('error', 'Please subscribe to access the features.');
     }
 }
