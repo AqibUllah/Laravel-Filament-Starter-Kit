@@ -8,7 +8,10 @@ use App\Models\Plan;
 use BackedEnum;
 use Filament\Pages\Page;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Stripe\Checkout\Session;
 use Stripe\Subscription as StripeSubscription;
 use Stripe\Stripe;
@@ -250,7 +253,7 @@ class SubscriptionSuccess extends Page
         ]);
 
         // Update team permissions/roles
-        $this->updateTeamPermissions($team, $features);
+        $this->updateTeamPermissions($team, $features,$plan);
 
         \Log::info('Plan features applied to team', [
             'team_id' => $team->id,
@@ -274,8 +277,15 @@ class SubscriptionSuccess extends Page
         }
     }
 
-    private function updateTeamPermissions(Team $team, $features)
+    private function updateTeamPermissions(Team $team, $features, Plan $plan)
     {
+        // Step 1: Remove special characters (keep letters, numbers, spaces)
+        $plan_name = preg_replace('/[^A-Za-z0-9 ]/', '', $plan->name);
+
+        // Step 2: Replace spaces with underscores & Concatenate "_plan" or any suffix
+        $final = Str::of($plan_name)->lower()->replace(' ', '_') . '_member';
+        auth()->user()->assignRole($final);
+
         // Implement your specific role/permission logic here
         foreach ($team->members as $member) {
             // Your role assignment logic
@@ -293,7 +303,10 @@ class SubscriptionSuccess extends Page
             }
         }
 
-        \Log::info('Team permissions updated', [
+
+        Artisan::call('optimize');
+
+        Log::info('Team permissions updated', [
             'team_id' => $team->id,
             'users_count' => $team->members->count()
         ]);

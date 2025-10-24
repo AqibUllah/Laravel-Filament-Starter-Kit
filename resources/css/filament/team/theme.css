@@ -13,6 +13,9 @@
 @source '../../../../resources/views/filament/**/*';
 @source '../../../../resources/views/components/**/*';
 
+@source '../../../../vendor/codewithdennis/filament-simple-alert/resources/**/*.blade.php';
+@source inline('animate-{spin,pulse,bounce}');
+
 .es-file-upload.document-logo > div {
     @apply w-48;
 }

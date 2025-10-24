@@ -1,5 +1,7 @@
 <?php
 
+use App\Filament\Pages\Plans;
+
 return [
 
     /*
@@ -191,7 +193,7 @@ return [
         'subject' => 'class',
         'prefix' => 'view',
         'exclude' => [
-            \Filament\Pages\Dashboard::class,
+            Plans::class
         ],
     ],
 

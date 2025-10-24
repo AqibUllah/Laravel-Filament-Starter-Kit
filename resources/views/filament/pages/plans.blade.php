@@ -1,16 +1,4 @@
-@php
-use \Filament\Notifications\Notification;
-@endphp
 <x-filament-panels::page>
-    @if (session('error'))
-        {{  Notification::make('error')
-        ->inline()
-        ->danger()
-        ->body(session('error'))
-        ->icon('heroicon-o-exclamation-triangle')
-        ->title('Error') }}
-    @endif
-
     {{-- Current Subscription Status --}}
     @if($this->currentSubscription)
         <x-filament::section class="mb-8">

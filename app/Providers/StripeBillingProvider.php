@@ -12,6 +12,7 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Checkout\Session as CheckoutSession;
 use Stripe\Customer;
 class StripeBillingProvider extends ServiceProvider implements BillingProvider
 {
@@ -37,7 +38,7 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
             if (!$team || !$team->subscription || !$team->subscription->stripe_customer_id) {
 
                 // Redirect to plans page if no subscription
-                return redirect()->route('filament.admin.pages.plans')
+                return redirect()->route('filament.admin.pages.plans',['tenant' => $team])
                     ->with(['warning' => 'error here']);
             }
 
@@ -72,7 +73,7 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
     {
         $customer = $this->getOrCreateStripeCustomer($team, $user);
 
-        $checkoutSession = Session::create([
+        $checkoutSession = CheckoutSession::create([
             'customer' => $customer->id,
             'payment_method_types' => ['card'],
             'line_items' => [[
