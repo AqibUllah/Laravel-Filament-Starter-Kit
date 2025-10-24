@@ -13,6 +13,7 @@ use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use App\Filament\Pages\Tenancy\RegisterTeam;
 use App\Models\Team;
+use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -51,7 +52,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 \Filament\Navigation\NavigationItem::make('Billing')
-                    ->url(fn (): string => route('filament.plans'))
+                    ->url(fn (): string => route('filament.admin.tenant.billing',['tenant' => filament()->getTenant()]))
                     ->icon('heroicon-o-credit-card')
                     ->sort(3),
             ])
@@ -71,7 +72,6 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-//                RedirectIfUserNotSubscribedMiddleware::class
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
@@ -88,6 +88,14 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->tenantBillingProvider(new StripeBillingProvider())
             ->simplePageMaxContentWidth(Width::ExtraLarge)
+            ->tenantMiddleware([
+                RedirectIfUserNotSubscribedMiddleware::class
+            ], isPersistent: true)
+            ->searchableTenantMenu()
+            ->tenantMenuItems([
+                'billing' => fn (Action $action) => $action->label('Manage subscription'),
+                // ...
+            ])
             ->tenant(Team::class)
             ->tenantProfile(TeamProfile::class)
             ->tenantRegistration(RegisterTeam::class);

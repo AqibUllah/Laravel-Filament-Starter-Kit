@@ -4,7 +4,6 @@ namespace App\Filament\Pages;
 
 use App\Models\Plan;
 use App\Models\Subscription;
-use App\Models\User;
 use App\Providers\StripeBillingProvider;
 use BackedEnum;
 use Filament\Actions\Action;
