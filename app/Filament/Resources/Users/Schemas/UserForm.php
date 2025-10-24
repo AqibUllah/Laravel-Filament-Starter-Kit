@@ -33,9 +33,6 @@ class UserForm
                     ->required(),
                 Select::make('roles')
                     ->relationship('roles', 'name')
-                    ->saveRelationshipsUsing(function (Model $record, $state) {
-                        $record->roles()->syncWithPivotValues($state, [config('permission.column_names.team_foreign_key') => getPermissionsTeamId()]);
-                    })
                     ->multiple()
                     ->preload()
                     ->searchable(),

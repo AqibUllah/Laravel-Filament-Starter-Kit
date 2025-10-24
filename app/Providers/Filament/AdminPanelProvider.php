@@ -82,15 +82,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->tenantMiddleware([
                 SyncShieldTenant::class,
+                RedirectIfUserNotSubscribedMiddleware::class
             ], isPersistent: true)
             ->authMiddleware([
                 Authenticate::class,
             ])
             ->tenantBillingProvider(new StripeBillingProvider())
             ->simplePageMaxContentWidth(Width::ExtraLarge)
-            ->tenantMiddleware([
-                RedirectIfUserNotSubscribedMiddleware::class
-            ], isPersistent: true)
             ->searchableTenantMenu()
             ->tenantMenuItems([
                 'billing' => fn (Action $action) => $action->label('Manage subscription'),

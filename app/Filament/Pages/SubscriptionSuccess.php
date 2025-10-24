@@ -22,6 +22,8 @@ class SubscriptionSuccess extends Page
      protected string $view = 'filament.pages.subscription-success';
     protected static bool $shouldRegisterNavigation = false;
 
+    protected static bool $isScopedToTenant = false;
+
     // Simple properties that Livewire supports
     public $sessionId;
     public $teamId;
@@ -48,7 +50,6 @@ class SubscriptionSuccess extends Page
             $this->isProcessing = false;
             return;
         }
-
         $this->processSubscription();
     }
 
@@ -161,7 +162,7 @@ class SubscriptionSuccess extends Page
         $this->trialEndsAt = $subscription->trial_ends_at?->format('M j, Y');
         $this->status = $subscription->status;
 
-        \Log::info('Local: Subscription created and features applied', [
+        Log::info('Local: Subscription created and features applied', [
             'team_id' => $team->id,
             'plan_id' => $plan->id,
             'subscription_id' => $subscription->id,
@@ -320,11 +321,6 @@ class SubscriptionSuccess extends Page
         if ($this->subscriptionId) {
             $this->dispatch('subscription-activated');
         }
-    }
-
-    public function goToDashboard()
-    {
-        return redirect()->to(filament()->getUrl());
     }
 
     // Helper method to get subscription for view (if needed)
