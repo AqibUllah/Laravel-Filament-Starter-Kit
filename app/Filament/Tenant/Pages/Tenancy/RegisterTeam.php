@@ -2,11 +2,13 @@
 namespace App\Filament\Tenant\Pages\Tenancy;
 
 use App\Models\Team;
+use BezhanSalleh\FilamentShield\Support\Utils;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Tenancy\RegisterTenant;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
+use App\Models\Role;
 
 class RegisterTeam extends RegisterTenant
 {
@@ -39,28 +41,17 @@ protected static string $layout = 'components.team.layout.custom-simple';
         $team->members()->attach(auth()->user());
         $team_name = $team->name;
 
-        // $starter_role = Role::firstOrCreate([
-        //     'name'  => 'starter_member',
-        //     // 'team_id'  => $team->id,
-        //     'guard_name'  => 'web',
-        // ]);
+        $team_admin_role = Role::firstOrCreate([
+           'name'   => 'team_admin',
+           'team_id' => $team->id,
+           'guard_name' => 'web'
+        ]);
 
-        // $starter_plan = Plan::where('price',0)->active()->first();
+        setPermissionsTeamId($team->id);
 
-        // dd($starter_plan);
+        $team_admin_role->syncPermissions(Utils::getPermissionModel()::pluck('id'));
 
-        // $team->subscription()->create([
-        //     'team_id' => $team->id,
-        //     'plan_id' => $starter_plan->id,
-        //     'stripe_subscription_id' => null,
-        //     'stripe_customer_id' => null,
-        //     'status' => 'active',
-        //     'trial_ends_at' => null,
-        //     'ends_at' => null,
-        //     'canceled_at' => null,
-        // ]);
-
-        // auth()->user()->assignRole($starter_role->name);
+        auth()->user()->assignRole($team_admin_role->name);
 
         Notification::make()
             ->title('company created')

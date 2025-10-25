@@ -1,7 +1,5 @@
 <?php
 
-use App\Filament\Tenant\Pages\Plans;
-
 return [
 
     /*
@@ -193,7 +191,7 @@ return [
         'subject' => 'class',
         'prefix' => 'view',
         'exclude' => [
-            Plans::class
+
         ],
     ],
 

@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class UserForm
@@ -28,8 +29,12 @@ class UserForm
                 TextInput::make('password')
                     ->password()
                     ->required(),
+                // Using Select Component
                 Select::make('roles')
                     ->relationship('roles', 'name')
+                    ->saveRelationshipsUsing(function (Model $record, $state) {
+                        $record->roles()->syncWithPivotValues($state, [config('permission.column_names.team_foreign_key') => getPermissionsTeamId()]);
+                    })
                     ->multiple()
                     ->preload()
                     ->searchable(),

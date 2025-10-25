@@ -2,6 +2,7 @@
 
 namespace App\Filament\Tenant\Pages;
 
+use App\Models\Permission;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Team;
@@ -280,12 +281,8 @@ class SubscriptionSuccess extends Page
 
     private function updateTeamPermissions(Team $team, $features, Plan $plan)
     {
-        // Step 1: Remove special characters (keep letters, numbers, spaces)
-        $plan_name = preg_replace('/[^A-Za-z0-9 ]/', '', $plan->name);
 
-        // Step 2: Replace spaces with underscores & Concatenate "_plan" or any suffix
-        $final = Str::of($plan_name)->lower()->replace(' ', '_') . '_member';
-        auth()->user()->assignRole($final);
+        auth()->user()->givePermissionTo(Permission::all());
 
         // Implement your specific role/permission logic here
         foreach ($team->members as $member) {
@@ -344,7 +341,7 @@ class SubscriptionSuccess extends Page
 
     public function getTitle(): string
     {
-        return 'Subscription Status';
+        return '';
     }
 
     public static function getRoutes(): \Closure

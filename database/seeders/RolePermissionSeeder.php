@@ -33,30 +33,11 @@ class RolePermissionSeeder extends Seeder
         // Set tenant and permissions team context to match the target team
         app()[PermissionRegistrar::class]->setPermissionsTeamId($team->id);
 
-        $roles = [
-            'starter_member','pro_member','business_member',
-            'enterprise_member','pro_yearly_member','business_yearly_member',
-        ];
-
-        foreach ($roles as $key => $role) {
-            Role::create([
-                'name'  => $role,
-                // 'team_id'  => $team->id,
-                'guard_name'  => 'web',
-            ]);
-        }
-
         $super_admin_role = Role::firstOrCreate([
-            'name' => 'super_admin',
-            // 'team_id' => $team->id,
-            'guard_name' => 'web'
+             'name' => 'team_admin',
+             'team_id' => $team->id,
+             'guard_name' => 'web'
         ]);
-
-
-        // After creating $super_admin_role and assigning it to $admin
-        $super_admin_role->givePermissionTo(Permission::all());
-
-
 
         if (! $admin) {
             $this->command->error('No user found. Please create a user first.');
@@ -70,8 +51,8 @@ class RolePermissionSeeder extends Seeder
             $team->members()->attach($admin->id);
         }
 
-        $this->command->info('✅Super Admin created successfully!');
-        $this->command->info('Email: superadmin@example.com');
+        $this->command->info('✅Team Admin created successfully For Team!');
+        $this->command->info('Email: teamadmin@example.com');
         $this->command->info('Password: password');
 
         setPermissionsTeamId($team->id);

@@ -24,11 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (auth()->user()?->hasAnyRole()){
-            Gate::before(function (User $user, $ability) {
-                return $user->hasRole('super_admin') ? true : null;
-            });
-        }
+//        if (auth()->user()?->hasAnyRole()){
+//            Gate::before(function (User $user, $ability) {
+//                return $user->hasRole('super_admin') ? true : null;
+//            });
+//        }
 
         app(\Spatie\Permission\PermissionRegistrar::class)
             ->setPermissionClass(Permission::class)

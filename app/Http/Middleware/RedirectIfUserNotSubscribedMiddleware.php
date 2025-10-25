@@ -7,6 +7,7 @@ use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
 class RedirectIfUserNotSubscribedMiddleware
@@ -21,6 +22,7 @@ class RedirectIfUserNotSubscribedMiddleware
 
         $team = Filament::getTenant();
         setPermissionsTeamId($team->id);
+        Artisan::call('cache:clear');
 
         // Allow access if team has active subscription or is on trial
         if ($team->hasActiveSubscription() || $team->isOnTrial()) {
