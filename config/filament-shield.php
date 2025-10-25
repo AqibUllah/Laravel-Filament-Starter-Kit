@@ -1,6 +1,6 @@
 <?php
 
-use App\Filament\Pages\Plans;
+use App\Filament\Tenant\Pages\Plans;
 
 return [
 
@@ -229,7 +229,6 @@ return [
     */
 
     'custom_permissions' => [
-        'assignable_by_team_owner',
         'view_advanced_analytics'
     ],
 

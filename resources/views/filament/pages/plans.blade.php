@@ -25,7 +25,7 @@
                 <x-filament::button
                     color="gray"
                     tag="a"
-                    href="{{ route('filament.admin.tenant.billing',['tenant' => filament()->getTenant()]) }}">
+                    href="{{ route('filament.tenant.tenant.billing',['tenant' => filament()->getTenant()]) }}">
                     Manage Billing
                 </x-filament::button>
             </div>

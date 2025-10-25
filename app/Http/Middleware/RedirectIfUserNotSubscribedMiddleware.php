@@ -30,8 +30,8 @@ class RedirectIfUserNotSubscribedMiddleware
 
         // 🚫 Skip plans or checkout routes to prevent loops
         if (
-            $request->routeIs('filament.admin.pages.plans') ||
-            $request->routeIs('filament.admin.pages.subscription-success')
+            $request->routeIs('filament.tenant.pages.plans') ||
+            $request->routeIs('filament.tenant.pages.subscription-success')
         ) {
             return $next($request);
         }
@@ -42,6 +42,6 @@ class RedirectIfUserNotSubscribedMiddleware
         ->body('Please subscribe to access the features.')->send();
 
         // Redirect to plans page if not subscribed
-        return redirect()->route('filament.admin.pages.plans',['tenant' => $team])->with('error', 'Please subscribe to access the features.');
+        return redirect()->route('filament.tenant.pages.plans',['tenant' => $team])->with('error', 'Please subscribe to access the features.');
     }
 }

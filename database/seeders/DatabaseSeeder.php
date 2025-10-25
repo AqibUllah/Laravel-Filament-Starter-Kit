@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         ->delete();
 
         $this->call([
+            AdminSeeder::class,
             UserSeeder::class,
             TeamUserSeeder::class,
             RolePermissionSeeder::class,
