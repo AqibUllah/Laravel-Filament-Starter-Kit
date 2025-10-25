@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         User::factory(10)->create();
         $first_user = User::first();
-        $first_user->email = 'superadmin@example.com';
+        $first_user->email = 'teamadmin@example.com';
         $first_user->save();
     }
 }

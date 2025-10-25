@@ -7,6 +7,7 @@ use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
 class RedirectIfUserNotSubscribedMiddleware
@@ -21,6 +22,7 @@ class RedirectIfUserNotSubscribedMiddleware
 
         $team = Filament::getTenant();
         setPermissionsTeamId($team->id);
+        Artisan::call('cache:clear');
 
         // Allow access if team has active subscription or is on trial
         if ($team->hasActiveSubscription() || $team->isOnTrial()) {
@@ -30,8 +32,8 @@ class RedirectIfUserNotSubscribedMiddleware
 
         // 🚫 Skip plans or checkout routes to prevent loops
         if (
-            $request->routeIs('filament.admin.pages.plans') ||
-            $request->routeIs('filament.admin.pages.subscription-success')
+            $request->routeIs('filament.tenant.pages.plans') ||
+            $request->routeIs('filament.tenant.pages.subscription-success')
         ) {
             return $next($request);
         }
@@ -42,6 +44,6 @@ class RedirectIfUserNotSubscribedMiddleware
         ->body('Please subscribe to access the features.')->send();
 
         // Redirect to plans page if not subscribed
-        return redirect()->route('filament.admin.pages.plans',['tenant' => $team])->with('error', 'Please subscribe to access the features.');
+        return redirect()->route('filament.tenant.pages.plans',['tenant' => $team])->with('error', 'Please subscribe to access the features.');
     }
 }

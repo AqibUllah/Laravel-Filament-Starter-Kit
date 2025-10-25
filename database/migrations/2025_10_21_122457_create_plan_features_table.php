@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('plan_features', function (Blueprint $table) {
             $table->id();
             $table->foreignId('plan_id')->constrained()->onDelete('cascade');
-            $table->foreignId('team_id');
             $table->string('name');
             $table->string('value'); // could be numeric or boolean
             $table->integer('sort_order')->default(0);

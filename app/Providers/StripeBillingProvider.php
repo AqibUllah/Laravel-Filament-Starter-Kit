@@ -38,7 +38,7 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
             if (!$team || !$team->subscription || !$team->subscription->stripe_customer_id) {
 
                 // Redirect to plans page if no subscription
-                return redirect()->route('filament.admin.pages.plans',['tenant' => $team])
+                return redirect()->route('filament.tenant.pages.plans',['tenant' => $team])
                     ->with(['warning' => 'error here']);
             }
 
@@ -63,7 +63,7 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
         } catch (\Exception $e) {
             SimpleAlert::make('example')
                 ->description('This is the description');
-            return redirect()->route('filament.admin.pages.plans',['tenant' => filament()->getTenant()])
+            return redirect()->route('filament.tenant.pages.plans',['tenant' => filament()->getTenant()])
                 ->with('error', 'Unable to access billing portal: ' . $e->getMessage());
         }
     }
@@ -81,8 +81,8 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
                 'quantity' => 1,
             ]],
             'mode' => 'subscription',
-            'success_url' => route('filament.admin.pages.subscription-success',['tenant' => $team]) . '?session_id={CHECKOUT_SESSION_ID}&team_id=' . $team->id,
-            'cancel_url' => route('filament.admin.pages.plans', ['tenant' => $team]),
+            'success_url' => route('filament.tenant.pages.subscription-success',['tenant' => $team]) . '?session_id={CHECKOUT_SESSION_ID}&team_id=' . $team->id,
+            'cancel_url' => route('filament.tenant.pages.plans', ['tenant' => $team]),
             'subscription_data' => [
                 'metadata' => [
                     'team_id' => $team->id,

@@ -34,10 +34,10 @@ class Team extends Model
 
     // ... existing code ...
 
-    public function currentPlan()
-    {
-        return $this->belongsTo(Plan::class, 'current_plan_id');
-    }
+//    public function currentPlan()
+//    {
+//        return $this->belongsTo(Plan::class, 'current_plan_id');
+//    }
 
     public function subscription(): HasOne
     {
