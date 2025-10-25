@@ -6,6 +6,7 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Providers\StripeBillingProvider;
 use BackedEnum;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -18,6 +19,7 @@ use UnitEnum;
 
 class Plans extends Page implements HasActions
 {
+    use HasPageShield;
     use InteractsWithHeaderActions;
     use InteractsWithActions;
     protected static string | BackedEnum | null $navigationIcon = Heroicon::CreditCard;
