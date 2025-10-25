@@ -23,7 +23,7 @@ return [
             'pages' => true,
             'widgets' => true,
             'resources' => true,
-            'custom_permissions' => false,
+            'custom_permissions' => true,
         ],
     ],
 
@@ -229,6 +229,7 @@ return [
     */
 
     'custom_permissions' => [
+        'assignable_by_team_owner',
         'view_advanced_analytics'
     ],
 
