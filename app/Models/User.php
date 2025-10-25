@@ -107,7 +107,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasDefau
         return Storage::url($this->attributes['avatar']);
     }
 
-    public function team()
+    public function team(): BelongsToMany
     {
         return $this->teams()->where('team_id', Filament::getTenant()->id);
     }
