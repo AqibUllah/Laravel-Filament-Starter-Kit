@@ -1,7 +1,5 @@
 <?php
 
-use App\Filament\Pages\Plans;
-
 return [
 
     /*
@@ -23,7 +21,7 @@ return [
             'pages' => true,
             'widgets' => true,
             'resources' => true,
-            'custom_permissions' => false,
+            'custom_permissions' => true,
         ],
     ],
 
@@ -193,7 +191,7 @@ return [
         'subject' => 'class',
         'prefix' => 'view',
         'exclude' => [
-            Plans::class
+
         ],
     ],
 

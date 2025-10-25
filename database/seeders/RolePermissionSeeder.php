@@ -33,30 +33,11 @@ class RolePermissionSeeder extends Seeder
         // Set tenant and permissions team context to match the target team
         app()[PermissionRegistrar::class]->setPermissionsTeamId($team->id);
 
-        $roles = [
-            'starter_member','pro_member','business_member',
-            'enterprise_member','pro_yearly_member','business_yearly_member',
-        ];
-
-        foreach ($roles as $key => $role) {
-            Role::create([
-                'name'  => $role,
-                // 'team_id'  => $team->id,
-                'guard_name'  => 'web',
-            ]);
-        }
-
         $super_admin_role = Role::firstOrCreate([
-            'name' => 'super_admin',
-            // 'team_id' => $team->id,
-            'guard_name' => 'web'
+             'name' => 'team_admin',
+             'team_id' => $team->id,
+             'guard_name' => 'web'
         ]);
-
-
-        // After creating $super_admin_role and assigning it to $admin
-        $super_admin_role->givePermissionTo(Permission::all());
-
-
 
         if (! $admin) {
             $this->command->error('No user found. Please create a user first.');
@@ -70,8 +51,8 @@ class RolePermissionSeeder extends Seeder
             $team->members()->attach($admin->id);
         }
 
-        $this->command->info('✅Super Admin created successfully!');
-        $this->command->info('Email: superadmin@example.com');
+        $this->command->info('✅Team Admin created successfully For Team!');
+        $this->command->info('Email: teamadmin@example.com');
         $this->command->info('Password: password');
 
         setPermissionsTeamId($team->id);
@@ -80,35 +61,35 @@ class RolePermissionSeeder extends Seeder
         // Optional: Reset context (not strictly needed in a seeder)
         app()[PermissionRegistrar::class]->setPermissionsTeamId(null);
 
-        $starter_role = Role::firstOrCreate(['name' => 'starter_member','guard_name' => 'web']);
+//        $starter_role = Role::firstOrCreate(['name' => 'starter_member','guard_name' => 'web']);
 
-        $resources = ['User', 'Task']; // your Filament resource names
-
-        foreach ($resources as $resource) {
-            $permissions = [
-                "ViewAny:{$resource}",
-                "View:{$resource}",
-                "Create:{$resource}",
-                "Update:{$resource}",
-                "Delete:{$resource}",
-                "ForceDelete:{$resource}",
-                "ForceDeleteAny:{$resource}",
-                "Restore:{$resource}",
-                "RestoreAny:{$resource}",
-                "Replicate:{$resource}",
-                "Reorder:{$resource}",
-                "DeleteAny:{$resource}",
-            ];
-
-            $starter_role->givePermissionTo($permissions);
-        }
+//        $resources = ['User', 'Task']; // your Filament resource names
+//
+//        foreach ($resources as $resource) {
+//            $permissions = [
+//                "ViewAny:{$resource}",
+//                "View:{$resource}",
+//                "Create:{$resource}",
+//                "Update:{$resource}",
+//                "Delete:{$resource}",
+//                "ForceDelete:{$resource}",
+//                "ForceDeleteAny:{$resource}",
+//                "Restore:{$resource}",
+//                "RestoreAny:{$resource}",
+//                "Replicate:{$resource}",
+//                "Reorder:{$resource}",
+//                "DeleteAny:{$resource}",
+//            ];
+//
+//            $starter_role->givePermissionTo($permissions);
+//        }
 
         // ✅ Custom pages
-        $pages = ['SubscriptionSuccess', 'SubscriptionStatus', 'Dashboard'];
-        foreach ($pages as $page) {
-            $permission = "View:{$page}";
-            Permission::firstOrCreate(['name' => $permission]);
-            $role->givePermissionTo($permission);
-        }
+//        $pages = ['SubscriptionSuccess', 'SubscriptionStatus', 'Dashboard'];
+//        foreach ($pages as $page) {
+//            $permission = "View:{$page}";
+//            Permission::firstOrCreate(['name' => $permission]);
+//            $role->givePermissionTo($permission);
+//        }
     }
 }
