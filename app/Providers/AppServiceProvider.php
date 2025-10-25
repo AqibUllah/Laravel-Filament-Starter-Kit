@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Permission;
@@ -23,9 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole('super_admin') ? true : null;
-        });
+        if (auth()->user()?->hasAnyRole()){
+            Gate::before(function (User $user, $ability) {
+                return $user->hasRole('super_admin') ? true : null;
+            });
+        }
 
         app(\Spatie\Permission\PermissionRegistrar::class)
             ->setPermissionClass(Permission::class)

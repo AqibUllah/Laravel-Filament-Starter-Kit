@@ -157,7 +157,7 @@
                 <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                     <x-filament::button
                         tag="a"
-                        href="{{ route('filament.admin.pages.dashboard',['tenant' => $this->teamId]) }}"
+                        href="{{ route('filament.tenant.pages.dashboard',['tenant' => $this->teamId]) }}"
                         color="primary"
                         size="xl"
                         class="flex items-center justify-center space-x-2 bg-gradient-to-r from-primary-600 to-blue-600 hover:from-primary-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
@@ -169,7 +169,7 @@
 
                     <x-filament::button
                         tag="a"
-                        href="{{ route('filament.admin.pages.plans',['tenant' => $this->teamId]) }}"
+                        href="{{ route('filament.tenant.pages.plans',['tenant' => $this->teamId]) }}"
                         color="gray"
                         size="xl"
                         class="flex items-center justify-center space-x-2 border-2 hover:border-primary-300 transition-all duration-200">

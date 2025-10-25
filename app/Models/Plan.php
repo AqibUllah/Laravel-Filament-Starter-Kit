@@ -45,10 +45,10 @@ class Plan extends Model
         return $this->hasMany(Subscription::class);
     }
 
-    public function team():BelongsTo
-    {
-        return $this->belongsTo(Team::class);
-    }
+//    public function team():BelongsTo
+//    {
+//        return $this->belongsTo(Team::class);
+//    }
 
     #[Scope]
     public function isFree(Builder $query): void

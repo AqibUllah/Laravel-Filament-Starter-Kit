@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('team_id');
+            $table->foreignId('team_id')->nullable();
             $table->string('stripe_price_id')->nullable();
             $table->string('stripe_product_id')->nullable();
             $table->decimal('price', 8, 2);
