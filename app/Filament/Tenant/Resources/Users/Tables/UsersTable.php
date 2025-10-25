@@ -2,9 +2,14 @@
 
 namespace App\Filament\Tenant\Resources\Users\Tables;
 
+use App\Filament\Schemas\Components\LimitAlert;
+use App\Helpers\FeatureLimitHelper;
+use App\Livewire\PlanFeatureLimitAlert;
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -15,6 +20,14 @@ class UsersTable
 {
     public static function configure(Table $table): Table
     {
+
+        $team = Filament::getTenant();
+
+        // Check plan limit
+        $limit = $team->featureValue('Users', 0);
+        $count = $team->members()->count();
+        $limitReached = $limit && $count >= $limit;
+
         return $table
             ->columns([
                 ImageColumn::make('avatar')
@@ -47,6 +60,7 @@ class UsersTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->contentFooter(fn () => FeatureLimitHelper::alertIfExceeded('Users', $count, route('filament.tenant.pages.plans', ['tenant' => filament()->getTenant()])));
     }
 }

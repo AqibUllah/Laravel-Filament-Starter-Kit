@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources\Tasks\Tables;
 
 use App\Enums\Enums\PriorityEnum;
 use App\Enums\Enums\TaskStatusEnum;
+use App\Helpers\FeatureLimitHelper;
 use App\Models\Task;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
@@ -24,6 +25,10 @@ class TasksTable
 {
     public static function configure(Table $table): Table
     {
+
+        $team = Filament::getTenant();
+        $count = $team->tasks()->count();
+
         return $table
             ->columns([
                 TextColumn::make('title')
@@ -162,7 +167,8 @@ class TasksTable
                         ->deselectRecordsAfterCompletion(),
                 ]),
             ])
-            ->defaultSort('due_date', 'asc');
+            ->defaultSort('due_date', 'asc')
+            ->contentFooter(fn () => FeatureLimitHelper::alertIfExceeded('Tasks', $count, route('filament.tenant.pages.plans', ['tenant' => filament()->getTenant()])));
     }
 
     public static function canCreate(): bool

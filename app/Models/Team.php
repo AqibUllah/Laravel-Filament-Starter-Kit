@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -34,10 +35,10 @@ class Team extends Model
 
     // ... existing code ...
 
-//    public function currentPlan()
-//    {
-//        return $this->belongsTo(Plan::class, 'current_plan_id');
-//    }
+    public function currentPlan():BelongsTo
+    {
+        return $this->belongsTo(Plan::class, 'current_plan_id');
+    }
 
     public function subscription(): HasOne
     {
@@ -54,6 +55,20 @@ class Team extends Model
     {
         return $this->subscription && $this->subscription->isOnTrial();
     }
+
+    public function featureValue(string $featureCode, $default = null)
+    {
+        $subscription = $this->subscription;
+
+        if (! $subscription || ! $subscription->plan) {
+            return $default;
+        }
+
+        return optional(
+            $subscription->plan->features->firstWhere('name', $featureCode)
+        )->value ?? $default;
+    }
+
 
     public function canAccessFeature(string $feature): bool
     {

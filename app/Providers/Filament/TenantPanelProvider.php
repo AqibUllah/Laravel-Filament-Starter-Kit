@@ -46,9 +46,10 @@ class TenantPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Tenant/Resources'), for: 'App\Filament\Tenant\Resources')
             ->discoverPages(in: app_path('Filament/Tenant/Pages'), for: 'App\Filament\Tenant\Pages')
+            ->discoverLivewireComponents(app_path('Filament/Schemas/Components'), for: 'App\Filament\Schemas\Components')
             ->pages([
                 Dashboard::class,
-                Plans::class
+                Plans::class,
             ])
             ->navigationItems([
                 \Filament\Navigation\NavigationItem::make('Billing')

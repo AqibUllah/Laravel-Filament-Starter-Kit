@@ -2,13 +2,16 @@
 
 namespace App\Policies;
 
+use App\Models\Team;
+use App\Services\FeatureLimiterService;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:User');
@@ -21,7 +24,10 @@ class UserPolicy
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:User');
+        return $authUser->can('Create:User') &&
+            app(FeatureLimiterService::class)
+                ->forTenant(Filament::getTenant())
+                ->canCreateUser();
     }
 
     public function update(AuthUser $authUser): bool
@@ -62,6 +68,27 @@ class UserPolicy
     public function reorder(AuthUser $authUser): bool
     {
         return $authUser->can('Reorder:User');
+    }
+
+    public function getUsageStats(): array
+    {
+        $team = Filament::getTenant();
+        $limiter = app(FeatureLimiterService::class)->forTenant($team);
+
+        $currentUsers = $team->members()->count();
+        $maxUsers = $limiter->getFeatureLimit('Users');
+        $remaining = $limiter->getRemainingUsers();
+
+        $percentage = $maxUsers > 0 ? ($currentUsers / $maxUsers) * 100 : 0;
+
+        return [
+            'current' => $currentUsers,
+            'max' => $maxUsers,
+            'remaining' => $remaining,
+            'percentage' => $percentage,
+            'is_limit_reached' => !$limiter->canCreateUser(),
+            'is_approaching_limit' => $percentage >= 80,
+        ];
     }
 
 }
