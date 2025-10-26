@@ -15,10 +15,12 @@
 /node_modules
 /public/build
 /public/hot
+/public/cache/*
 /public/storage
 /storage/*.key
 /storage/pail
 /vendor
+/bootstrap/cache/
 Homestead.json
 Homestead.yaml
 Thumbs.db
