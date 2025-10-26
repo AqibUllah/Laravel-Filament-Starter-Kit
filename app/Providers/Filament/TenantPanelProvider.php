@@ -59,7 +59,7 @@ class TenantPanelProvider extends PanelProvider
                     ->sort(3),
             ])
             ->viteTheme('resources/css/filament/team/theme.css')
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Tenant/Widgets'), for: 'App\Filament\Tenant\Widgets')
             ->widgets([
                 TimeTrackingWidget::class,
                 TaskStatsWidget::class,

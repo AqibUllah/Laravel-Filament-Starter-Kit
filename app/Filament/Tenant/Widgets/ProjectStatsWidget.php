@@ -14,8 +14,8 @@ class ProjectStatsWidget extends BaseWidget
     {
         $totalProjects = Project::count();
         $activeProjects = Project::count();
-        $completedProjects = Project::completed()->count();
-        $overdueProjects = Project::overdue()->count();
+        $completedProjects = Project::query()->completed()->count();
+        $overdueProjects = Project::query()->overdue()->count();
 
         $avgProgress = Project::where('status', '!=', ProjectStatusEnum::Cancelled)
             ->avg('progress') ?? 0;
