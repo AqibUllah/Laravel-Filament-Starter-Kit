@@ -16,6 +16,8 @@
 /public/build
 /public/hot
 /public/cache/*
+=======
+>>>>>>> 10dcdfeb474978809b8f3ec61fd22b4b5bd11166
 /public/storage
 /storage/*.key
 /storage/pail

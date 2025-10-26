@@ -20,6 +20,7 @@ class TaskStatsWidget extends StatsOverviewWidget
         $totalTasks = Task::forMe()->count();
         $completedTasks = Task::forMe()->completed()->count();
         $overdueTasks = Task::forMe()->overdue()->count();
+
         $myPendingTasks = Task::where('team_id', $currentTeam->id)
             ->forMe()
             ->pending()
