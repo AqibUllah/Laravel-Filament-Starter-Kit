@@ -2,8 +2,8 @@
 
 namespace App\Filament\Tenant\Resources\Tasks\Tables;
 
-use App\Enums\Enums\PriorityEnum;
-use App\Enums\Enums\TaskStatusEnum;
+use App\Enums\PriorityEnum;
+use App\Enums\TaskStatusEnum;
 use App\Helpers\FeatureLimitHelper;
 use App\Models\Task;
 use Filament\Actions\Action;
