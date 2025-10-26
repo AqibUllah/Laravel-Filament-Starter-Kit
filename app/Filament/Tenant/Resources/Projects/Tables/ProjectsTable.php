@@ -19,6 +19,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class ProjectsTable
 {
@@ -32,7 +33,7 @@ class ProjectsTable
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
-                    ->description(fn ($record) => $record->description ? \Str::limit(strip_tags($record->description), 50) : null)
+                    ->description(fn ($record) => $record->description ? Str::limit(strip_tags($record->description), 50) : null)
                     ->url(fn ($record) => route('filament.tenant.resources.projects.edit', ['record' => $record, 'tenant' => $currentTeam])),
 
                 TextColumn::make('status')

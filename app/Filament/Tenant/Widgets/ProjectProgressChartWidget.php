@@ -17,8 +17,7 @@ class ProjectProgressChartWidget extends ChartWidget
     {
         $currentTeam = Filament::getTenant();
 
-        $projects = Project::where('team_id', $currentTeam->id)
-            ->where('status', '!=', ProjectStatusEnum::Cancelled)
+        $projects = Project::where('status', '!=', ProjectStatusEnum::Cancelled)
             ->orderBy('progress', 'desc')
             ->limit(10)
             ->get();
