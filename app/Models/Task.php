@@ -14,6 +14,7 @@ class Task extends Model
 
     protected $fillable = [
         'team_id',
+        'project_id',
         'assigned_by',
         'assigned_to',
         'title',
@@ -43,6 +44,11 @@ class Task extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 
     // Assigner relationship

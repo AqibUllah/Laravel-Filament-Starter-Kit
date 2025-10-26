@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources\Tasks\Schemas;
 
 use App\Enums\PriorityEnum;
 use App\Enums\TaskStatusEnum;
+use App\Models\Project;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
@@ -34,6 +35,12 @@ class TaskForm
                         Textarea::make('description')
                             ->rows(3)
                             ->columnSpanFull(),
+                        Select::make('project')
+                            ->label('Project')
+                            ->relationship('Project', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Select a project'),
                         Select::make('assigned_to')
                             ->label('Assign To')
                             ->options($currentTeam->members()->pluck('name', 'user_id'))
