@@ -112,6 +112,11 @@ class Team extends Model
         return $this->hasMany(Task::class);
     }
 
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
+
     // Check if user can assign tasks
     public function userCanAssignTasks(User $user): bool
     {

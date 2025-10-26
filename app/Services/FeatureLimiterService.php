@@ -30,6 +30,13 @@ class FeatureLimiterService
         return $currentTasks < $maxTasks;
     }
 
+    public function canCreateProject(): bool
+    {
+        $currentTasks = $this->tenant->projects()->count();
+        $maxTasks = $this->getFeatureLimit('Projects');
+        return $currentTasks < $maxTasks;
+    }
+
     public function canUseStorage(int $additionalBytes = 0): bool
     {
         $currentStorage = $this->getCurrentStorageUsage();
