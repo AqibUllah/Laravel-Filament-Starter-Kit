@@ -17,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class ProjectForm
 {
@@ -35,16 +36,16 @@ class ProjectForm
                             ->columnSpanFull()
                             ->live()
                             ->afterStateUpdated(function ($state, callable $set) {
-                                $set('slug', \Str::slug($state));
+                                $set('slug', Str::slug($state));
                             }),
-                        
+
                         TextInput::make('slug')
                             ->label('URL Slug')
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
                             ->columnSpanFull()
                             ->helperText('Used in project URLs. Leave empty to auto-generate from name.'),
-                        
+
                         RichEditor::make('description')
                             ->columnSpanFull()
                             ->toolbarButtons([
@@ -59,7 +60,7 @@ class ProjectForm
                                 'h3',
                                 'blockquote',
                             ]),
-                        
+
                         Select::make('status')
                             ->options(ProjectStatusEnum::class)
                             ->default(ProjectStatusEnum::Planning)
@@ -70,12 +71,12 @@ class ProjectForm
                                     $set('progress', 100);
                                 }
                             }),
-                        
+
                         Select::make('priority')
                             ->options(PriorityEnum::class)
                             ->default(PriorityEnum::Medium)
                             ->required(),
-                        
+
                         TextInput::make('progress')
                             ->numeric()
                             ->minValue(0)
@@ -102,7 +103,7 @@ class ProjectForm
                                     $set('due_date', $state);
                                 }
                             }),
-                        
+
                         DatePicker::make('due_date')
                             ->required()
                             ->afterOrEqual('start_date')
@@ -113,21 +114,21 @@ class ProjectForm
                                     $set('start_date', $state);
                                 }
                             }),
-                        
+
                         TextInput::make('budget')
                             ->numeric()
                             ->prefix('$')
                             ->step(0.01)
                             ->minValue(0)
                             ->helperText('Total project budget'),
-                        
+
                         TextInput::make('estimated_hours')
                             ->numeric()
                             ->suffix('hours')
                             ->step(0.5)
                             ->minValue(0)
                             ->helperText('Estimated total hours for the project'),
-                        
+
                         TextInput::make('actual_hours')
                             ->numeric()
                             ->suffix('hours')
@@ -146,7 +147,7 @@ class ProjectForm
                             ->preload()
                             ->default(auth()->id())
                             ->required(),
-                        
+
                         Select::make('users')
                             ->label('Team Members')
                             ->multiple()
@@ -154,7 +155,7 @@ class ProjectForm
                             ->preload()
                             ->searchable()
                             ->helperText('Select team members to assign to this project'),
-                        
+
                         Placeholder::make('team_info')
                             ->content('This project belongs to: ' . $currentTeam->name)
                             ->columnSpanFull(),
@@ -167,12 +168,12 @@ class ProjectForm
                         TextInput::make('client_name')
                             ->maxLength(255)
                             ->helperText('Client or company name'),
-                        
+
                         TextInput::make('client_email')
                             ->email()
                             ->maxLength(255)
                             ->helperText('Primary client contact email'),
-                        
+
                         TextInput::make('client_phone')
                             ->tel()
                             ->maxLength(20)
@@ -186,12 +187,12 @@ class ProjectForm
                         TagsInput::make('tags')
                             ->placeholder('Add tags...')
                             ->helperText('Add relevant tags to categorize this project'),
-                        
+
                         Textarea::make('notes')
                             ->rows(4)
                             ->columnSpanFull()
                             ->helperText('Internal notes and additional information'),
-                        
+
                         FileUpload::make('attachments')
                             ->multiple()
                             ->acceptedFileTypes(['application/pdf', 'image/*', 'text/*', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
