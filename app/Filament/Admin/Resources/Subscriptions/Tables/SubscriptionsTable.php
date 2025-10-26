@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Subscriptions\Tables;
 
-use App\Enums\Enums\TaskStatusEnum;
+use App\Enums\TaskStatusEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;

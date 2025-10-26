@@ -2,7 +2,7 @@
 
 namespace App\Filament\Tenant\Resources\Tasks\Widgets;
 
-use App\Enums\Enums\TaskStatusEnum;
+use App\Enums\TaskStatusEnum;
 use App\Models\Task;
 use Filament\Facades\Filament;
 use Filament\Widgets\StatsOverviewWidget;
@@ -18,10 +18,9 @@ class TimeTrackingWidget extends StatsOverviewWidget
             return [];
         }
 
-        $totalEstimated = Task::where('team_id', $currentTeam->id)->forMe()->sum('estimated_hours');
-        $totalActual = Task::where('team_id', $currentTeam->id)->forMe()->sum('actual_hours');
-        $completedTasksWithTime = Task::where('team_id', $currentTeam->id)
-            ->where('status', TaskStatusEnum::Completed)
+        $totalEstimated = Task::forMe()->sum('estimated_hours');
+        $totalActual = Task::forMe()->sum('actual_hours');
+        $completedTasksWithTime = Task::where('status', TaskStatusEnum::Completed)
             ->whereNotNull('actual_hours')
             ->count();
 

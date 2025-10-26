@@ -2,8 +2,8 @@
 
 namespace App\Filament\Tenant\Resources\Tasks\Schemas;
 
-use App\Enums\Enums\PriorityEnum;
-use App\Enums\Enums\TaskStatusEnum;
+use App\Enums\PriorityEnum;
+use App\Enums\TaskStatusEnum;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;

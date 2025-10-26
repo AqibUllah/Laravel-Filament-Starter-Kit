@@ -8,6 +8,7 @@ use App\Filament\Tenant\Pages\Team\Profile as TeamProfile;
 use App\Filament\Tenant\Pages\Tenancy\RegisterTeam;
 use App\Filament\Tenant\Resources\Tasks\Widgets\TimeTrackingWidget;
 use App\Filament\Tenant\Widgets\TaskStatsWidget;
+use App\Filament\Tenant\Widgets\ProjectProgressChartWidget;
 use App\Http\Middleware\RedirectIfUserNotSubscribedMiddleware;
 use App\Models\Team;
 use App\Providers\StripeBillingProvider;
@@ -60,8 +61,9 @@ class TenantPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/team/theme.css')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                TimeTrackingWidget::class, // Add this
+                TimeTrackingWidget::class,
                 TaskStatsWidget::class,
+                ProjectProgressChartWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
