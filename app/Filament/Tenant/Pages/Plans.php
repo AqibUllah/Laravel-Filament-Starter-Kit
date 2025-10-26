@@ -26,6 +26,8 @@ class Plans extends Page implements HasActions
     protected static bool $shouldRegisterNavigation = true;
     protected static string | UnitEnum | null $navigationGroup = 'Billing';
 
+    protected static ?int $navigationSort=4;
+
     protected static bool $isScopedToTenant = false;
 
     // \Filament\Resource\Resource::scopeToTenant(false);

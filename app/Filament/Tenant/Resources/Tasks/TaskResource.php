@@ -25,6 +25,8 @@ class TaskResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Project Management';
 
+    protected static ?int $navigationSort=3;
+
     public static function form(Schema $schema): Schema
     {
         return TaskForm::configure($schema);
