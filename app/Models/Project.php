@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -75,42 +76,50 @@ class Project extends Model
     }
 
     // Scopes
-    public function scopeActive(Builder $query): Builder
+
+    #[Scope]
+    public function active(Builder $query): void
     {
-        return $query->whereIn('status', [ProjectStatusEnum::Planning, ProjectStatusEnum::InProgress]);
+        $query->whereIn('status', [ProjectStatusEnum::Planning, ProjectStatusEnum::InProgress]);
     }
 
-    public function scopeCompleted(Builder $query): Builder
+    #[Scope]
+    public function completed(Builder $query): void
     {
-        return $query->where('status', ProjectStatusEnum::Completed);
+        $query->where('status', ProjectStatusEnum::Completed);
     }
 
-    public function scopeOnHold(Builder $query): Builder
+    #[Scope]
+    public function onHold(Builder $query): void
     {
-        return $query->where('status', ProjectStatusEnum::OnHold);
+        $query->where('status', ProjectStatusEnum::OnHold);
     }
 
-    public function scopeOverdue(Builder $query): Builder
+    #[Scope]
+    public function overdue(Builder $query): void
     {
-        return $query->where('due_date', '<', now())
+        $query->where('due_date', '<', now())
             ->whereNotIn('status', [ProjectStatusEnum::Completed, ProjectStatusEnum::Cancelled, ProjectStatusEnum::Archived]);
     }
 
-    public function scopeForUser(Builder $query, int $userId): Builder
+    #[Scope]
+    public function forUser(Builder $query, int $userId): void
     {
-        return $query->whereHas('users', function ($q) use ($userId) {
+        $query->whereHas('users', function ($q) use ($userId) {
             $q->where('user_id', $userId);
         })->orWhere('project_manager_id', $userId);
     }
 
-    public function scopeHighPriority(Builder $query): Builder
+    #[Scope]
+    public function highPriority(Builder $query): void
     {
-        return $query->where('priority', PriorityEnum::High);
+        $query->where('priority', PriorityEnum::High);
     }
 
-    public function scopeWithProgress(Builder $query, int $minProgress = 0): Builder
+    #[Scope]
+    public function withProgress(Builder $query, int $minProgress = 0): void
     {
-        return $query->where('progress', '>=', $minProgress);
+        $query->where('progress', '>=', $minProgress);
     }
 
     // Helper Methods
