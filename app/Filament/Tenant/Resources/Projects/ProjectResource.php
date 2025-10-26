@@ -10,7 +10,6 @@ use App\Filament\Tenant\Resources\Projects\RelationManagers\TasksRelationManager
 use App\Filament\Tenant\Resources\Projects\RelationManagers\TeamMembersRelationManager;
 use App\Filament\Tenant\Resources\Projects\Schemas\ProjectForm;
 use App\Filament\Tenant\Resources\Projects\Tables\ProjectsTable;
-use App\Filament\Tenant\Widgets\ProjectStatsWidget;
 use App\Models\Project;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -67,7 +66,7 @@ class ProjectResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::active()->count();
+        return static::getModel()::query()->active()->count();
     }
 
     public static function getNavigationBadgeColor(): ?string
