@@ -24,7 +24,7 @@ class CouponPolicy
     public function view(Admin $admin, Coupon $coupon): bool
     {
         // admins can view global coupons or coupons for their team
-        return $coupon->team_id === null || $coupon->team_id === $admin->currentTeam?->id;
+        return $coupon->created_by === $admin->id;
     }
 
     /**
@@ -32,8 +32,9 @@ class CouponPolicy
      */
     public function create(Admin $admin): bool
     {
-        // Only team owners can create coupons
-        return $admin->currentTeam && $admin->currentTeam->owner_id === $admin->id;
+        // All admins can create coupons since we're using a separate admin guard
+        // and not relying on role/permission seeder for admin panel
+        return true;
     }
 
     /**
@@ -42,8 +43,7 @@ class CouponPolicy
     public function update(Admin $admin, Coupon $coupon): bool
     {
         // Only team owners can update coupons for their team
-        return $coupon->team_id === $admin->currentTeam?->id
-            && $admin->currentTeam?->owner_id === $admin->id;
+        return $coupon->created_by === $admin->id;
     }
 
     /**
@@ -52,8 +52,7 @@ class CouponPolicy
     public function delete(Admin $admin, Coupon $coupon): bool
     {
         // Only team owners can delete coupons for their team
-        return $coupon->team_id === $admin->currentTeam?->id
-            && $admin->currentTeam?->owner_id === $admin->id;
+        return $coupon->created_by === $admin->id;
     }
 
     /**

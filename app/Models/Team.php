@@ -46,6 +46,11 @@ class Team extends Model
             ->where('status', 'active')->withoutGlobalScopes();
     }
 
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class)->withoutGlobalScopes();
+    }
+
     public function hasActiveSubscription(): bool
     {
         return $this->subscription && $this->subscription->isActive();
@@ -98,6 +103,11 @@ class Team extends Model
 
     public function owner()
     {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function ownerFromMembers()
+    {
         return $this->users()->wherePivot('role', 'owner')->first();
     }
 
@@ -114,13 +124,19 @@ class Team extends Model
 
     public function projects(): HasMany
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Project::class)->withoutGlobalScopes();
     }
 
     // Check if user can assign tasks
     public function userCanAssignTasks(User $user): bool
     {
-        return $this->users()->where('user_id', $user->id)->whereIn('role', ['owner', 'admin', 'super_admin'])->exists();
+        return $this->members()->where('user_id', $user->id)->whereIn('role', ['owner', 'admin', 'super_admin'])->exists();
+    }
+
+    // Alias for members relationship
+    public function users()
+    {
+        return $this->members();
     }
 
 }

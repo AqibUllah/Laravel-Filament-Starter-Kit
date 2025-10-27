@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             TaskSeeder::class,
             PlanSeeder::class,
             PlanFeatureSeeder::class,
+            CouponSeeder::class
 //            SubscriptionSeeder::class
         ]);
 
