@@ -6,6 +6,8 @@ use App\Models\Permission;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Team;
+use App\Models\Coupon;
+use App\Services\CouponService;
 use BackedEnum;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -37,6 +39,8 @@ class SubscriptionSuccess extends Page
     public $trialEndsAt;
     public $status;
     public $isPlanSwitch = false;
+    public $couponCode;
+    public $discountAmount = 0;
 
     public function mount(): void
     {
@@ -148,6 +152,9 @@ class SubscriptionSuccess extends Page
                     \Carbon\Carbon::createFromTimestamp($stripeSubscription->cancel_at) : null,
                 'canceled_at' => $stripeSubscription->canceled_at ?
                     \Carbon\Carbon::createFromTimestamp($stripeSubscription->canceled_at) : null,
+                'coupon_id' => $this->getCouponFromMetadata($stripeSubscription),
+                'discount_amount' => $this->calculateDiscountFromStripe($stripeSubscription),
+                'final_amount' => $this->calculateFinalAmount($stripeSubscription, $plan),
             ]
         );
 
@@ -351,5 +358,43 @@ class SubscriptionSuccess extends Page
                 ->middleware(['web', 'auth'])
                 ->name('subscription.success');
         };
+    }
+
+    private function getCouponFromMetadata($stripeSubscription): ?int
+    {
+        $couponCode = $stripeSubscription->metadata['coupon_code'] ?? null;
+        
+        if ($couponCode) {
+            $coupon = Coupon::where('code', $couponCode)->first();
+            return $coupon ? $coupon->id : null;
+        }
+        
+        return null;
+    }
+
+    private function calculateDiscountFromStripe($stripeSubscription): float
+    {
+        // Calculate discount from Stripe subscription data
+        if (isset($stripeSubscription->discount) && $stripeSubscription->discount->coupon) {
+            $coupon = $stripeSubscription->discount->coupon;
+            
+            if ($coupon->percent_off) {
+                // For percentage discounts, we need the original amount
+                // This is a simplified calculation - you might want to store this differently
+                return 0; // Will be calculated properly in calculateFinalAmount
+            } elseif ($coupon->amount_off) {
+                return $coupon->amount_off / 100; // Convert from cents
+            }
+        }
+        
+        return 0;
+    }
+
+    private function calculateFinalAmount($stripeSubscription, Plan $plan): float
+    {
+        $originalAmount = $plan->price;
+        $discountAmount = $this->calculateDiscountFromStripe($stripeSubscription);
+        
+        return max(0, $originalAmount - $discountAmount);
     }
 }

@@ -32,6 +32,63 @@
         </x-filament::section>
     @endif
 
+    {{-- Coupon Section --}}
+    <x-filament::section class="mb-8">
+        <x-slot name="heading">
+            Coupon Code
+        </x-slot>
+        <x-slot name="description">
+            Enter a coupon code to get a discount on your subscription
+        </x-slot>
+
+        <div class="flex gap-4 items-end">
+            <div class="flex-1">
+                <x-filament::input.wrapper>
+                    <x-filament::input
+                        wire:model.live="couponCode"
+                        placeholder="Enter coupon code (e.g., WELCOME20)"
+                        wire:keyup.enter="validateCoupon"
+                    />
+                </x-filament::input.wrapper>
+            </div>
+            
+            <x-filament::button
+                wire:click="validateCoupon"
+                color="primary"
+                :disabled="empty($couponCode)">
+                Apply Coupon
+            </x-filament::button>
+            
+            @if($appliedCoupon)
+                <x-filament::button
+                    wire:click="removeCoupon"
+                    color="gray"
+                    outline>
+                    Remove
+                </x-filament::button>
+            @endif
+        </div>
+
+        @if($appliedCoupon)
+            <div class="mt-4 p-4 bg-success-50 dark:bg-success-900/20 border border-success-200 dark:border-success-800 rounded-lg">
+                <div class="flex items-center">
+                    <x-heroicon-o-check-circle class="h-5 w-5 text-success-500 mr-2" />
+                    <div>
+                        <p class="font-medium text-success-800 dark:text-success-200">
+                            Coupon Applied: {{ $appliedCoupon->name }}
+                        </p>
+                        <p class="text-sm text-success-600 dark:text-success-300">
+                            {{ $appliedCoupon->getFormattedDiscount() }} discount
+                            @if($appliedCoupon->description)
+                                - {{ $appliedCoupon->description }}
+                            @endif
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
+    </x-filament::section>
+
     {{-- Plans Grid --}}
     <x-filament::section class="mb-8">
         <x-slot name="heading">
@@ -61,8 +118,25 @@
                             <p class="text-gray-600 dark:text-gray-300">{{ $plan->description }}</p>
 
                             <div class="my-4">
-                                <span class="text-3xl font-bold">${{ $plan->price }}</span>
-                                <span class="text-gray-600">/{{ $plan->interval }}</span>
+                                @if($appliedCoupon)
+                                    @php
+                                        $couponService = app(\App\Services\CouponService::class);
+                                        $discountData = $couponService->calculateDiscount($appliedCoupon, $plan->price);
+                                    @endphp
+                                    <div class="space-y-1">
+                                        <div class="flex items-center">
+                                            <span class="text-lg text-gray-500 line-through">${{ $plan->price }}</span>
+                                            <span class="text-3xl font-bold ml-2">${{ number_format($discountData['final_amount'], 2) }}</span>
+                                            <span class="text-gray-600">/{{ $plan->interval }}</span>
+                                        </div>
+                                        <div class="text-sm text-success-600 font-medium">
+                                            Save ${{ number_format($discountData['discount_amount'], 2) }} ({{ $discountData['savings_percentage'] }}% off)
+                                        </div>
+                                    </div>
+                                @else
+                                    <span class="text-3xl font-bold">${{ $plan->price }}</span>
+                                    <span class="text-gray-600">/{{ $plan->interval }}</span>
+                                @endif
                             </div>
 
                             <ul class="space-y-2 mb-6">
