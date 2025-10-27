@@ -4,6 +4,8 @@ namespace App\Filament\Tenant\Pages;
 
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Models\Coupon;
+use App\Services\CouponService;
 use App\Providers\StripeBillingProvider;
 use BackedEnum;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
@@ -36,6 +38,9 @@ class Plans extends Page implements HasActions
 
     public $plans;
     public $currentSubscription;
+    public $couponCode = '';
+    public $couponValidation = null;
+    public $appliedCoupon = null;
 
     public function mount(): void
     {
@@ -96,7 +101,7 @@ class Plans extends Page implements HasActions
 
         try {
             $billingProvider = app(StripeBillingProvider::class);
-            $checkoutSession = $billingProvider->createCheckoutSession($plan, $team, $user);
+            $checkoutSession = $billingProvider->createCheckoutSession($plan, $team, $user, $this->couponCode);
             // Redirect to Stripe Checkout
             $this->redirect($checkoutSession->url);
 
@@ -107,6 +112,54 @@ class Plans extends Page implements HasActions
                 ->danger()
                 ->send();
         }
+    }
+
+    public function validateCoupon(): void
+    {
+        if (empty($this->couponCode)) {
+            $this->couponValidation = null;
+            $this->appliedCoupon = null;
+            return;
+        }
+
+        $team = Filament::getTenant();
+        $couponService = app(CouponService::class);
+        
+        // Validate against the first plan for now (you might want to make this plan-specific)
+        $firstPlan = $this->plans->first();
+        
+        if ($firstPlan) {
+            $this->couponValidation = $couponService->validateCoupon($this->couponCode, $team, $firstPlan);
+            
+            if ($this->couponValidation['valid']) {
+                $this->appliedCoupon = $this->couponValidation['coupon'];
+                Notification::make()
+                    ->title('Coupon Applied!')
+                    ->body('Your coupon has been validated and will be applied at checkout.')
+                    ->success()
+                    ->send();
+            } else {
+                $this->appliedCoupon = null;
+                Notification::make()
+                    ->title('Invalid Coupon')
+                    ->body($this->couponValidation['message'])
+                    ->danger()
+                    ->send();
+            }
+        }
+    }
+
+    public function removeCoupon(): void
+    {
+        $this->couponCode = '';
+        $this->couponValidation = null;
+        $this->appliedCoupon = null;
+        
+        Notification::make()
+            ->title('Coupon Removed')
+            ->body('Coupon has been removed from your order.')
+            ->info()
+            ->send();
     }
 
     public function isCurrentPlan($planId): bool

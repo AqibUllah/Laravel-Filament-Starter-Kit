@@ -10,6 +10,8 @@ use Stripe\BillingPortal\Session;
 use Stripe\Stripe;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Models\Coupon;
+use App\Services\CouponService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Checkout\Session as CheckoutSession;
@@ -69,17 +71,38 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
     }
 
     // Additional methods for subscription management
-    public function createCheckoutSession(Plan $plan, $team, $user)
+    public function createCheckoutSession(Plan $plan, $team, $user, $couponCode = null)
     {
         $customer = $this->getOrCreateStripeCustomer($team, $user);
+        
+        $lineItems = [[
+            'price' => $plan->stripe_price_id,
+            'quantity' => 1,
+        ]];
 
-        $checkoutSession = CheckoutSession::create([
+        $discounts = [];
+        
+        // Handle coupon if provided
+        if ($couponCode) {
+            $couponService = app(CouponService::class);
+            $validation = $couponService->validateCoupon($couponCode, $team, $plan);
+            
+            if ($validation['valid']) {
+                $coupon = $validation['coupon'];
+                
+                // Create Stripe coupon if it doesn't exist
+                $stripeCouponId = $this->createStripeCoupon($coupon);
+                
+                if ($stripeCouponId) {
+                    $discounts[] = ['coupon' => $stripeCouponId];
+                }
+            }
+        }
+
+        $checkoutSessionData = [
             'customer' => $customer->id,
             'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price' => $plan->stripe_price_id,
-                'quantity' => 1,
-            ]],
+            'line_items' => $lineItems,
             'mode' => 'subscription',
             'success_url' => route('filament.tenant.pages.subscription-success',['tenant' => $team]) . '?session_id={CHECKOUT_SESSION_ID}&team_id=' . $team->id,
             'cancel_url' => route('filament.tenant.pages.plans', ['tenant' => $team]),
@@ -87,9 +110,16 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
                 'metadata' => [
                     'team_id' => $team->id,
                     'plan_id' => $plan->id,
+                    'coupon_code' => $couponCode,
                 ],
             ],
-        ]);
+        ];
+
+        if (!empty($discounts)) {
+            $checkoutSessionData['discounts'] = $discounts;
+        }
+
+        $checkoutSession = CheckoutSession::create($checkoutSessionData);
 
         return $checkoutSession;
     }
@@ -110,5 +140,49 @@ class StripeBillingProvider extends ServiceProvider implements BillingProvider
         ]);
 
         return $customer;
+    }
+
+    private function createStripeCoupon(Coupon $coupon): ?string
+    {
+        try {
+            // Check if Stripe coupon already exists
+            $existingCoupons = \Stripe\Coupon::all(['limit' => 100]);
+            foreach ($existingCoupons->data as $stripeCoupon) {
+                if ($stripeCoupon->metadata['local_coupon_id'] ?? null == $coupon->id) {
+                    return $stripeCoupon->id;
+                }
+            }
+
+            // Create new Stripe coupon
+            $stripeCouponData = [
+                'id' => 'local_' . $coupon->id . '_' . time(), // Unique ID for Stripe
+                'metadata' => [
+                    'local_coupon_id' => $coupon->id,
+                    'coupon_code' => $coupon->code,
+                ],
+            ];
+
+            if ($coupon->type === 'percentage') {
+                $stripeCouponData['percent_off'] = $coupon->value;
+            } else {
+                $stripeCouponData['amount_off'] = $coupon->value * 100; // Convert to cents
+                $stripeCouponData['currency'] = 'usd';
+            }
+
+            if ($coupon->valid_until) {
+                $stripeCouponData['redeem_by'] = $coupon->valid_until->timestamp;
+            }
+
+            if ($coupon->usage_limit) {
+                $stripeCouponData['max_redemptions'] = $coupon->usage_limit;
+            }
+
+            $stripeCoupon = \Stripe\Coupon::create($stripeCouponData);
+            
+            return $stripeCoupon->id;
+        } catch (\Exception $e) {
+            \Log::error('Failed to create Stripe coupon: ' . $e->getMessage());
+            return null;
+        }
     }
 }
