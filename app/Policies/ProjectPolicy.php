@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Services\FeatureLimiterService;
-use Filament\Facades\Filament;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\Project;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -13,7 +11,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class ProjectPolicy
 {
     use HandlesAuthorization;
-
+    
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:Project');
@@ -26,10 +24,7 @@ class ProjectPolicy
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:Project') &&
-            app(FeatureLimiterService::class)
-                ->forTenant(Filament::getTenant())
-                ->canCreateProject();
+        return $authUser->can('Create:Project');
     }
 
     public function update(AuthUser $authUser, Project $project): bool

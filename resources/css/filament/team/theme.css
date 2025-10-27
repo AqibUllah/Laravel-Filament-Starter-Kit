@@ -16,6 +16,11 @@
 @source '../../../../vendor/codewithdennis/filament-simple-alert/resources/**/*.blade.php';
 @source inline('animate-{spin,pulse,bounce}');
 
+.fi-main, .fi-simple-main {
+    &.fi-width-7xl {
+      max-width: var(--container-9xl);
+    }
+}
 .es-file-upload.document-logo > div {
     @apply w-48;
 }

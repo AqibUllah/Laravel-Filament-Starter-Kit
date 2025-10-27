@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use Alizharb\FilamentThemesManager\FilamentThemesManagerPlugin;
+use App\Filament\Tenant\Pages\Dashboard;
 use App\Filament\Tenant\Pages\PlansDashboard;
 use App\Filament\Tenant\Pages\ProjectDashboard;
 use App\Filament\Tenant\Pages\TaskDashboard;
@@ -21,7 +22,6 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
