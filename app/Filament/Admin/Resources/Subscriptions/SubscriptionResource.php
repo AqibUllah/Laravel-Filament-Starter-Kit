@@ -8,11 +8,11 @@ use App\Filament\Admin\Resources\Subscriptions\Pages\ListSubscriptions;
 use App\Filament\Admin\Resources\Subscriptions\Schemas\SubscriptionForm;
 use App\Filament\Admin\Resources\Subscriptions\Tables\SubscriptionsTable;
 use App\Models\Subscription;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use BackedEnum;
 use UnitEnum;
 
 class SubscriptionResource extends Resource

@@ -32,6 +32,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Http\Middleware\RecordUsageMiddleware;
 
 class TenantPanelProvider extends PanelProvider
 {
@@ -93,6 +94,10 @@ class TenantPanelProvider extends PanelProvider
                 SyncShieldTenant::class,
                 RedirectIfUserNotSubscribedMiddleware::class
             ], isPersistent: true)
+            ->middleware([
+                // Existing middleware are above; add usage recording as a global middleware for tenant panel
+                RecordUsageMiddleware::class,
+            ])
             ->authMiddleware([
                 Authenticate::class,
             ])

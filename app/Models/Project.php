@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
+use App\Jobs\RecordProjectUsage;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -266,6 +267,12 @@ class Project extends Model
             // Auto-complete project if progress reaches 100%
             if ($project->progress >= 100 && $project->status !== ProjectStatusEnum::Completed) {
                 $project->markAsCompleted();
+            }
+        });
+
+        static::created(function (Project $project) {
+            if ($project->team_id && $project->id) {
+                RecordProjectUsage::dispatch($project->team_id, $project->id);
             }
         });
     }

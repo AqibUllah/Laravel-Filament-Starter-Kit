@@ -3,6 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Widgets\CouponStatsWidget;
+use App\Filament\Admin\Widgets\UsageStatsWidget;
+use App\Services\UsageService;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -40,7 +42,8 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
-                CouponStatsWidget::class
+                CouponStatsWidget::class,
+                UsageStatsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -57,5 +60,70 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->authGuard('admin');
+    }
+
+    /**
+     * Configure usage-based billing for the admin panel
+     * This method provides configuration for usage-based billing features
+     */
+    protected function configureUsageBasedBilling(): array
+    {
+        return [
+            'enabled' => true,
+            'metrics' => [
+                'api_calls' => [
+                    'name' => 'API Calls',
+                    'unit' => 'calls',
+                    'unit_price' => 0.001,
+                    'description' => 'Number of API requests made',
+                ],
+                'storage_gb' => [
+                    'name' => 'Storage Usage',
+                    'unit' => 'GB',
+                    'unit_price' => 0.10,
+                    'description' => 'Storage space used in gigabytes',
+                ],
+                'active_users' => [
+                    'name' => 'Active Users',
+                    'unit' => 'users',
+                    'unit_price' => 2.00,
+                    'description' => 'Number of active users',
+                ],
+                'database_queries' => [
+                    'name' => 'Database Queries',
+                    'unit' => 'queries',
+                    'unit_price' => 0.0001,
+                    'description' => 'Number of database queries executed',
+                ],
+                'email_sends' => [
+                    'name' => 'Email Sends',
+                    'unit' => 'emails',
+                    'unit_price' => 0.01,
+                    'description' => 'Number of emails sent',
+                ],
+            ],
+            'billing_periods' => [
+                'monthly' => [
+                    'name' => 'Monthly',
+                    'days' => 30,
+                    'default' => true,
+                ],
+                'weekly' => [
+                    'name' => 'Weekly',
+                    'days' => 7,
+                ],
+                'daily' => [
+                    'name' => 'Daily',
+                    'days' => 1,
+                ],
+            ],
+            'overage_policies' => [
+                'block' => 'Block usage when limit exceeded',
+                'charge' => 'Charge overage fees',
+                'warn' => 'Send warning notifications',
+            ],
+            'default_overage_policy' => 'charge',
+            'usage_service' => UsageService::class,
+        ];
     }
 }
