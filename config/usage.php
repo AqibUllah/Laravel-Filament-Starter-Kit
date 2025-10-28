@@ -20,11 +20,9 @@ return [
 			'metric' => 'page_views',
 			'quantity' => 1,
 			'unit_price' => 0.0,
-			'metadata' => function (\Illuminate\Http\Request $request) {
-				return [
-					'path' => $request->path(),
-				];
-			},
+			// Closures are not allowed in config cache; use a serializable value.
+			// If runtime-built metadata is needed, implement it where the config is consumed.
+			'metadata' => null,
 		],
 
 		// Example: track table exports
