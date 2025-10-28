@@ -67,6 +67,11 @@ return [
         'ttl' => null,
     ],
 
+    // Resolve values for extra columns at runtime
+    'resolvers' => [
+        'tenant_id' => [\App\Settings\Resolvers\TenantResolver::class, 'tenantId'],
+    ],
+
     /*
      * These global casts will be automatically used whenever a property within
      * your settings class isn't a default PHP type.

@@ -15,6 +15,7 @@ use App\Filament\Tenant\Widgets\TaskStatsWidget;
 use App\Http\Middleware\RedirectIfUserNotSubscribedMiddleware;
 use App\Models\Team;
 use App\Providers\StripeBillingProvider;
+use App\Settings\TenantGeneralSettings;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
 use Filament\Actions\Action;
@@ -38,15 +39,16 @@ class TenantPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $settings = new TenantGeneralSettings();
         return $panel
             ->default()
-            ->brandName('Laravel Filament Saas Starter Kit')
+            ->brandName($settings->company_name)
             ->id('tenant')
             ->path('tenant')
             ->login()
             ->registration()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => $settings->primary_color ?? Color::Amber,
             ])
             ->discoverResources(in: app_path('Filament/Tenant/Resources'), for: 'App\Filament\Tenant\Resources')
             ->discoverPages(in: app_path('Filament/Tenant/Pages'), for: 'App\Filament\Tenant\Pages')

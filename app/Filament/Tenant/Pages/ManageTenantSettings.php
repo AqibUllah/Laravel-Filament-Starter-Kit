@@ -15,6 +15,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Artisan;
 use UnitEnum;
 
 class ManageTenantSettings extends Page
@@ -27,24 +28,6 @@ class ManageTenantSettings extends Page
      protected static string | UnitEnum | null $navigationGroup = 'System';
 
      protected static ?int $navigationSort = 8;
-
-    public function form(Schema $schema): Schema
-    {
-        return $schema->components([
-            TextInput::make('company_name')
-                ->label('Company Name')
-                ->required()
-                ->maxLength(120),
-            FileUpload::make('company_logo_path')
-                ->label('Company Logo')
-                ->image()
-                ->directory('tenant-logos')
-                ->imageEditor(),
-            ColorPicker::make('primary_color')
-                ->label('Primary Color')
-                ->nullable(),
-        ]);
-    }
 
     protected function getHeaderActions(): array
     {
@@ -62,6 +45,7 @@ class ManageTenantSettings extends Page
                             FileUpload::make('company_logo_path')
                                 ->label('Company Logo')
                                 ->image()
+                                ->visibility('public')
                                 ->directory('tenant-logos')
                                 ->imageEditor(),
                             ColorPicker::make('primary_color')
@@ -252,6 +236,13 @@ class ManageTenantSettings extends Page
 //                    dd($action);
                 })
                 ->action(function (array $data) {
+                    // Debug tenant context
+                    \Illuminate\Support\Facades\Log::info('ManageTenantSettings: Saving settings', [
+                        'filament_tenant' => filament()->getTenant()?->id,
+                        'auth_user' => auth()->id(),
+                        'data_keys' => array_keys($data)
+                    ]);
+
                     $settings = app(TenantGeneralSettings::class);
 
                     // Branding
@@ -296,7 +287,8 @@ class ManageTenantSettings extends Page
                         ->title('Settings saved')
                         ->success()
                         ->send();
-                }),
+                })
+                ->successRedirectUrl(ManageTenantSettings::getUrl()),
         ];
     }
 }
