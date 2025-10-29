@@ -14,6 +14,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use App\Settings\TenantGeneralSettings;
 
 class TaskForm
 {
@@ -23,6 +24,7 @@ class TaskForm
 //        $currentTeam = \Auth::user()->currentTeam;
 
         $currentTeam = Filament::getTenant();
+        $settings = new TenantGeneralSettings();
 
         return $schema
             ->components([
@@ -50,10 +52,10 @@ class TaskForm
                             ->minDate(now()),
                         Select::make('priority')
                             ->options(PriorityEnum::class)
-                            ->default('medium'),
+                            ->default($settings->task_default_priority ?? 'medium'),
                         Select::make('status')
                             ->options(TaskStatusEnum::class)
-                            ->default('pending'),
+                            ->default($settings->task_default_status ?? 'pending'),
                     ])->columns(2),
 
                 Section::make('Time Tracking')

@@ -29,6 +29,10 @@ class ManageTenantSettings extends Page
 
      protected static ?int $navigationSort = 8;
 
+     protected static ?string $title = 'System Settings';
+
+     protected ?string $subheading = 'Manage your application configuration and preferences';
+
     protected function getHeaderActions(): array
     {
         return [

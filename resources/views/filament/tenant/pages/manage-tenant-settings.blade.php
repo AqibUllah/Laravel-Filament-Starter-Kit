@@ -4,13 +4,6 @@
     @endphp
 
     <div class="space-y-8">
-        <!-- Header Section -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-            <div>
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">System Settings</h2>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your application configuration and preferences</p>
-            </div>
-        </div>
 
         <!-- Settings Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">

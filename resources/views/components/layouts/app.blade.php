@@ -1,7 +1,3 @@
-@php
-    use Filament\Support\Enums\MaxWidth;
-@endphp
-
 <x-filament-panels::layout.base>
     @props([
         'after' => null,
@@ -21,21 +17,14 @@
         @endif
 
         <!-- Left Side - Visual Section -->
-        <div class="relative hidden w-0 flex-1 lg:block overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-blue-600/10 z-10"></div>
-            <img
-                class="absolute inset-0 size-full object-cover transform scale-105"
-                src="{{ asset('images/team.jpg') }}"
-                alt="Team collaboration"
-            >
-            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-8 text-white z-20">
-                <h3 class="text-xl font-bold mb-2">Welcome to Our Community</h3>
-                <p class="text-sm opacity-90">You're now part of something special</p>
-            </div>
-        </div>
+{{--            <img--}}
+{{--                class="absolute inset-0 size-full object-cover transform scale-105"--}}
+{{--                src="{{ asset('images/team.jpg') }}"--}}
+{{--                alt="Team collaboration"--}}
+{{--            >--}}
 
         <!-- Right Side - Content Section -->
-        <div class="flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 lg:flex-none lg:px-20 xl:px-24 w-full lg:w-1/2">
+        <div class="flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 lg:flex-none lg:px-20 xl:px-24 w-full">
             <div class="w-full mx-auto lg:mx-0">
                 <!-- Logo/Brand -->
                 <div class="flex justify-center lg:justify-start mb-8">
@@ -50,7 +39,7 @@
                 </div>
 
                 <!-- Main Content -->
-                <main class="w-full rounded-2xl shadow-xl">
+                <main class="w-1/2 rounded-2xl mx-auto">
                     {{ $slot }}
                 </main>
 

@@ -18,12 +18,14 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
+use App\Settings\TenantGeneralSettings;
 
 class ProjectForm
 {
     public static function configure(Schema $schema): Schema
     {
         $currentTeam = Filament::getTenant();
+        $settings = new TenantGeneralSettings();
 
         return $schema
             ->components([
@@ -63,7 +65,7 @@ class ProjectForm
 
                         Select::make('status')
                             ->options(ProjectStatusEnum::class)
-                            ->default(ProjectStatusEnum::Planning)
+                            ->default($settings->project_default_status ?? ProjectStatusEnum::Planning)
                             ->required()
                             ->live()
                             ->afterStateUpdated(function ($state, callable $set) {
@@ -74,7 +76,7 @@ class ProjectForm
 
                         Select::make('priority')
                             ->options(PriorityEnum::class)
-                            ->default(PriorityEnum::Medium)
+                            ->default($settings->project_default_priority ?? PriorityEnum::Medium)
                             ->required(),
 
                         TextInput::make('progress')
