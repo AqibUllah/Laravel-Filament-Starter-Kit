@@ -15,6 +15,7 @@ use App\Filament\Tenant\Widgets\TaskStatsWidget;
 use App\Http\Middleware\RedirectIfUserNotSubscribedMiddleware;
 use App\Models\Team;
 use App\Providers\StripeBillingProvider;
+use App\Settings\TenantGeneralSettings;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
 use Filament\Actions\Action;
@@ -26,6 +27,8 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
+use Illuminate\Support\Facades\Config;
+use Carbon\Carbon;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -38,19 +41,40 @@ class TenantPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $settings = new TenantGeneralSettings();
         return $panel
             ->default()
-            ->brandName('Laravel Filament Saas Starter Kit')
+            ->brandName($settings->company_name)
+            ->brandLogo($settings->company_logo_path ? asset($settings->company_logo_path) : null)
             ->id('tenant')
             ->path('tenant')
             ->login()
             ->registration()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => $settings->primary_color ?? Color::Amber,
             ])
+            // Sidebar behavior from tenant settings
+            ->sidebarCollapsibleOnDesktop((bool) ($settings->sidebar_collapsed_default ?? false))
             ->discoverResources(in: app_path('Filament/Tenant/Resources'), for: 'App\Filament\Tenant\Resources')
             ->discoverPages(in: app_path('Filament/Tenant/Pages'), for: 'App\Filament\Tenant\Pages')
             ->discoverLivewireComponents(app_path('Filament/Schemas/Components'), for: 'App\Filament\Schemas\Components')
+            // Apply locale/timezone preferences for the tenant at boot time
+            ->bootUsing(function () use ($settings): void {
+                if (! empty($settings->locale)) {
+                    app()->setLocale($settings->locale);
+                    Carbon::setLocale($settings->locale);
+                }
+
+                if (! empty($settings->timezone)) {
+                    Config::set(['app.timezone' => $settings->timezone]);
+                    date_default_timezone_set($settings->timezone);
+                }
+
+                // disk
+                if (! empty($settings->storage_upload_disk)) {
+                    Config::set(['filesystems.default' => $settings->storage_upload_disk]);
+                }
+            })
             ->pages([
                 Dashboard::class,
                 Plans::class,
