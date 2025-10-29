@@ -37,7 +37,7 @@ return [
         'database' => [
             'type' => Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
             'model' => null,
-            'table' => null,
+            'table' => 'settings',
             'connection' => null,
         ],
         'redis' => [
@@ -65,6 +65,11 @@ return [
         'store' => null,
         'prefix' => null,
         'ttl' => null,
+    ],
+
+    // Extra columns for scoping settings
+    'extra_columns' => [
+        'tenant_id',
     ],
 
     // Resolve values for extra columns at runtime
