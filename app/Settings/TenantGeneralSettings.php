@@ -3,9 +3,16 @@
 namespace App\Settings;
 
 use Spatie\LaravelSettings\Settings;
+use Spatie\LaravelSettings\SettingsRepositories\SettingsRepository;
 
 class TenantGeneralSettings extends Settings
 {
+    public static function repository(): ?string
+    {
+        return 'database';
+    }
+
+
     // Branding
     public string $company_name;
     public ?string $company_logo_path;

@@ -19,6 +19,7 @@ use App\Settings\TenantGeneralSettings;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
 use Filament\Actions\Action;
+use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -41,7 +42,7 @@ class TenantPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $settings = new TenantGeneralSettings();
+        $settings = app(TenantGeneralSettings::class);
         return $panel
             ->default()
             ->brandName($settings->company_name)
@@ -49,10 +50,17 @@ class TenantPanelProvider extends PanelProvider
             ->id('tenant')
             ->path('tenant')
             ->login()
+            ->profile()
             ->registration()
             ->colors([
                 'primary' => $settings->primary_color ?? Color::Amber,
             ])
+            ->multiFactorAuthentication([
+                AppAuthentication::make()
+                ->recoverable()
+                ->recoveryCodeCount(10)
+                ->brandName($settings->company_name ?? 'Team'),
+            ],isRequired: $settings->require_2fa ?? false)
             // Sidebar behavior from tenant settings
             ->sidebarCollapsibleOnDesktop((bool) ($settings->sidebar_collapsed_default ?? false))
             ->discoverResources(in: app_path('Filament/Tenant/Resources'), for: 'App\Filament\Tenant\Resources')
@@ -72,7 +80,7 @@ class TenantPanelProvider extends PanelProvider
 
                 // disk
                 if (! empty($settings->storage_upload_disk)) {
-                    Config::set(['filesystems.default' => $settings->storage_upload_disk]);
+                    Config::set(['filament.default_filesystem_disk' => $settings->storage_upload_disk]);
                 }
             })
             ->pages([
