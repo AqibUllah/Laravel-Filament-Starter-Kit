@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Pages;
 
 use App\Settings\TenantGeneralSettings;
 use BackedEnum;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
@@ -20,6 +21,8 @@ use UnitEnum;
 
 class ManageTenantSettings extends Page
 {
+    use HasPageShield;
+
     protected string $view = 'filament.tenant.pages.manage-tenant-settings';
     protected static string $settings = TenantGeneralSettings::class;
 
@@ -49,8 +52,10 @@ class ManageTenantSettings extends Page
                             FileUpload::make('company_logo_path')
                                 ->label('Company Logo')
                                 ->image()
-                                ->visibility('public')
+                                ->disk($settings->storage_upload_disk ?? 'public')
+                                ->acceptedFileTypes(['image/jpg','image/png','image/jpeg'])
                                 ->directory('tenant-logos')
+                                ->visibility('public')
                                 ->imageEditor(),
                             ColorPicker::make('primary_color')
                                 ->label('Primary Color')
@@ -284,6 +289,8 @@ class ManageTenantSettings extends Page
 
                     // UX
                     $settings->sidebar_collapsed_default = $data['sidebar_collapsed_default'] ?? false;
+
+                    $settings->tenant_id = filament()->getTenant()->id;
 
                     $settings->save();
 
