@@ -29,6 +29,7 @@ use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -42,11 +43,22 @@ class TenantPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $settings = app(TenantGeneralSettings::class);
+        $settings = null;
+        if (Schema::hasTable('settings')) {
+            try {
+                $settings = app(TenantGeneralSettings::class);
+            } catch (\Throwable $e) {
+                // The settings table might not be ready or filled, fallback to default values
+                $settings = (object)[];
+            }
+        } else {
+            // Table does not exist: fallback to default values for first-time setup
+            $settings = (object)[];
+        }
         return $panel
             ->default()
-            ->brandName($settings->company_name)
-            ->brandLogo($settings->company_logo_path ? asset($settings->company_logo_path) : null)
+            ->brandName($settings->company_name ?? 'Team')
+            ->brandLogo(isset($settings->company_logo_path) && $settings->company_logo_path ? asset($settings->company_logo_path) : null)
             ->id('tenant')
             ->path('tenant')
             ->login()
@@ -62,7 +74,7 @@ class TenantPanelProvider extends PanelProvider
                 ->brandName($settings->company_name ?? 'Team'),
             ],isRequired: $settings->require_2fa ?? false)
             // Sidebar behavior from tenant settings
-            ->sidebarCollapsibleOnDesktop((bool) ($settings->sidebar_collapsed_default ?? false))
+            ->sidebarCollapsibleOnDesktop((bool)($settings->sidebar_collapsed_default ?? false))
             ->discoverResources(in: app_path('Filament/Tenant/Resources'), for: 'App\Filament\Tenant\Resources')
             ->discoverPages(in: app_path('Filament/Tenant/Pages'), for: 'App\Filament\Tenant\Pages')
             ->discoverLivewireComponents(app_path('Filament/Schemas/Components'), for: 'App\Filament\Schemas\Components')
@@ -124,7 +136,7 @@ class TenantPanelProvider extends PanelProvider
             ])
             ->tenantMiddleware([
                 SyncShieldTenant::class,
-                RedirectIfUserNotSubscribedMiddleware::class
+                RedirectIfUserNotSubscribedMiddleware::class,
             ], isPersistent: true)
             ->middleware([
                 // Existing middleware are above; add usage recording as a global middleware for tenant panel
