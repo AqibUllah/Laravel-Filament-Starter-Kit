@@ -19,7 +19,9 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
 
         if ($tenantId) {
             $builder->where('tenant_id', $tenantId);
+            return $builder;
         }
+
 
         return $builder;
     }
