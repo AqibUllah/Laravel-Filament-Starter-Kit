@@ -1,5 +1,8 @@
 <?php
 
+use App\Settings\Repositories\TenantSettingsRepository;
+use App\Settings\TenantGeneralSettings;
+
 return [
 
     /*
@@ -7,7 +10,7 @@ return [
      * put them (manually) here.
      */
     'settings' => [
-
+        TenantGeneralSettings::class
     ],
 
     /*
@@ -35,7 +38,8 @@ return [
      */
     'repositories' => [
         'database' => [
-            'type' => Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            // 'type' => Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'type' => TenantSettingsRepository::class,
             'model' => null,
             'table' => 'settings',
             'connection' => null,
