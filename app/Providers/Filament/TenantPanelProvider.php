@@ -38,7 +38,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\RecordUsageMiddleware;
-use App\Http\Middleware\SetCurrentTenant;
 
 class TenantPanelProvider extends PanelProvider
 {
@@ -138,7 +137,6 @@ class TenantPanelProvider extends PanelProvider
             ->tenantMiddleware([
                 SyncShieldTenant::class,
                 RedirectIfUserNotSubscribedMiddleware::class,
-                SetCurrentTenant::class
             ], isPersistent: true)
             ->middleware([
                 // Existing middleware are above; add usage recording as a global middleware for tenant panel
