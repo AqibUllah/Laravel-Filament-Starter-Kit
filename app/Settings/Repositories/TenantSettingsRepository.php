@@ -42,7 +42,36 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
         // return app()->bound('currentTenantId')
         // ? app('currentTenantId')
         // : null;
-        return filament()->getTenant() ?? null;
+        // return filament()->getTenant() ?? null;
+
+        // 1. Filament context first
+    if (function_exists('filament') && filament()->getTenant()) {
+        return method_exists(filament()->getTenant(), 'getKey')
+            ? filament()->getTenant()->getKey()
+            : filament()->getTenant();
+    }
+
+    // 2. Auth context fallback
+    if (auth()->check() && isset(auth()->user()->team)) {
+        return auth()->user()->team->id;
+    }
+
+    // 3. Fallback: Get ID from URL segment (assuming structure: /tenant/{id}/...)
+    $request = request();
+    if ($request->route('tenant')) {
+        return is_object($request->route('tenant'))
+            ? $request->route('tenant')->getKey()
+            : $request->route('tenant');
+    }
+
+    // 4. Optionally, fallback to URL segment manually
+    $segments = $request->segments();
+    $tenantIndex = array_search('tenant', $segments);
+    if ($tenantIndex !== false && isset($segments[$tenantIndex + 1])) {
+        return (int) $segments[$tenantIndex + 1];
+    }
+
+    return null;
     }
 
     public function updatePropertiesPayload(string $group, array $properties): void
@@ -77,8 +106,6 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
         $tenantProps = $builder->where('group', $group)
         ->when($tenantId, fn ($q) => $q->where('tenant_id', $tenantId))
         ->get(['name', 'payload']);
-
-        // dd($tenantId,filament()->getTenant());
 
         // If none found, fallback to global (tenant_id = null)
         if ($tenantProps->isEmpty()) {
