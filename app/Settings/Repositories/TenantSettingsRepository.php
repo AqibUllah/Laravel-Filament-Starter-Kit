@@ -10,21 +10,21 @@ use Spatie\LaravelSettings\SettingsRepositories\SettingsRepository;
 class TenantSettingsRepository extends DatabaseSettingsRepository
 {
 
-    public function getBuilder(): Builder
-    {
-        $builder = parent::getBuilder();
-
-        // Automatically scope queries by tenant
-        $tenantId = $this->currentTenantId();
-
-        if ($tenantId) {
-            $builder->where('tenant_id', $tenantId);
-            return $builder;
-        }
-
-
-        return $builder;
-    }
+//    public function getBuilder(): Builder
+//    {
+//        $builder = parent::getBuilder();
+//
+//        // Automatically scope queries by tenant
+//        $tenantId = $this->currentTenantId();
+//
+//        if ($tenantId) {
+//            $builder->where('tenant_id', $tenantId);
+//            return $builder;
+//        }
+//
+//
+//        return $builder;
+//    }
 
     public function createProperty(string $group, string $name, $payload): void
     {
@@ -99,28 +99,28 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
             ->upsert($propertiesInBatch, ['group', 'name', 'tenant_id'], ['payload']);
     }
 
-    public function getPropertiesInGroup(string $group): array
-    {
-        $tenantId = $this->currentTenantId();
-        $builder = parent::getBuilder();
-
-        // Try to get tenant-specific properties
-        $tenantProps = $builder->where('group', $group)
-        ->when($tenantId, fn ($q) => $q->where('tenant_id', $tenantId))
-        ->get(['name', 'payload']);
-
-        // If none found, fallback to global (tenant_id = null)
-        if ($tenantProps->isEmpty()) {
-            $tenantProps = $builder->newQuery()
-                ->where('group', $group)
-                ->whereNull('tenant_id')
-                ->get(['name', 'payload']);
-        }
-
-        return $tenantProps
-            ->mapWithKeys(fn ($object) => [
-                $object->name => $this->decode($object->payload, true)
-            ])
-            ->toArray();
-    }
+//    public function getPropertiesInGroup(string $group): array
+//    {
+//        $tenantId = $this->currentTenantId();
+//        $builder = parent::getBuilder();
+//
+//        // Try to get tenant-specific properties
+//        $tenantProps = $builder->where('group', $group)
+//        ->when($tenantId, fn ($q) => $q->where('tenant_id', $tenantId))
+//        ->get(['name', 'payload']);
+//
+//        // If none found, fallback to global (tenant_id = null)
+//        if ($tenantProps->isEmpty()) {
+//            $tenantProps = $builder->newQuery()
+//                ->where('group', $group)
+//                ->whereNull('tenant_id')
+//                ->get(['name', 'payload']);
+//        }
+//
+//        return $tenantProps
+//            ->mapWithKeys(fn ($object) => [
+//                $object->name => $this->decode($object->payload, true)
+//            ])
+//            ->toArray();
+//    }
 }

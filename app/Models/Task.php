@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PriorityEnum;
 use App\Enums\TaskStatusEnum;
+use App\Events\TaskAssigned;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Task extends Model
 {
     use HasFactory;
+    
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'updated' => TaskAssigned::class,
+    ];
+    
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::updated(function ($task) {
+            if ($task->isDirty('assigned_to') && $task->assigned_to) {
+                event(new TaskAssigned($task));
+            }
+        });
+    }
 
     protected $fillable = [
         'team_id',

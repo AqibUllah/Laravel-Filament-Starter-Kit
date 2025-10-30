@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
+use App\Events\ProjectCreated;
 use App\Jobs\RecordProjectUsage;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +17,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Project extends Model
 {
     use HasFactory, SoftDeletes;
+    
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => ProjectCreated::class,
+    ];
 
     protected $fillable = [
         'name',
