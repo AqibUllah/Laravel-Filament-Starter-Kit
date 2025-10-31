@@ -41,15 +41,14 @@ class TeamInvitationNotification extends Notification implements ShouldQueue
     public function toMail(User $notifiable): TemplateMailable
     {
         $acceptUrl = url('/team-invitations/' . $this->invitationToken);
-        
-        return (new TemplateMailable('team-invitation'))
-            ->to($notifiable->email)
-            ->subject('You have been invited to join a team')
-            ->with([
-                'user' => $notifiable,
-                'team' => $this->team,
-                'acceptUrl' => $acceptUrl,
-            ]);
+
+        $mailable = new TemplateMailable('team-invitation');
+        $mailable->sendTo = $notifiable->email;
+        $mailable->user = $notifiable;
+        $mailable->team = $this->team;
+        $mailable->acceptUrl = $acceptUrl;
+
+        return $mailable->to($notifiable->email);
     }
 
     /**

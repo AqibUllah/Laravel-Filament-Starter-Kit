@@ -38,14 +38,13 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
      */
     public function toMail(User $notifiable): TemplateMailable
     {
-        return (new TemplateMailable('task-assigned'))
-            ->to($notifiable->email)
-            ->subject('Task Assigned: ' . $this->task->title)
-            ->with([
-                'user' => $notifiable,
-                'task' => $this->task,
-                'project' => $this->task->project,
-            ]);
+        $mailable = new TemplateMailable('task-assigned');
+        $mailable->sendTo = $notifiable->email;
+        $mailable->user = $notifiable;
+        $mailable->task = $this->task;
+        $mailable->project = $this->task->project;
+
+        return $mailable->to($notifiable->email);
     }
 
     /**

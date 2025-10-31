@@ -38,13 +38,12 @@ class ProjectCreatedNotification extends Notification implements ShouldQueue
      */
     public function toMail(User $notifiable): TemplateMailable
     {
-        return (new TemplateMailable('project-created'))
-            ->to($notifiable->email)
-            ->subject('New Project Created: ' . $this->project->name)
-            ->with([
-                'user' => $notifiable,
-                'project' => $this->project,
-            ]);
+        $mailable = new TemplateMailable('project-created');
+        $mailable->sendTo = $notifiable->email;
+        $mailable->user = $notifiable;
+        $mailable->project = $this->project;
+
+        return $mailable->to($notifiable->email);
     }
 
     /**

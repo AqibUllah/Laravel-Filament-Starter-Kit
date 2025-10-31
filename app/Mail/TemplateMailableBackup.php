@@ -2,16 +2,16 @@
 
 namespace App\Mail;
 
-use App\Models\EmailTemplate;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Visualbuilder\EmailTemplates\Facades\TokenHelper;
+use App\Models\EmailTemplate;
 use Visualbuilder\EmailTemplates\Traits\BuildGenericEmail;
 
-class TemplateMailable extends Mailable
+class TemplateMailableBackup extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -27,6 +27,7 @@ class TemplateMailable extends Mailable
     public $task;
     public $team;
     public $acceptUrl;
+    public $tenantId;
     public $teamId;
 
     /**
@@ -58,7 +59,6 @@ class TemplateMailable extends Mailable
             App::currentLocale(),
             $resolvedTeamId
         );
-
         if (!$this->emailTemplate) {
             Log::warning("Email template {$this->template} was not found.");
             return $this;

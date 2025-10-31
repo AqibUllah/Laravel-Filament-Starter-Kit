@@ -21,9 +21,9 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/framework/views
 /vendor
 /bootstrap/cache/
-.env.testing
 Homestead.json
 Homestead.yaml
 Thumbs.db
