@@ -17,6 +17,7 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "rickdbcn/filament-email": "^2.1",
+        "saade/filament-laravel-log": "^4.0",
         "spatie/laravel-settings": "^3.5",
         "stripe/stripe-php": "^17.6",
         "visualbuilder/email-templates": "^4.0"
