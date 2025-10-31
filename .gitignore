@@ -23,7 +23,6 @@
 /storage/pail
 /vendor
 /bootstrap/cache/
-.env.testing
 Homestead.json
 Homestead.yaml
 Thumbs.db
