@@ -2,13 +2,13 @@
 
 namespace App\Mail;
 
+use App\Models\EmailTemplate;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Visualbuilder\EmailTemplates\Facades\TokenHelper;
-use Visualbuilder\EmailTemplates\Models\EmailTemplate;
 use Visualbuilder\EmailTemplates\Traits\BuildGenericEmail;
 
 class TemplateMailable extends Mailable
@@ -18,9 +18,16 @@ class TemplateMailable extends Mailable
     use BuildGenericEmail;
 
     public $template;
-    public $data = [];
     public $sendTo;
     public $emailTemplate;
+
+    // Public properties for token replacement
+    public $user;
+    public $project;
+    public $task;
+    public $team;
+    public $acceptUrl;
+    public $teamId;
 
     /**
      * Create a new message instance.
@@ -31,24 +38,7 @@ class TemplateMailable extends Mailable
     public function __construct(string $template)
     {
         $this->template = $template;
-    }
-
-    /**
-     * Set the view data for the message.
-     *
-     * @param  string|array  $key
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function with($key, $value = null)
-    {
-        if (is_array($key)) {
-            $this->data = array_merge($this->data, $key);
-        } else {
-            $this->data[$key] = $value;
-        }
-
-        return $this;
+        $this->sendTo = '';
     }
 
     /**
@@ -58,41 +48,67 @@ class TemplateMailable extends Mailable
      */
     public function build()
     {
-        $this->emailTemplate = EmailTemplate::findEmailByKey($this->template, App::currentLocale());
+        $resolvedTeamId = $this->teamId
+            ?? ($this->team->id ?? null)
+            ?? ($this->project->team_id ?? null)
+            ?? ($this->task->team_id ?? null);
+
+        $this->emailTemplate = EmailTemplate::findEmailByKey(
+            $this->template,
+            App::currentLocale(),
+            $resolvedTeamId
+        );
 
         if (!$this->emailTemplate) {
             Log::warning("Email template {$this->template} was not found.");
             return $this;
         }
 
+        // Safely get theme colours with null check
+        $themeColours = ($this->emailTemplate->theme && $this->emailTemplate->theme->colours)
+            ? $this->emailTemplate->theme->colours
+            : [];
+
+        // Build a token-safe models object to avoid passing enums/objects into str_replace
+        $tokenModels = (object) [
+            'user' => $this->user,
+            'project' => $this->project ? (object) $this->project->toArray() : null,
+            'task' => $this->task ? (object) $this->task->toArray() : null,
+            'team' => $this->team ? (object) $this->team->toArray() : null,
+            'acceptUrl' => $this->acceptUrl ?? null,
+            'emailTemplate' => $this->emailTemplate,
+        ];
+
         $viewData = [
-            'content'       => TokenHelper::replace($this->emailTemplate->content ?? '', $this),
-            'preHeaderText' => TokenHelper::replace($this->emailTemplate->preheader ?? '', $this),
-            'title'         => TokenHelper::replace($this->emailTemplate->title ?? '', $this),
-            'theme'         => $this->emailTemplate->theme?->colours ?? null,
+            'content'       => TokenHelper::replace($this->emailTemplate->content ?? '', $tokenModels),
+            'preHeaderText' => TokenHelper::replace($this->emailTemplate->preheader ?? '', $tokenModels),
+            'title'         => TokenHelper::replace($this->emailTemplate->title ?? '', $tokenModels),
+            'theme'         => $themeColours,
             'logo'          => $this->emailTemplate->logo,
         ];
 
         // Ensure theme has safe defaults to avoid undefined index errors in views
-        $defaultColours = [
-            'anchor_color'      => '#1a82e2',
-            'header_bg_color'   => '#f2f2f2',
-            'body_bg_color'     => '#f9f9f9',
-            'content_bg_color'  => '#ffffff',
-            'body_color'        => '#000000',
-            'footer_bg_color'   => '#f2f2f2',
-            'button_bg_color'   => '#1a82e2',
-            'button_color'      => '#ffffff',
-            'callout_bg_color'  => '#f2f2f2',
-            'callout_color'     => '#333333',
-            'default'           => '#333333',
-        ];
-
-        $themeColours = is_array($viewData['theme']) ? $viewData['theme'] : [];
-        $viewData['theme'] = array_merge($defaultColours, $themeColours);
+        if (!is_array($viewData['theme']) || empty($viewData['theme'])) {
+            $viewData['theme'] = [
+                'anchor_color'      => '#1a82e2',
+                'header_bg_color'   => '#f2f2f2',
+                'body_bg_color'     => '#f9f9f9',
+                'content_bg_color'  => '#ffffff',
+                'body_color'        => '#000000',
+                'footer_bg_color'   => '#f2f2f2',
+                'button_bg_color'   => '#1a82e2',
+                'button_color'      => '#ffffff',
+                'callout_bg_color'  => '#f2f2f2',
+                'callout_color'     => '#333333',
+            ];
+        }
 
         if (is_array($this->emailTemplate->cc) && count($this->emailTemplate->cc)) {
             $this->cc($this->emailTemplate->cc);
+        }
+
+        if (is_array($this->emailTemplate->bcc) && count($this->emailTemplate->bcc)) {
+            $this->bcc($this->emailTemplate->bcc);
         }
 
         // Handle "from" which may be stored as an array or a JSON string
@@ -104,7 +120,7 @@ class TemplateMailable extends Mailable
             $this->from($from['email'], $from['name'] ?? config('mail.from.name'));
         }
 
-        $this->subject(TokenHelper::replace($this->emailTemplate->subject ?? '', $this));
+        $this->subject(TokenHelper::replace($this->emailTemplate->subject ?? '', $tokenModels));
 
         $view = $this->emailTemplate->view ?? 'default';
 
