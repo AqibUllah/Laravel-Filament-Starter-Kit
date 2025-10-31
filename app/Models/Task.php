@@ -8,11 +8,13 @@ use App\Events\TaskAssigned;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Task extends Model
 {
-    use HasFactory;
-    
+    use HasFactory, LogsActivity;
+
     /**
      * The event map for the model.
      *
@@ -21,7 +23,7 @@ class Task extends Model
     protected $dispatchesEvents = [
         'updated' => TaskAssigned::class,
     ];
-    
+
     /**
      * The "booted" method of the model.
      */
@@ -167,5 +169,29 @@ class Task extends Model
                 }
             }
         });
+    }
+
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('tasks')
+            ->logOnly([
+                'title',
+                'description',
+                'due_date',
+                'priority',
+                'status',
+                'assigned_by',
+                'assigned_to',
+                'estimated_hours',
+                'actual_hours',
+                'completed_at',
+                'project_id',
+                'team_id',
+                'tags',
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }
