@@ -4,6 +4,8 @@
 @source '../../../../resources/views/components/**/*';
 @source '../../../../resources/views/filament/**/*';
 
+@import '../../../../vendor/saade/filament-laravel-log/resources/css/filament-laravel-log.css';
+@source '../../../../vendor/saade/filament-laravel-log/resources/views/**/*.blade.php';
 
 .fi-main, .fi-simple-main {
     &.fi-width-7xl {

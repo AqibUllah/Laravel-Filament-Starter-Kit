@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources\Tasks\Tables;
 
 use App\Enums\PriorityEnum;
 use App\Enums\TaskStatusEnum;
+use App\Filament\Tenant\Resources\Tasks\TaskResource;
 use App\Helpers\FeatureLimitHelper;
 use App\Models\Task;
 use Filament\Actions\Action;
@@ -120,6 +121,7 @@ class TasksTable
                     })
                     ->visible(fn (Task $record) => in_array($record->status, [TaskStatusEnum::Pending, TaskStatusEnum::InProgress]))
                     ->color('success'),
+                Action::make('activities')->url(fn ($record) => TaskResource::getUrl('activities', ['record' => $record])),
                 EditAction::make(),
                 DeleteAction::make(),
             ])

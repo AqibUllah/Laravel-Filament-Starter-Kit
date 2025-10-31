@@ -39,6 +39,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\RecordUsageMiddleware;
 use RickDBCN\FilamentEmail\FilamentEmail;
+use Saade\FilamentLaravelLog\FilamentLaravelLogPlugin;
 
 class TenantPanelProvider extends PanelProvider
 {
@@ -134,6 +135,15 @@ class TenantPanelProvider extends PanelProvider
                     ->navigationGroup('User Management')
                     ->globalSearchResultsLimit(50),
                 FilamentThemesManagerPlugin::make(),
+                FilamentLaravelLogPlugin::make()
+                    ->navigationGroup('Settings')
+                    ->logDirs([
+                        storage_path('logs')
+                    ])
+                ->authorize(
+                    fn () => auth()->user()->teamOwner()
+                )
+
             ])
             ->tenantMiddleware([
                 SyncShieldTenant::class,
