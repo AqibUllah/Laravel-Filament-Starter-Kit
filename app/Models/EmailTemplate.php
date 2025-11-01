@@ -116,7 +116,6 @@ class EmailTemplate extends Model
     public static function findEmailByKey($key, $language = null, $teamId = null)
     {
         $teamId = $teamId ?? optional(filament()->getTenant())->id;
-        dd($teamId,$language,$key);
         $cacheKey = "email_by_key_{$key}_{$language}_team_{$teamId}";
 
         //For multi site domains this key will need to include the site_id
@@ -125,7 +124,7 @@ class EmailTemplate extends Model
                 ->when($teamId, function (Builder $q) use ($teamId) {
                     $q->where('team_id', $teamId);
                 })
-                ->language($language ?? config('filament-email-templates.default_locale'))
+//                ->language($language ?? config('filament-email-templates.default_locale'))
                 ->where("key", $key)
                 ->firstOrFail();
         });

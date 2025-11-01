@@ -20,4 +20,17 @@ class EditEmailTemplateTheme extends EditRecord
             RestoreAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        // Eager load the email_template relation to ensure it's available
+        $this->record->load('email_template');
+        
+        // Set the template-keys value for preview when editing
+        if ($this->record->email_template) {
+            $data['template-keys'] = $this->record->email_template->key;
+        }
+        
+        return $data;
+    }
 }

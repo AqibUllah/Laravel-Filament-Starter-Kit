@@ -3,7 +3,9 @@
 namespace App\Filament\Tenant\Resources\EmailTemplateThemes\Schemas;
 
 use App\Filament\Tenant\Resources\EmailTemplateThemes\EmailTemplateThemeResource;
+use App\Models\EmailTemplate;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Group;
@@ -22,8 +24,33 @@ class EmailTemplateThemeForm
                         Section::make(__('vb-email-templates::email-templates.theme-form-fields-labels.template-preview'))
                             ->schema([
                                 View::make('preview')
-                                    ->view('vb-email-templates::email.default_preview',
-                                        ['data' => EmailTemplateThemeResource::getPreviewData()])
+                                    ->key(fn ($get) => 'preview-' . ($get('template-keys') ?? 'no-template') . '-' . md5(json_encode($get('colours') ?? [])))
+                                    ->view('filament.tenant.components.email-template-preview', function ($get) {
+                                        $templateKey = $get('template-keys');
+                                        
+                                        // Return empty data if no template selected
+                                        if (!$templateKey) {
+                                            return ['data' => null];
+                                        }
+
+                                        $previewData = EmailTemplateThemeResource::getPreviewData($templateKey);
+
+                                        // Return empty data if no preview data
+                                        if (!$previewData) {
+                                            return ['data' => null];
+                                        }
+
+                                        // Merge theme colours from form state
+                                        $themeColours = $get('colours');
+                                        if ($previewData && $themeColours && is_array($themeColours)) {
+                                            $previewData['theme'] = array_merge(
+                                                $previewData['theme'] ?? [],
+                                                array_filter($themeColours)
+                                            );
+                                        }
+
+                                        return ['data' => $previewData];
+                                    })
                                     ->dehydrated(false),
                             ])
                             ->columnSpan(['lg' => 2]),
@@ -31,6 +58,23 @@ class EmailTemplateThemeForm
                     ->columnSpan(['lg' => 2]),
                 Group::make()
                     ->schema([
+                        Section::make()
+                            ->schema([
+                                Select::make('template-keys')
+                                    ->label('Template')
+                                    ->options(EmailTemplate::pluck('name', 'key'))
+                                    ->placeholder('Select a template to preview')
+                                    ->default(function ($record) {
+                                        // Auto-select the related template when editing
+                                        if ($record && $record->email_template) {
+                                            return $record->email_template->key;
+                                        }
+                                        return null;
+                                    })
+                                    ->live()
+                                    ->searchable(),
+                            ]),
+
                         Section::make()
                             ->schema([
                                 TextInput::make('name')
@@ -59,7 +103,8 @@ class EmailTemplateThemeForm
                                     ->live(),
 
                                 ColorPicker::make('colours.footer_bg_color')
-                                    ->label(__('vb-email-templates::email-templates.theme-form-fields-labels.footer-bg')),
+                                    ->label(__('vb-email-templates::email-templates.theme-form-fields-labels.footer-bg'))
+                                    ->live(),
 
                                 ColorPicker::make('colours.callout_bg_color')
                                     ->label(__('vb-email-templates::email-templates.theme-form-fields-labels.callout-bg'))

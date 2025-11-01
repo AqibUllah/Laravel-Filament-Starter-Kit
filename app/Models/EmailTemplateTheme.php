@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Visualbuilder\EmailTemplates\Database\Factories\EmailTemplateThemeFactory;
 
@@ -56,5 +57,10 @@ class EmailTemplateTheme extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function email_template(): HasOne
+    {
+        return $this->hasOne(EmailTemplate::class,'vb_email_templates_themes_id');
     }
 }

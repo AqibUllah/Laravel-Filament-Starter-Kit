@@ -62,9 +62,18 @@ class EmailTemplateThemeResource extends Resource
             ]);
     }
 
-    public static function getPreviewData()
+    public static function getPreviewData(?string $templateKey = null)
     {
-        $emailTemplate = EmailTemplate::first();
+        // Only return data if a template key is provided
+        if (!$templateKey) {
+            return null;
+        }
+
+        $emailTemplate = EmailTemplate::where('key', $templateKey)->first();
+
+        if (!$emailTemplate) {
+            return null;
+        }
 
         return $emailTemplate->getEmailPreviewData();
     }
