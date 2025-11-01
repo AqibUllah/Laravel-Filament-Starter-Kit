@@ -10,21 +10,21 @@ use Spatie\LaravelSettings\SettingsRepositories\SettingsRepository;
 class TenantSettingsRepository extends DatabaseSettingsRepository
 {
 
-//    public function getBuilder(): Builder
-//    {
-//        $builder = parent::getBuilder();
-//
-//        // Automatically scope queries by tenant
-//        $tenantId = $this->currentTenantId();
-//
-//        if ($tenantId) {
-//            $builder->where('tenant_id', $tenantId);
-//            return $builder;
-//        }
-//
-//
-//        return $builder;
-//    }
+    public function getBuilder(): Builder
+    {
+        $builder = parent::getBuilder();
+
+        // Automatically scope queries by tenant
+        $tenantId = $this->currentTenantId();
+
+        if ($tenantId) {
+            $builder->where('tenant_id', $tenantId);
+            return $builder;
+        }
+
+
+        return $builder;
+    }
 
     public function createProperty(string $group, string $name, $payload): void
     {

@@ -141,7 +141,7 @@ class TenantPanelProvider extends PanelProvider
                         storage_path('logs')
                     ])
                 ->authorize(
-                    fn () => auth()->user()->teamOwner()
+                    fn () => isset(auth()->user()->teamOwner)
                 )
 
             ])
