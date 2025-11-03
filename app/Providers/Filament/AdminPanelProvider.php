@@ -21,6 +21,9 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use RickDBCN\FilamentEmail\FilamentEmail;
+use Saade\FilamentLaravelLog\FilamentLaravelLogPlugin;
+use Visualbuilder\EmailTemplates\EmailTemplatesPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -31,6 +34,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('Admin Panel')
             ->login()
+            ->passwordReset()
+            ->authPasswordBroker('admins')
             ->colors([
                 'primary' => Color::Emerald,
             ])
@@ -61,7 +66,21 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->authGuard('admin');
+            ->authGuard('admin')
+            ->plugins([
+                EmailTemplatesPlugin::make(),
+                FilamentEmail::make(),
+                FilamentLaravelLogPlugin::make()
+                ->navigationGroup('Admin')
+                ->navigationSort('5')
+                    ->navigationIcon('heroicon-o-bug-ant')
+                    ->activeNavigationIcon('heroicon-s-bug-ant')
+                    ->navigationBadge('+10')
+                    ->navigationBadgeColor('danger')
+                    ->navigationBadgeTooltip('New logs available')
+                    ->navigationSort(1)
+                    ->title('Application Logs')
+            ]);
     }
 
     /**

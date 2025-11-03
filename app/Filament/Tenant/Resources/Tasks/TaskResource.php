@@ -50,6 +50,7 @@ class TaskResource extends Resource
             'index' => ListTasks::route('/'),
             'create' => CreateTask::route('/create'),
             'edit' => EditTask::route('/{record}/edit'),
+            'activities' => Pages\ListTaskActivities::route('/{record}/activities'),
         ];
     }
 }

@@ -13,6 +13,8 @@
 @source '../../../../resources/views/filament/**/*';
 @source '../../../../resources/views/components/**/*';
 
+@import '../../../../vendor/pxlrbt/filament-activity-log/resources/css/styles.css';
+
 @source '../../../../vendor/codewithdennis/filament-simple-alert/resources/**/*.blade.php';
 @source inline('animate-{spin,pulse,bounce}');
 

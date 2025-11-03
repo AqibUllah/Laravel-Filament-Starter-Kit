@@ -35,7 +35,10 @@ class DatabaseSeeder extends Seeder
             PlanFeatureSeeder::class,
             CouponSeeder::class,
 //            SubscriptionSeeder::class
-            UsageSeeder::class
+            UsageSeeder::class,
+            CustomEmailTemplateSeeder::class,
+            EmailTemplateSeeder::class,
+            EmailTemplateThemeSeeder::class
         ]);
 
     }
