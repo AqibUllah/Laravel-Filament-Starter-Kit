@@ -51,7 +51,7 @@ If you use this software (even non-commercially), you must:
 
 **Unauthorized commercial use will be considered a copyright violation and may result in legal action.**
 
-For licensing inquiries: [Add your contact email/URL here]
+For licensing inquiries: [aqibullah3312@gmail.com]
 
 ## 🧩 Overview
 
