@@ -147,5 +147,10 @@ php artisan db:seed
 # Start local development server
 php artisan serve
 
+# admin panel
 Email: superadmin@example.com
+Password: password
+
+# tenant panel
+Email: teamadmin@example.com
 Password: password
