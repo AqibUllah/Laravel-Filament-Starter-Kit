@@ -100,31 +100,6 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
 ---
 
 
-## 📸 Demo
-
-> 📷 **Demo Screenshot**
->
-### 🏠 Dashboard
-![Dashboard Screenshot](public/images/demo.png)
-
-### 🏠 Team Profile
-![Team Screenshot](public/images/11.JPG)
-
-### 📋 Create Task
-![Create Task Screenshot](public/images/33.JPG)
-
-### ⚙️ Roles & Permissions
-![Roles Screenshot](public/images/55.JPG)
-
-### 📋 Tasks
-![Tasks Screenshot](public/images/44.JPG)
-
-### ⚙️ Theme Manager
-![Theme Manager Screenshot](public/images/66.JPG)
-
----
-
-
 ## 🛠 Tech Stack
 
 - **Laravel** 12+
