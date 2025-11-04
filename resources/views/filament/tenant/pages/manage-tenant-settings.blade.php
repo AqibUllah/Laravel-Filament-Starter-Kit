@@ -1,6 +1,40 @@
 <x-filament-panels::page>
     @php
-        $settings = app(\App\Settings\TenantGeneralSettings::class)
+        // Always get fresh settings by clearing any cached instance first
+        app()->forgetInstance(\App\Settings\TenantGeneralSettings::class);
+        
+        try {
+            $settings = app(\App\Settings\TenantGeneralSettings::class);
+            
+            // Ensure we refresh to get latest data
+            if (method_exists($settings, 'refresh')) {
+                $settings->refresh();
+            }
+        } catch (\Throwable $e) {
+            // If settings don't exist, use default values
+            $settings = (object)[
+                'company_name' => 'Not set',
+                'company_logo_path' => null,
+                'primary_color' => null,
+                'locale' => 'en',
+                'timezone' => null,
+                'date_format' => null,
+                'time_format' => null,
+                'require_2fa' => false,
+                'password_policy' => null,
+                'project_default_priority' => null,
+                'project_default_status' => null,
+                'task_default_priority' => null,
+                'task_default_status' => null,
+                'email_notifications_enabled' => false,
+                'notify_on_project_changes' => false,
+                'notify_on_task_assign' => false,
+                'storage_upload_disk' => null,
+                'storage_max_file_mb' => null,
+                'allowed_file_types' => [],
+                'sidebar_collapsed_default' => false,
+            ];
+        }
     @endphp
 
     <div class="space-y-8">

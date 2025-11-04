@@ -42,6 +42,24 @@ class ManageTenantSettings extends Page
             Action::make('save')
                 ->label('Edit & Save Settings')
                 ->modalHeading('Tenant Settings')
+                ->modalCancelAction(function () {
+                    // Clear settings cache and refresh the page to ensure fresh data
+                    $this->refreshSettings();
+                })
+                ->extraModalFooterActions([
+                    Action::make('cancel')
+                        ->label('Cancel')
+                        ->color('gray')
+                        ->action(function () {
+                            // Clear settings cache and refresh
+                            $this->refreshSettings();
+                        })
+                ])
+                ->closeModalByClickingAway(true)
+                ->after(function () {
+                    // Ensure fresh settings when modal is dismissed by clicking outside
+                    $this->refreshSettings();
+                })
                 ->form([
                     Section::make('Branding')
                         ->schema([
@@ -196,12 +214,41 @@ class ManageTenantSettings extends Page
                         ]),
                 ])
                 ->mountUsing(function (Schema $schema) {
-                    $settings = app(TenantGeneralSettings::class);
+                    // Clear any cached instance to ensure fresh data
+                    app()->forgetInstance(TenantGeneralSettings::class);
 
+                    try {
+                        $settings = app(TenantGeneralSettings::class);
 
-                    // Ensure we read the latest persisted values
-                    if (method_exists($settings, 'refresh')) {
-                        $settings->refresh();
+                        // Ensure we read the latest persisted values
+                        if (method_exists($settings, 'refresh')) {
+                            $settings->refresh();
+                        }
+                    } catch (\Throwable $e) {
+                        // If settings don't exist, create a default object
+                        // The repository should auto-initialize, but if it fails, use defaults
+                        $settings = (object)[
+                            'company_name' => '',
+                            'company_logo_path' => null,
+                            'primary_color' => null,
+                            'locale' => 'en',
+                            'timezone' => null,
+                            'date_format' => null,
+                            'time_format' => null,
+                            'require_2fa' => false,
+                            'password_policy' => null,
+                            'project_default_priority' => null,
+                            'project_default_status' => null,
+                            'task_default_priority' => null,
+                            'task_default_status' => null,
+                            'email_notifications_enabled' => false,
+                            'notify_on_project_changes' => false,
+                            'notify_on_task_assign' => false,
+                            'storage_upload_disk' => null,
+                            'storage_max_file_mb' => null,
+                            'allowed_file_types' => [],
+                            'sidebar_collapsed_default' => false,
+                        ];
                     }
 
                     $schema->fill([
@@ -252,7 +299,23 @@ class ManageTenantSettings extends Page
                         'data_keys' => array_keys($data)
                     ]);
 
-                    $settings = app(TenantGeneralSettings::class);
+                    try {
+                        $settings = app(TenantGeneralSettings::class);
+                    } catch (\Throwable $e) {
+                        // If settings don't exist, the repository should auto-initialize them
+                        // The getPropertiesInGroup method will create default settings for the tenant
+                        // Try instantiating again - it should work now
+                        try {
+                            $settings = app(TenantGeneralSettings::class);
+                        } catch (\Throwable $e2) {
+                            // If still failing, log and throw
+                            \Illuminate\Support\Facades\Log::error('Failed to load TenantGeneralSettings after auto-initialization', [
+                                'tenant_id' => filament()->getTenant()?->id,
+                                'error' => $e2->getMessage()
+                            ]);
+                            throw $e2;
+                        }
+                    }
 
                     // Branding
                     $settings->company_name = $data['company_name'] ?? '';
@@ -294,6 +357,9 @@ class ManageTenantSettings extends Page
 
                     $settings->save();
 
+                    // Clear settings cache after saving
+                    $this->clearSettingsCache();
+
                     Notification::make()
                         ->title('Settings saved')
                         ->success()
@@ -301,6 +367,29 @@ class ManageTenantSettings extends Page
                 })
                 ->successRedirectUrl(ManageTenantSettings::getUrl()),
         ];
+    }
+
+    /**
+     * Clear settings cache to ensure fresh data
+     */
+    protected function clearSettingsCache(): void
+    {
+        // Clear Laravel cache if settings are cached
+        if (config('settings.cache.enabled')) {
+            cache()->forget('spatie.settings.' . TenantGeneralSettings::group());
+        }
+
+        // Clear the resolved instance from container to force fresh load
+        app()->forgetInstance(TenantGeneralSettings::class);
+    }
+
+    /**
+     * Refresh the page to ensure fresh settings data
+     */
+    public function refreshSettings(): void
+    {
+        $this->clearSettingsCache();
+        $this->dispatch('$refresh');
     }
 }
 
