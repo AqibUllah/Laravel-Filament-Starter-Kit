@@ -6,6 +6,22 @@
     <title>{{ config('app.name', 'Laravel Filament Starter Kit') }} - Multi-Tenant SaaS Platform</title>
     <meta name="description" content="A powerful multi-tenant SaaS starter kit built with Laravel and Filament. Manage teams, tasks, projects, and subscriptions with ease.">
 
+        <script>
+        // Apply saved/system theme ASAP to avoid flash and ensure dark variants are active
+        (function() {
+            try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var isDark = stored ? stored === 'dark' : prefersDark;
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {}
+        })();
+        </script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700&family=inter:400,500,600,700" rel="stylesheet" />
@@ -109,8 +125,24 @@
                             @endif
                         @endauth
         @endif
+                    <button id="theme-toggle" aria-label="Toggle theme" class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <svg id="icon-moon-desktop" class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"></path>
+                        </svg>
+                        <svg id="icon-sun-desktop" class="w-5 h-5 text-gray-700 dark:text-gray-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364 6.364l-1.414-1.414M7.05 7.05L5.636 5.636m12.728 0l-1.414 1.414M7.05 16.95l-1.414 1.414M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </button>
                 </div>
-                <div class="md:hidden">
+                <div class="md:hidden flex items-center gap-3">
+                    <button id="theme-toggle-mobile" aria-label="Toggle theme" class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <svg id="icon-moon-mobile" class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"></path>
+                        </svg>
+                        <svg id="icon-sun-mobile" class="w-5 h-5 text-gray-700 dark:text-gray-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364 6.364l-1.414-1.414M7.05 7.05L5.636 5.636m12.728 0l-1.414 1.414M7.05 16.95l-1.414 1.414M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </button>
                     <button id="mobile-menu-btn" class="text-gray-700 dark:text-gray-300">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -667,7 +699,6 @@
             <div class="grid md:grid-cols-3 gap-8">
                 @foreach($plans as $plan)
 
-                @endforeach
 
                 <!-- Pro Plan -->
                 <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl {{  $plan->is_featured ? 'border-purple-500 relative transform scale-105 border-2' : '' }}">
@@ -705,6 +736,8 @@
                         Get Started
                     </a>
                 </div>
+                @endforeach
+
             </div>
         </div>
     </section>
@@ -777,6 +810,58 @@
     </footer>
 
     <script>
+        // Theme handling
+        (function() {
+            function applyTheme(theme) {
+                const root = document.documentElement;
+                if (theme === 'dark') {
+                    root.classList.add('dark');
+                } else {
+                    root.classList.remove('dark');
+                }
+                localStorage.setItem('theme', theme);
+                updateThemeIcons(theme);
+            }
+
+            function getPreferredTheme() {
+                const stored = localStorage.getItem('theme');
+                if (stored === 'light' || stored === 'dark') return stored;
+                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            function updateThemeIcons(theme) {
+                const isDark = theme === 'dark';
+                const desktopSun = document.getElementById('icon-sun-desktop');
+                const desktopMoon = document.getElementById('icon-moon-desktop');
+                const mobileSun = document.getElementById('icon-sun-mobile');
+                const mobileMoon = document.getElementById('icon-moon-mobile');
+                if (desktopSun && desktopMoon) {
+                    desktopSun.classList.toggle('hidden', !isDark);
+                    desktopMoon.classList.toggle('hidden', isDark);
+                }
+                if (mobileSun && mobileMoon) {
+                    mobileSun.classList.toggle('hidden', !isDark);
+                    mobileMoon.classList.toggle('hidden', isDark);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize theme
+                const initial = getPreferredTheme();
+                applyTheme(initial);
+
+                // Toggle handlers
+                document.getElementById('theme-toggle')?.addEventListener('click', function() {
+                    const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                    applyTheme(current === 'dark' ? 'light' : 'dark');
+                });
+                document.getElementById('theme-toggle-mobile')?.addEventListener('click', function() {
+                    const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                    applyTheme(current === 'dark' ? 'light' : 'dark');
+                });
+            });
+        })();
+
         // Mobile menu toggle
         document.getElementById('mobile-menu-btn')?.addEventListener('click', function() {
             const menu = document.getElementById('mobile-menu');
