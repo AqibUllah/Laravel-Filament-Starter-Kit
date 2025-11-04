@@ -670,15 +670,17 @@
                 @endforeach
 
                 <!-- Pro Plan -->
-                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl {{  $plan->is_featured ? 'border-purple-500 relative transform scale-105 border-2' : 'border' }}">
-                    <div class="absolute top-0 right-0 bg-purple-500 text-white px-4 py-1 rounded-bl-lg rounded-tr-2xl text-sm font-semibold">
-                        Popular
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Pro</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">For growing businesses</p>
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl {{  $plan->is_featured ? 'border-purple-500 relative transform scale-105 border-2' : '' }}">
+                    @if($plan->is_featured)
+                        <div class="absolute top-0 right-0 bg-purple-500 text-white px-4 py-1 rounded-bl-lg rounded-tr-2xl text-sm font-semibold">
+                            Most Popular
+                        </div>
+                    @endif
+                    <h3 class="text-2xl font-bold mb-2">{{ $plan->name }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">{{ $plan->description }}</p>
                     <div class="mb-6">
-                        <span class="text-4xl font-bold">$49</span>
-                        <span class="text-gray-600 dark:text-gray-400">/month</span>
+                        <span class="text-4xl font-bold">${{ $plan->price }}</span>
+                        <span class="text-gray-600 dark:text-gray-400">/{{ $plan->interval }}</span>
                     </div>
                     <ul class="space-y-3 mb-8">
                         @foreach(json_decode($plan->features) as $feature)
@@ -699,7 +701,7 @@
                             </li>
                         @endforeach
                     </ul>
-                    <a href="{{ Route::has('filament.tenant.auth.register') ? route('filament.tenant.auth.register') : '#' }}" class="block w-full text-center px-6 py-3 {{ $plan->is_featured ? 'bg-purple-600 text-white rounded-lg hover:bg-purple-700' : '' }} transition">
+                    <a href="{{ Route::has('filament.tenant.auth.register') ? route('filament.tenant.auth.register') : '#' }}" class="block w-full text-center px-6 py-3 {{ $plan->is_featured ? 'bg-purple-600 text-white rounded-lg hover:bg-purple-700' : 'bg-gray-200' }} transition">
                         Get Started
                     </a>
                 </div>
