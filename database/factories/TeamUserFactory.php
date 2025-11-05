@@ -21,7 +21,7 @@ class TeamUserFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
-            'user_id' => random_int(1,10),
+            'user_id' => random_int(1,3),
             'team_id' => $team->id,
         ];
     }

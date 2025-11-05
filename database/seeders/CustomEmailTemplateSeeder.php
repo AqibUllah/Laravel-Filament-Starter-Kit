@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Team;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -30,6 +31,7 @@ class CustomEmailTemplateSeeder extends Seeder
                             <p>Kind Regards,<br>
                             ##config.app.name##</p>',
                 'logo' => 'media/email-templates/logo.png',
+                'team_id'   => Team::first()->id
             ],
             [
                 'key' => 'task-assigned',
@@ -50,6 +52,7 @@ class CustomEmailTemplateSeeder extends Seeder
                             <p>Kind Regards,<br>
                             ##config.app.name##</p>',
                 'logo' => 'media/email-templates/logo.png',
+                'team_id'   => Team::first()->id
             ],
             [
                 'key' => 'team-invitation',
@@ -70,6 +73,7 @@ class CustomEmailTemplateSeeder extends Seeder
                             <p>Kind Regards,<br>
                             ##config.app.name##</p>',
                 'logo' => 'media/email-templates/logo.png',
+                'team_id'   => Team::first()->id
             ],
         ];
 

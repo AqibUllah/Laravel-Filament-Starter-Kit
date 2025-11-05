@@ -46,7 +46,6 @@ class RolePermissionSeeder extends Seeder
 
         $admin->assignRole($super_admin_role->name);
 
-        // ✅ Attach user to the team if not already attached
         if (! $team->members()->where('user_id', $admin->id)->exists()) {
             $team->members()->attach($admin->id);
         }
@@ -58,38 +57,6 @@ class RolePermissionSeeder extends Seeder
         setPermissionsTeamId($team->id);
         $super_admin_role->syncPermissions(Utils::getPermissionModel()::pluck('id'));
 
-        // Optional: Reset context (not strictly needed in a seeder)
         app()[PermissionRegistrar::class]->setPermissionsTeamId(null);
-
-//        $starter_role = Role::firstOrCreate(['name' => 'starter_member','guard_name' => 'web']);
-
-//        $resources = ['User', 'Task']; // your Filament resource names
-//
-//        foreach ($resources as $resource) {
-//            $permissions = [
-//                "ViewAny:{$resource}",
-//                "View:{$resource}",
-//                "Create:{$resource}",
-//                "Update:{$resource}",
-//                "Delete:{$resource}",
-//                "ForceDelete:{$resource}",
-//                "ForceDeleteAny:{$resource}",
-//                "Restore:{$resource}",
-//                "RestoreAny:{$resource}",
-//                "Replicate:{$resource}",
-//                "Reorder:{$resource}",
-//                "DeleteAny:{$resource}",
-//            ];
-//
-//            $starter_role->givePermissionTo($permissions);
-//        }
-
-        // ✅ Custom pages
-//        $pages = ['SubscriptionSuccess', 'SubscriptionStatus', 'Dashboard'];
-//        foreach ($pages as $page) {
-//            $permission = "View:{$page}";
-//            Permission::firstOrCreate(['name' => $permission]);
-//            $role->givePermissionTo($permission);
-//        }
     }
 }

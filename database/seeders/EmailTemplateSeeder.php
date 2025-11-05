@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Team;
 use Illuminate\Database\Seeder;
 use Visualbuilder\EmailTemplates\Models\EmailTemplate;
 
@@ -20,7 +21,9 @@ class EmailTemplateSeeder extends Seeder
                                 <p>Thanks for registering with ##config.app.name##.</p>
                                 <p>If you need any assistance please contact our customer services team ##config.email-templates.customer-services.email## who will be happy to help.</p>
                                 <p>Kind Regards<br>
-                                ##config.app.name##</p>"
+                                ##config.app.name##</p>",
+                'team_id'   => Team::first()->id
+
             ],
             [
                 'key'       => 'user-request-reset',
@@ -36,7 +39,8 @@ class EmailTemplateSeeder extends Seeder
                                 <p>We'll never ask for your credentials over the phone or by email and you should never share your credentials</p>
                                 <p>If you’re having trouble clicking the 'Change My Password' button, copy and paste the URL below into your web browser:</p>
                                 <p><a href='##tokenUrl##'>##tokenUrl##</a></p>
-                                <p>Kind Regards,<br>##config.app.name##</p>"
+                                <p>Kind Regards,<br>##config.app.name##</p>",
+                'team_id'   => Team::first()->id
             ],
             [
                 'key'       => 'user-password-reset-success',
@@ -47,7 +51,8 @@ class EmailTemplateSeeder extends Seeder
                 'preheader' => 'Success',
                 'content'   => "<p>Dear ##user.name##,</p>
                                 <p>Your password has been reset.</p>
-                                <p>Kind Regards,<br>##config.app.name##</p>"
+                                <p>Kind Regards,<br>##config.app.name##</p>",
+                'team_id'   => Team::first()->id
             ],
             [
                 'key'       => 'user-locked-out',
@@ -60,7 +65,8 @@ class EmailTemplateSeeder extends Seeder
                 'content'   => "<p>Dear ##user.name##,</p>
                                 <p>Sorry your account has been locked out due to too many bad password attempts.</p>
                                 <p>Please contact our customer services team on ##config.email-templates.customer-services.email## who will be able to help</p>
-                                 <p>Kind Regards,<br>##config.app.name##</p>"
+                                 <p>Kind Regards,<br>##config.app.name##</p>",
+                'team_id'   => Team::first()->id
 
             ],
             [
@@ -77,7 +83,8 @@ class EmailTemplateSeeder extends Seeder
                                 <div>{{button url='##verificationUrl##' title='Verify Email Address'}}</div>
                                 <p>If you’re having trouble clicking the 'Verify Email Address' button, copy and paste the URL below into your web browser:</p>
                                 <p><a href='##verificationUrl##'>##verificationUrl##</a></p>
-                                <p>Kind Regards,<br>##config.app.name##</p>"
+                                <p>Kind Regards,<br>##config.app.name##</p>",
+                'team_id'   => Team::first()->id
             ],
             [
                 'key'       => 'user-verified',
@@ -88,7 +95,8 @@ class EmailTemplateSeeder extends Seeder
                 'preheader' => 'Verification success for ##config.app.name##',
                 'content'   => "<p>Hi ##user.name##,</p>
                                 <p>Your email address ##user.email## has been verified on ##config.app.name##</p>
-                                <p>Kind Regards,<br>##config.app.name##</p>"
+                                <p>Kind Regards,<br>##config.app.name##</p>",
+                'team_id'   => Team::first()->id
             ],
             [
                 'key'       => 'user-login',
@@ -101,7 +109,8 @@ class EmailTemplateSeeder extends Seeder
                                 <p>You have been logged into ##config.app.name##.</p>
                                 <p>If this was not you please contact: </p>
                                 <p>You can disable this email in your account notification preferences.</p>
-                                <p>Kind Regards,<br>##config.app.name##</p>"
+                                <p>Kind Regards,<br>##config.app.name##</p>",
+                'team_id'   => Team::first()->id
             ],
         ];
 

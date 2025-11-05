@@ -17,7 +17,6 @@ class TeamSeeder extends Seeder
         Team::factory(1)->create([
             'name' => 'Super Admin Team',
             'slug' => 'super-admin-team',
-            'owner_id' => User::factory(),
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Team;
 use Visualbuilder\EmailTemplates\Models\EmailTemplateTheme;
 use Illuminate\Database\Seeder;
 
@@ -30,6 +31,7 @@ class EmailTemplateThemeSeeder extends Seeder
                     'anchor_color'       => '#1E88E5',
                 ],
                 'is_default'=>1,
+                'team_id'   => Team::first()->id
             ],
             [
                 'name'       => 'Pastel',
@@ -49,6 +51,7 @@ class EmailTemplateThemeSeeder extends Seeder
                     'anchor_color'       => '#4c05a1',
                 ],
                 'is_default'=>0,
+                'team_id'   => Team::first()->id
             ],
             [
                 'name'       => 'Elegant Contrast',
@@ -67,6 +70,7 @@ class EmailTemplateThemeSeeder extends Seeder
                     'anchor_color'       => '#8E24AA', // Matching with header
                 ],
                 'is_default'=>0,
+                'team_id'   => Team::first()->id
             ],
             [
                 'name'       => 'Earthy & Calm',
@@ -84,6 +88,7 @@ class EmailTemplateThemeSeeder extends Seeder
                     'anchor_color'       => '#43A047', // Matching with header
                 ],
                 'is_default'=>0,
+                'team_id'   => Team::first()->id
             ],
 
         ];
