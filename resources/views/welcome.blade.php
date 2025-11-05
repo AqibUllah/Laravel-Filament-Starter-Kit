@@ -688,7 +688,8 @@
     </section>
 
     <!-- Pricing Section -->
-    <section id="pricing" class="section-padding bg-gray-50 dark:bg-gray-800">
+    @if(isset($plans))
+        <section id="pricing" class="section-padding bg-gray-50 dark:bg-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
@@ -698,8 +699,6 @@
             </div>
             <div class="grid md:grid-cols-3 gap-8">
                 @foreach($plans as $plan)
-
-
                 <!-- Pro Plan -->
                 <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl {{  $plan->is_featured ? 'border-purple-500 relative transform scale-105 border-2' : '' }}">
                     @if($plan->is_featured)
@@ -741,7 +740,7 @@
             </div>
         </div>
     </section>
-
+    @endif
     <!-- CTA Section -->
     <section class="section-padding gradient-bg-2 relative overflow-hidden">
         <div class="absolute inset-0 opacity-10">
