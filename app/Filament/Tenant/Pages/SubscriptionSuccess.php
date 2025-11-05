@@ -74,6 +74,7 @@ class SubscriptionSuccess extends Page
                 if (app()->environment('local')) {
                     $this->handleLocalSubscription($stripeSubscription);
                 } else {
+
                     // For production, just check if subscription exists
                     $this->checkExistingSubscription($session->subscription);
                 }
@@ -143,6 +144,7 @@ class SubscriptionSuccess extends Page
             ],
             [
                 'team_id' => $team->id,
+                'user_id' => auth()->id(),
                 'plan_id' => $plan->id,
                 'stripe_customer_id' => $stripeSubscription->customer,
                 'status' => $stripeSubscription->status,
@@ -277,9 +279,9 @@ class SubscriptionSuccess extends Page
         }
 
         $storage = strtolower($storage);
-        if (strpos($storage, 'gb') !== false) {
+        if (str_contains($storage, 'gb')) {
             return (int) $storage * 1024;
-        } elseif (strpos($storage, 'mb') !== false) {
+        } elseif (str_contains($storage, 'mb')) {
             return (int) $storage;
         } else {
             return (int) $storage;
@@ -309,12 +311,13 @@ class SubscriptionSuccess extends Page
         }
 
 
-        Artisan::call('optimize');
+        Artisan::call('optimize:clear');
 
         Log::info('Team permissions updated', [
             'team_id' => $team->id,
             'users_count' => $team->members->count()
         ]);
+
     }
 
     public function checkSubscriptionStatus()
@@ -363,12 +366,12 @@ class SubscriptionSuccess extends Page
     private function getCouponFromMetadata($stripeSubscription): ?int
     {
         $couponCode = $stripeSubscription->metadata['coupon_code'] ?? null;
-        
+
         if ($couponCode) {
             $coupon = Coupon::where('code', $couponCode)->first();
             return $coupon ? $coupon->id : null;
         }
-        
+
         return null;
     }
 
@@ -377,7 +380,7 @@ class SubscriptionSuccess extends Page
         // Calculate discount from Stripe subscription data
         if (isset($stripeSubscription->discount) && $stripeSubscription->discount->coupon) {
             $coupon = $stripeSubscription->discount->coupon;
-            
+
             if ($coupon->percent_off) {
                 // For percentage discounts, we need the original amount
                 // This is a simplified calculation - you might want to store this differently
@@ -386,7 +389,7 @@ class SubscriptionSuccess extends Page
                 return $coupon->amount_off / 100; // Convert from cents
             }
         }
-        
+
         return 0;
     }
 
@@ -394,7 +397,7 @@ class SubscriptionSuccess extends Page
     {
         $originalAmount = $plan->price;
         $discountAmount = $this->calculateDiscountFromStripe($stripeSubscription);
-        
+
         return max(0, $originalAmount - $discountAmount);
     }
 }
