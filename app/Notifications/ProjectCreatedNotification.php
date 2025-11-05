@@ -13,7 +13,7 @@ class ProjectCreatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Project $project;
+    public Project $project;
 
     /**
      * Create a new notification instance.

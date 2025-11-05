@@ -20,6 +20,7 @@ class TemplateMailable extends Mailable
     public $template;
     public $sendTo;
     public $emailTemplate;
+    public $data = [];
 
     // Public properties for token replacement
     public $user;
@@ -35,10 +36,11 @@ class TemplateMailable extends Mailable
      * @param string $template The email template key
      * @return void
      */
-    public function __construct(string $template)
+    public function __construct(string $template, array $data = [], string $sendTo = '')
     {
         $this->template = $template;
-        $this->sendTo = '';
+        $this->data = $data;
+        $this->sendTo = $sendTo;
     }
 
     /**

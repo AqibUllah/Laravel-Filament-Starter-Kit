@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Plan>
@@ -24,7 +25,8 @@ class PlanFactory extends Factory
             'trial_days' => $this->faker->numberBetween(0, 30),
             'sort_order' => $this->faker->numberBetween(1, 10),
             'is_active' => true,
-            'is_featured' => $this->faker->boolean(20)
+            'is_featured' => $this->faker->boolean(20),
+            'stripe_price_id' => 'price_' . Str::random(10),
         ];
     }
 }

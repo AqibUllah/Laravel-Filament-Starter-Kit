@@ -275,7 +275,7 @@ class Project extends Model
 
         static::updating(function (Project $project) {
             // Auto-complete project if progress reaches 100%
-            if ($project->progress >= 100 && $project->status !== ProjectStatusEnum::Completed) {
+            if ($project->progress >= 100 && !in_array($project->status, [ProjectStatusEnum::Completed, ProjectStatusEnum::Archived])) {
                 $project->markAsCompleted();
             }
         });

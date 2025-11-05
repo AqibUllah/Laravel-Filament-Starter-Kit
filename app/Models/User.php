@@ -21,6 +21,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 
+use Stripe\Stripe;
+use Stripe\Customer;
+
 class User extends Authenticatable implements FilamentUser, HasTenants, HasDefaultTenant, HasAppAuthentication, HasAppAuthenticationRecovery
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -163,4 +166,27 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasDefau
         return $this->teams()->where('team_id', Filament::getTenant()->id);
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function subscribeToPlan(Plan $plan, int $teamId, string $status)
+    {
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $customer = Customer::create([
+            'email' => $this->email,
+            'name' => $this->name,
+        ]);
+
+        return $this->subscriptions()->create([
+            'user_id' => $this->id,
+            'plan_id' => $plan->id,
+            'stripe_price_id' => $plan->stripe_price_id,
+            'team_id' => $teamId,
+            'status' => $status,
+            'stripe_customer_id' => $customer->id,
+        ]);
+    }
 }

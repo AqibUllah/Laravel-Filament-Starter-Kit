@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +17,7 @@ class TeamSeeder extends Seeder
         Team::factory(1)->create([
             'name' => 'Super Admin Team',
             'slug' => 'super-admin-team',
-            'owner_id' => 1,
+            'owner_id' => User::factory(),
         ]);
     }
 }

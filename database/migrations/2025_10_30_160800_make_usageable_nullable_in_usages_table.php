@@ -12,9 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Use raw statements to avoid requiring doctrine/dbal for column change()
-        DB::statement('ALTER TABLE `usages` MODIFY `usageable_type` VARCHAR(255) NULL');
-        DB::statement('ALTER TABLE `usages` MODIFY `usageable_id` BIGINT UNSIGNED NULL');
+        // Use Laravel's Schema builder for cross-database compatibility
+        Schema::table('usages', function (Blueprint $table) {
+            $table->string('usageable_type')->nullable()->change();
+            $table->unsignedBigInteger('usageable_id')->nullable()->change();
+        });
     }
 
     /**
@@ -22,7 +24,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('ALTER TABLE `usages` MODIFY `usageable_type` VARCHAR(255) NOT NULL');
-        DB::statement('ALTER TABLE `usages` MODIFY `usageable_id` BIGINT UNSIGNED NOT NULL');
+        Schema::table('usages', function (Blueprint $table) {
+            $table->string('usageable_type')->nullable(false)->change();
+            $table->unsignedBigInteger('usageable_id')->nullable(false)->change();
+        });
     }
 };

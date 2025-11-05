@@ -8,7 +8,7 @@ class StubUser extends AuthUser
 {
     public bool $canValue = false;
 
-    public function __construct(bool $canValue)
+    public function __construct(bool $canValue = false)
     {
         parent::__construct();
         $this->canValue = $canValue;

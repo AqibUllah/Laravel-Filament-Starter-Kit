@@ -13,7 +13,7 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Task $task;
+    public Task $task;
 
     /**
      * Create a new notification instance.

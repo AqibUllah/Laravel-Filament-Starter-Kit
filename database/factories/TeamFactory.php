@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -18,7 +19,7 @@ class TeamFactory extends Factory
             'description' => $this->faker->text(),
             'domain' => $this->faker->word(),
             'status' => $this->faker->boolean(),
-            'owner_id' => 1,
+            'owner_id' => User::factory(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

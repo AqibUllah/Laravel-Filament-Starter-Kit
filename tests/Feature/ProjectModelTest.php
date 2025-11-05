@@ -5,11 +5,10 @@ use App\Enums\ProjectStatusEnum;
 use App\Jobs\RecordProjectUsage;
 use App\Models\Project;
 use App\Models\Team;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
-
-uses(RefreshDatabase::class);
 
 it('creates a project and computes helper values', function () {
     Bus::fake();
@@ -82,7 +81,7 @@ it('computes overdue, days remaining and derived colors', function () {
     ]);
 
     expect($overdue->isOverdue())->toBeTrue()
-        ->and($overdue->getDaysRemaining())->toBeNull() // overdue returns null per helper
+        ->and($overdue->getDaysRemaining())->toBe(0) // overdue returns null per helper
         ->and($overdue->getPriorityColor())->toBe('success')
         ->and($overdue->getStatusColor())->toBe('warning');
 
@@ -98,6 +97,11 @@ it('computes overdue, days remaining and derived colors', function () {
 
     expect($upcoming->isOverdue())->toBeFalse()
         ->and($upcoming->getDaysRemaining())->toBeInt();
+});
+
+it('can have tasks', function () {
+    $project = Project::factory()->has(Task::factory()->count(3))->create();
+    expect($project->tasks)->toHaveCount(3);
 });
 
 

@@ -15,13 +15,7 @@ class TeamUserFactory extends Factory
     public function definition(): array
     {
 
-        $team = Team::firstOrCreate(
-            ['slug' => 'super-admin-team'], // Search by unique attribute
-            [
-                'name' => 'Super Admin Team',
-                'owner_id' => 1,
-            ] // Fields to fill if not found
-        );
+        $team = Team::firstOrFail();
 
         return [
             'created_at' => Carbon::now(),

@@ -11,11 +11,13 @@ class Subscription extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'team_id',
         'plan_id',
         'coupon_id',
         'stripe_subscription_id',
         'stripe_customer_id',
+        'stripe_price_id',
         'status',
         'trial_ends_at',
         'ends_at',
