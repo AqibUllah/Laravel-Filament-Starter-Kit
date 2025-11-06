@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             CouponSeeder::class,
 //            SubscriptionSeeder::class
             UsageSeeder::class,
+            ShieldSeeder::class,
             CustomEmailTemplateSeeder::class,
             EmailTemplateSeeder::class,
             EmailTemplateThemeSeeder::class
