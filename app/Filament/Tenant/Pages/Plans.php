@@ -21,7 +21,6 @@ use UnitEnum;
 
 class Plans extends Page implements HasActions
 {
-    use HasPageShield;
     use InteractsWithHeaderActions;
     use InteractsWithActions;
     protected static string | BackedEnum | null $navigationIcon = Heroicon::CreditCard;
@@ -124,13 +123,13 @@ class Plans extends Page implements HasActions
 
         $team = Filament::getTenant();
         $couponService = app(CouponService::class);
-        
+
         // Validate against the first plan for now (you might want to make this plan-specific)
         $firstPlan = $this->plans->first();
-        
+
         if ($firstPlan) {
             $this->couponValidation = $couponService->validateCoupon($this->couponCode, $team, $firstPlan);
-            
+
             if ($this->couponValidation['valid']) {
                 $this->appliedCoupon = $this->couponValidation['coupon'];
                 Notification::make()
@@ -154,7 +153,7 @@ class Plans extends Page implements HasActions
         $this->couponCode = '';
         $this->couponValidation = null;
         $this->appliedCoupon = null;
-        
+
         Notification::make()
             ->title('Coupon Removed')
             ->body('Coupon has been removed from your order.')
