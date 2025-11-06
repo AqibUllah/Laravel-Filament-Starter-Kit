@@ -8,41 +8,46 @@
         'heading' => null,
         'subheading' => null,
     ])
+    <div class="antialiased min-h-screen bg-gray-50 dark:bg-gray-900 animated-gradient">
+        <!-- Floating Shapes -->
+        <div class="floating-shape w-20 h-20 top-10 left-10"></div>
+        <div class="floating-shape w-16 h-16 top-32 right-20"></div>
+        <div class="floating-shape w-24 h-24 bottom-20 left-32"></div>
+        <div class="floating-shape w-12 h-12 bottom-32 right-16"></div>
 
-    <div class="flex min-h-screen">
-        @if (($hasTopbar ?? true) && filament()->auth()->check())
-            <div
-                class="absolute end-0 top-0 flex h-16 items-center gap-x-4 pe-4 md:pe-6 lg:pe-8"
-            >
-                @if (filament()->hasDatabaseNotifications())
-                    @livewire(Filament\Livewire\DatabaseNotifications::class, [
-                        'lazy' => filament()->hasLazyLoadedDatabaseNotifications()
-                    ])`
+        <div class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
+            <!-- Brand Section -->
+            <div class="mb-8 text-center">
+                @if(isset($brandLogo))
+                    <div class="logo-container mb-4">
+                        {{ $brandLogo }}
+                    </div>
                 @endif
 
-{{--                <x-filament-panels::user-menu/>--}}
+                @if(isset($brandName))
+                    <h1 class="brand-text text-4xl md:text-5xl font-bold text-white mb-2">
+                        {{ $brandName }}
+                    </h1>
+                @endif
+
+                @if(isset($brandDescription))
+                    <p class="brand-subtitle text-white/80 text-lg md:text-xl">
+                        {{ $brandDescription }}
+                    </p>
+                @endif
             </div>
-        @endif
 
-        <div class="relative hidden w-0 flex-1 lg:block">
-            <img class="absolute inset-0 size-full object-cover"
-                 src="{{ asset('images/team.jpg') }} "
-                 alt="">
-        </div>
-
-        <div
-            class="fi-simple-main-ctn flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 w-1/2 bg-white dark:bg-gray-800"
-        >
-            <main
-                @class([
-                    'fi-simple-main mx-auto w-full',
-
-                ])
-            >
+            <!-- Content Section -->
+            <div class="login-card w-full max-w-md rounded-2xl p-8">
                 {{ $slot }}
-            </main>
-        </div>
+            </div>
 
-        {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::FOOTER, scopes: $livewire->getRenderHookScopes()) }}
+            <!-- Footer -->
+            <div class="mt-8 text-center">
+                <p class="text-white/60 text-sm">
+                    &copy; {{ date('Y') }} {{ config('app.name', 'Your Application') }}. All rights reserved.
+                </p>
+            </div>
+        </div>
     </div>
 </x-filament-panels::layout.base>
