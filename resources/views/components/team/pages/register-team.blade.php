@@ -7,7 +7,7 @@
                 class="w-full mt-10"
                 size="lg"
                 icon="heroicon-m-sparkles"
-                outlined>
+                >
                 Create Company
             </x-filament::button>
     </form>
