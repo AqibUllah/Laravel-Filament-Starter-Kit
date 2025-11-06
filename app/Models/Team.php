@@ -136,4 +136,25 @@ class Team extends Model
     {
         return $this->members();
     }
+
+    /** @return HasMany<\App\Models\EmailTemplateTheme, self> */
+    public function emailTemplateThemes(): HasMany
+    {
+        return $this->hasMany(\App\Models\EmailTemplateTheme::class);
+    }
+
+
+    /** @return HasMany<\App\Models\EmailTemplate, self> */
+    public function emailTemplates(): HasMany
+    {
+        return $this->hasMany(\App\Models\EmailTemplate::class);
+    }
+
+
+    /** @return HasMany<\App\Models\Role, self> */
+    public function roles(): HasMany
+    {
+        return $this->hasMany(\App\Models\Role::class);
+    }
+
 }
