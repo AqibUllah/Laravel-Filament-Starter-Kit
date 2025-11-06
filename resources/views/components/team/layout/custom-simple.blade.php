@@ -1,6 +1,3 @@
-@php
-    use Filament\Support\Enums\MaxWidth;
-@endphp
 
 <x-filament-panels::layout.base :livewire="$livewire">
     @props([
