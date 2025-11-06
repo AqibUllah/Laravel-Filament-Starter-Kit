@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/images/demo.png" alt="Laravel Filament SaaS Starter Kit Screenshot" width="100%" />
+  <img src="public/images/demo.png" alt="Laravel Filament SaaS Starter Kit Screenshot" />
 </p>
 <h1 align="center">🚀 Laravel Filament SaaS Starter Kit</h1>
 
