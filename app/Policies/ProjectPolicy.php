@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Policies;
 
 use App\Models\Project;
+use App\Services\FeatureLimiterService;
+use Filament\Facades\Filament;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
@@ -24,7 +26,10 @@ class ProjectPolicy
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:Project');
+        return $authUser->can('Create:Project') &&
+            app(FeatureLimiterService::class)
+                ->forTenant(Filament::getTenant())
+                ->canCreateProject();
     }
 
     public function update(AuthUser $authUser, Project $project): bool

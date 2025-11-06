@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Policies;
 
 use App\Models\Task;
+use App\Services\FeatureLimiterService;
+use Filament\Facades\Filament;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
@@ -24,7 +26,10 @@ class TaskPolicy
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:Task');
+        return $authUser->can('Create:Task') &&
+            app(FeatureLimiterService::class)
+                ->forTenant(Filament::getTenant())
+                ->canCreateTask();
     }
 
     public function update(AuthUser $authUser, Task $task): bool
