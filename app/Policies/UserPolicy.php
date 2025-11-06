@@ -4,11 +4,13 @@ namespace App\Policies;
 
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Services\FeatureLimiterService;
+use Filament\Facades\Filament;
 
 class UserPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:User');
@@ -21,7 +23,10 @@ class UserPolicy
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:User');
+        return $authUser->can('Create:User') &&
+        app(FeatureLimiterService::class)
+            ->forTenant(Filament::getTenant())
+            ->canCreateUser();
     }
 
     public function update(AuthUser $authUser): bool
