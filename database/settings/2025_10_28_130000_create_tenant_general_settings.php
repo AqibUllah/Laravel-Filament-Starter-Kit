@@ -3,8 +3,8 @@
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
 use App\Enums\TaskStatusEnum;
-use Spatie\LaravelSettings\Migrations\SettingsMigration;
 use Illuminate\Support\Facades\DB;
+use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
 return new class extends SettingsMigration
 {
@@ -55,5 +55,3 @@ return new class extends SettingsMigration
         }
     }
 };
-
-

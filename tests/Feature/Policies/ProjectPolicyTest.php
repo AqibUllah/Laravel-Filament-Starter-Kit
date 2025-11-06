@@ -21,9 +21,9 @@ class StubUser extends AuthUser
 }
 
 it('authorizes when user can returns true', function () {
-    $policy = new ProjectPolicy();
+    $policy = new ProjectPolicy;
     $user = new StubUser(true);
-    $project = new Project();
+    $project = new Project;
 
     expect($policy->viewAny($user))->toBeTrue()
         ->and($policy->view($user, $project))->toBeTrue()
@@ -39,9 +39,9 @@ it('authorizes when user can returns true', function () {
 });
 
 it('denies when user can returns false', function () {
-    $policy = new ProjectPolicy();
+    $policy = new ProjectPolicy;
     $user = new StubUser(false);
-    $project = new Project();
+    $project = new Project;
 
     expect($policy->viewAny($user))->toBeFalse()
         ->and($policy->view($user, $project))->toBeFalse()
@@ -55,5 +55,3 @@ it('denies when user can returns false', function () {
         ->and($policy->replicate($user, $project))->toBeFalse()
         ->and($policy->reorder($user))->toBeFalse();
 });
-
-

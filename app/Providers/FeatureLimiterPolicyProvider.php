@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Services\FeatureLimiterService;
 use Filament\Facades\Filament;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class FeatureLimiterPolicyProvider extends ServiceProvider
 {
@@ -23,7 +23,7 @@ class FeatureLimiterPolicyProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::after(function ($user, string $ability, bool|null $result, array $arguments) {
+        Gate::after(function ($user, string $ability, ?bool $result, array $arguments) {
             // Only act if policy allowed or hasn't decided (null)
             if ($result === false) {
                 return false;
@@ -60,8 +60,8 @@ class FeatureLimiterPolicyProvider extends ServiceProvider
 
             // Call your FeatureLimiterService
             $canCreate = app(FeatureLimiterService::class)
-            ->forTenant(Filament::getTenant())
-            ->canCreate($featureKey);
+                ->forTenant(Filament::getTenant())
+                ->canCreate($featureKey);
 
             return $canCreate && $result;
         });

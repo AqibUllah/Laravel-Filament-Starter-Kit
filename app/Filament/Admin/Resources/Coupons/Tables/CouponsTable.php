@@ -41,8 +41,7 @@ class CouponsTable
                 TextColumn::make('used_count')
                     ->label('Used')
                     ->sortable()
-                    ->formatStateUsing(fn ($record, $state) =>
-                        $record->usage_limit
+                    ->formatStateUsing(fn ($record, $state) => $record->usage_limit
                             ? "{$state}/{$record->usage_limit}"
                             : $state
                     ),
@@ -51,8 +50,7 @@ class CouponsTable
                     ->dateTime()
                     ->sortable()
                     ->placeholder('Never expires')
-                    ->color(fn ($record) =>
-                        $record->valid_until && $record->valid_until->isPast()
+                    ->color(fn ($record) => $record->valid_until && $record->valid_until->isPast()
                             ? 'danger'
                             : null
                     ),

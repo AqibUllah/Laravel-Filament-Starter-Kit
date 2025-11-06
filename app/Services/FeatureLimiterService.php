@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Team;
 use Illuminate\Support\Facades\Cache;
 
 class FeatureLimiterService
 {
     protected $tenant;
+
     public function forTenant($tenant): self
     {
         $this->tenant = $tenant;
+
         return $this;
     }
 
@@ -18,6 +19,7 @@ class FeatureLimiterService
     {
         $currentUsers = $this->tenant->members()->count();
         $maxUsers = $this->getFeatureLimit('Users');
+
         return $currentUsers < $maxUsers;
     }
 
@@ -33,6 +35,7 @@ class FeatureLimiterService
     {
         $currentTasks = $this->tenant->projects()->count();
         $maxTasks = $this->getFeatureLimit('Projects');
+
         return $currentTasks < $maxTasks;
     }
 
@@ -73,7 +76,7 @@ class FeatureLimiterService
         return Cache::remember(
             "tenant_{$this->tenant->id}_feature_{$feature}",
             now()->addHours(1),
-            fn() => $this->tenant->currentPlan->features->where('name', $feature)->first()?->value ?? 0
+            fn () => $this->tenant->currentPlan->features->where('name', $feature)->first()?->value ?? 0
         );
     }
 
@@ -102,5 +105,4 @@ class FeatureLimiterService
             default => false,
         };
     }
-
 }

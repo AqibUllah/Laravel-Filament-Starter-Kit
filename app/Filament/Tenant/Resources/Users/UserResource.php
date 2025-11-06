@@ -23,7 +23,7 @@ class UserResource extends Resource
 
     protected static ?string $tenantOwnershipRelationshipName = 'teams';
 
-    protected static string | UnitEnum | null $navigationGroup = 'User Management';
+    protected static string|UnitEnum|null $navigationGroup = 'User Management';
 
     protected static ?int $navigationSort = 5;
 

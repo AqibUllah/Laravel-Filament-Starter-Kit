@@ -7,14 +7,12 @@ use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Icons\Heroicon;
 
-enum TaskStatusEnum: string implements HasLabel,HasIcon,HasColor
+enum TaskStatusEnum: string implements HasColor, HasIcon, HasLabel
 {
-
     case Pending = 'pending';
     case InProgress = 'in_progress';
     case Completed = 'completed';
     case Cancelled = 'cancelled';
-
 
     public function getLabel(): ?string
     {

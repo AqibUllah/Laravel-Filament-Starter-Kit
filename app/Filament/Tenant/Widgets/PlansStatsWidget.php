@@ -14,7 +14,7 @@ class PlansStatsWidget extends BaseWidget
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [];
         }
 
@@ -42,7 +42,7 @@ class PlansStatsWidget extends BaseWidget
 
         return [
             Stat::make('Current Plan', $currentPlan?->name ?? 'No Plan')
-                ->description($currentPlan ? '$' . $currentPlan->price . '/' . $currentPlan->interval : 'No active subscription')
+                ->description($currentPlan ? '$'.$currentPlan->price.'/'.$currentPlan->interval : 'No active subscription')
                 ->descriptionIcon('heroicon-m-credit-card')
                 ->color($currentPlan ? 'success' : 'danger')
                 ->url(fn (): string => route('filament.tenant.tenant.billing', ['tenant' => filament()->getTenant()]))
@@ -51,7 +51,7 @@ class PlansStatsWidget extends BaseWidget
                 ]),
 
             Stat::make('Available Plans', $totalPlans)
-                ->description($freePlans . ' free, ' . $paidPlans . ' paid')
+                ->description($freePlans.' free, '.$paidPlans.' paid')
                 ->descriptionIcon('heroicon-m-list-bullet')
                 ->color('primary')
                 ->url(fn (): string => route('filament.tenant.pages.plans', ['tenant' => filament()->getTenant()]))

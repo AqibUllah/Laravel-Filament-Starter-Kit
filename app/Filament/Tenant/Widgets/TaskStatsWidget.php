@@ -13,7 +13,7 @@ class TaskStatsWidget extends StatsOverviewWidget
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [];
         }
 

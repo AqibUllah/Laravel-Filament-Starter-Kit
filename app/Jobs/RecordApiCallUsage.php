@@ -30,5 +30,3 @@ class RecordApiCallUsage implements ShouldQueue
         app(UsageService::class)->recordApiCall($team, $this->endpoint, $this->responseTimeMs);
     }
 }
-
-

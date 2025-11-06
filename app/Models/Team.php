@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,7 +34,7 @@ class Team extends Model
 
     // ... existing code ...
 
-    public function currentPlan():BelongsTo
+    public function currentPlan(): BelongsTo
     {
         return $this->belongsTo(Plan::class, 'current_plan_id');
     }
@@ -74,10 +73,9 @@ class Team extends Model
         )->value ?? $default;
     }
 
-
     public function canAccessFeature(string $feature): bool
     {
-        if (!$this->subscription) {
+        if (! $this->subscription) {
             return false;
         }
 
@@ -85,7 +83,7 @@ class Team extends Model
             ->where('name', $feature)
             ->first();
 
-        if (!$planFeature) {
+        if (! $planFeature) {
             return false;
         }
 
@@ -94,7 +92,7 @@ class Team extends Model
 
     public function getRemainingTrialDays(): int
     {
-        if (!$this->isOnTrial()) {
+        if (! $this->isOnTrial()) {
             return 0;
         }
 
@@ -138,5 +136,4 @@ class Team extends Model
     {
         return $this->members();
     }
-
 }

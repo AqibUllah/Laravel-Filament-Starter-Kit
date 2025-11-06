@@ -7,12 +7,11 @@ use App\Filament\Tenant\Resources\Projects\ProjectResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\ViewEntry;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
-use \Filament\Schemas\Components\Section;
-use \Filament\Schemas\Components\Grid;
 
 class ViewProject extends ViewRecord
 {
@@ -29,7 +28,7 @@ class ViewProject extends ViewRecord
                 ->color('info')
                 ->action(function () {
                     $newProject = $this->record->replicate();
-                    $newProject->name = $this->record->name . ' (Copy)';
+                    $newProject->name = $this->record->name.' (Copy)';
                     $newProject->status = ProjectStatusEnum::Planning;
                     $newProject->progress = 0;
                     $newProject->completed_at = null;
@@ -198,7 +197,7 @@ class ViewProject extends ViewRecord
 
                                 TextEntry::make('duration')
                                     ->label('Duration')
-                                    ->state(fn ($record) => $record->duration ? $record->duration . ' days' : 'Not set')
+                                    ->state(fn ($record) => $record->duration ? $record->duration.' days' : 'Not set')
                                     ->placeholder('Not set'),
                             ]),
                     ]),

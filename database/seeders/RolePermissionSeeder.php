@@ -2,13 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
 use BezhanSalleh\FilamentShield\Support\Utils;
-use Filament\Facades\Filament;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\PermissionRegistrar;
 
@@ -26,6 +23,7 @@ class RolePermissionSeeder extends Seeder
 
         if (! $team) {
             $this->command->error('No team found. Please seed or create a team first.');
+
             return;
         }
         $admin = User::first();
@@ -34,13 +32,14 @@ class RolePermissionSeeder extends Seeder
         app()[PermissionRegistrar::class]->setPermissionsTeamId($team->id);
 
         $super_admin_role = Role::firstOrCreate([
-             'name' => 'team_admin',
-             'team_id' => $team->id,
-             'guard_name' => 'web'
+            'name' => 'team_admin',
+            'team_id' => $team->id,
+            'guard_name' => 'web',
         ]);
 
         if (! $admin) {
             $this->command->error('No user found. Please create a user first.');
+
             return;
         }
 

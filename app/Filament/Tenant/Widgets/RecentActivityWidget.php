@@ -3,8 +3,8 @@
 namespace App\Filament\Tenant\Widgets;
 
 use App\Models\Project;
-use App\Models\Task;
 use App\Models\Subscription;
+use App\Models\Task;
 use Filament\Facades\Filament;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
@@ -19,7 +19,7 @@ class RecentActivityWidget extends ChartWidget
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [
                 'datasets' => [],
                 'labels' => [],

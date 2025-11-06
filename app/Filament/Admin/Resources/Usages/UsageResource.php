@@ -4,12 +4,12 @@ namespace App\Filament\Admin\Resources\Usages;
 
 use App\Filament\Admin\Resources\Usages\Pages\CreateUsage;
 use App\Filament\Admin\Resources\Usages\Pages\EditUsage;
-use App\Filament\Admin\Resources\Usages\Pages\ViewUsage;
 use App\Filament\Admin\Resources\Usages\Pages\ListUsages;
+use App\Filament\Admin\Resources\Usages\Pages\ViewUsage;
 use App\Filament\Admin\Resources\Usages\Schemas\UsageForm;
 use App\Filament\Admin\Resources\Usages\Tables\UsagesTable;
-use BackedEnum;
 use App\Models\Usage;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -24,7 +24,7 @@ class UsageResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ChartBar;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Billing & Plans';
+    protected static string|UnitEnum|null $navigationGroup = 'Billing & Plans';
 
     protected static ?int $navigationSort = 3;
 

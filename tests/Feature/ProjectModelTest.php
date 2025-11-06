@@ -4,10 +4,9 @@ use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
 use App\Jobs\RecordProjectUsage;
 use App\Models\Project;
-use App\Models\Team;
 use App\Models\Task;
+use App\Models\Team;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 
 it('creates a project and computes helper values', function () {
@@ -103,5 +102,3 @@ it('can have tasks', function () {
     $project = Project::factory()->has(Task::factory()->count(3))->create();
     expect($project->tasks)->toHaveCount(3);
 });
-
-

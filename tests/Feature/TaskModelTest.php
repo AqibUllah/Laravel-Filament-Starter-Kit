@@ -83,5 +83,3 @@ it('fires TaskAssigned event when assignee changes', function () {
 
     Event::assertDispatched(TaskAssigned::class);
 });
-
-

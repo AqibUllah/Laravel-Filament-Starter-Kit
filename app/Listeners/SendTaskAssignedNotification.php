@@ -17,8 +17,8 @@ class SendTaskAssignedNotification implements ShouldQueue
         // Get the task's team_id to scope settings correctly
         $teamId = $event->task->team_id;
         \Illuminate\Support\Facades\Log::info('SendTaskAssignedNotification: teamId', ['teamId' => $teamId]);
-        
-        if (!$teamId) {
+
+        if (! $teamId) {
             return;
         }
 
@@ -27,7 +27,7 @@ class SendTaskAssignedNotification implements ShouldQueue
         \Illuminate\Support\Facades\Log::info('SendTaskAssignedNotification: settings', ['settings' => $settings]);
 
         // Check if notifications for task assignment are enabled
-        if (!($settings['notify_on_task_assign'] ?? false)) {
+        if (! ($settings['notify_on_task_assign'] ?? false)) {
             return;
         }
 

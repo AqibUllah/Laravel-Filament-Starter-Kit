@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Plan;
-use App\Models\User;
 use App\Models\Team;
+use App\Models\User;
 use Stripe\Customer;
 use Stripe\Stripe;
 

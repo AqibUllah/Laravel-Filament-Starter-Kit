@@ -33,12 +33,12 @@ class Subscription extends Model
         'final_amount' => 'decimal:2',
     ];
 
-    public function team():BelongsTo
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
-    public function plan():BelongsTo
+    public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class)->withoutGlobalScopes();
     }
@@ -50,12 +50,12 @@ class Subscription extends Model
 
     public function isActive(): bool
     {
-        return $this->status === 'active' && !$this->isCanceled();
+        return $this->status === 'active' && ! $this->isCanceled();
     }
 
     public function isCanceled(): bool
     {
-        return !is_null($this->canceled_at);
+        return ! is_null($this->canceled_at);
     }
 
     public function isOnTrial(): bool
@@ -70,6 +70,6 @@ class Subscription extends Model
 
     public function isRecurring(): bool
     {
-        return $this->isActive() && !$this->isOnTrial() && !$this->isCanceled();
+        return $this->isActive() && ! $this->isOnTrial() && ! $this->isCanceled();
     }
 }

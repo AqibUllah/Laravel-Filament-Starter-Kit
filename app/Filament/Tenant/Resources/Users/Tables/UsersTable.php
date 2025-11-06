@@ -2,10 +2,7 @@
 
 namespace App\Filament\Tenant\Resources\Users\Tables;
 
-use App\Filament\Schemas\Components\LimitAlert;
 use App\Helpers\FeatureLimitHelper;
-use App\Livewire\PlanFeatureLimitAlert;
-use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -40,7 +37,7 @@ class UsersTable
                     ->searchable(),
                 TextColumn::make('phone'),
                 ToggleColumn::make('is_active')
-                ->label('Active'),
+                    ->label('Active'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

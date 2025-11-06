@@ -3,12 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
 
 class RedirectIfUserNotSubscribedMiddleware
 {
@@ -16,7 +14,7 @@ class RedirectIfUserNotSubscribedMiddleware
     {
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('filament.admin.auth.login');
         }
 
@@ -39,11 +37,11 @@ class RedirectIfUserNotSubscribedMiddleware
         }
 
         Notification::make('Error')
-        ->title('Error')
-        ->danger()
-        ->body('Please subscribe to access the features.')->send();
+            ->title('Error')
+            ->danger()
+            ->body('Please subscribe to access the features.')->send();
 
         // Redirect to plans page if not subscribed
-        return redirect()->route('filament.tenant.pages.plans',['tenant' => $team])->with('error', 'Please subscribe to access the features.');
+        return redirect()->route('filament.tenant.pages.plans', ['tenant' => $team])->with('error', 'Please subscribe to access the features.');
     }
 }

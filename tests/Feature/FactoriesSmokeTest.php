@@ -14,10 +14,8 @@ it('can create users via factory', function () {
 
 it('can create teams via factory', function () {
     $teams = Team::factory()->count(2)->create([
-        'owner_id' => User::factory()
+        'owner_id' => User::factory(),
     ]);
     expect($teams)->toHaveCount(2)
         ->and(Team::count())->toBe(2);
 });
-
-

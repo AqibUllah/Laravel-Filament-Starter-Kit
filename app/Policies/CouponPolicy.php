@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Coupon;
 use App\Models\Admin;
+use App\Models\Coupon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CouponPolicy

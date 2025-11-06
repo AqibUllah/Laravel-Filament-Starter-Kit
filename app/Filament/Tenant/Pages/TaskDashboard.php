@@ -9,7 +9,7 @@ use Filament\Pages\Page;
 
 class TaskDashboard extends Page
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?string $title = 'Task Analytics';
 
@@ -19,7 +19,7 @@ class TaskDashboard extends Page
 
     protected static ?int $navigationSort = 3;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Analytics';
+    protected static string|\UnitEnum|null $navigationGroup = 'Analytics';
 
     public function getHeaderWidgets(): array
     {
@@ -30,7 +30,7 @@ class TaskDashboard extends Page
         ];
     }
 
-    public function getColumns(): int | array
+    public function getColumns(): int|array
     {
         return 2;
     }

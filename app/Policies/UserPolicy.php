@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
-use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Services\FeatureLimiterService;
 use Filament\Facades\Filament;
+use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
 class UserPolicy
 {
@@ -68,5 +68,4 @@ class UserPolicy
     {
         return $authUser->can('Reorder:User');
     }
-
 }

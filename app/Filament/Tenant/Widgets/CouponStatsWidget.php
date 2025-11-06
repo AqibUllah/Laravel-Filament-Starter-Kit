@@ -3,7 +3,6 @@
 namespace App\Filament\Tenant\Widgets;
 
 use App\Models\Coupon;
-use App\Models\Subscription;
 use App\Services\CouponService;
 use Filament\Facades\Filament;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -16,8 +15,8 @@ class CouponStatsWidget extends BaseWidget
     protected function getStats(): array
     {
         $team = Filament::getTenant();
-        
-        if (!$team) {
+
+        if (! $team) {
             return [];
         }
 
@@ -30,7 +29,7 @@ class CouponStatsWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-tag')
                 ->color('success'),
 
-            Stat::make('Total Savings', '$' . number_format($stats['total_savings'], 2))
+            Stat::make('Total Savings', '$'.number_format($stats['total_savings'], 2))
                 ->description('Money saved with coupons')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('info'),

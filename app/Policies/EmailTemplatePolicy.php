@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\EmailTemplate;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
 class EmailTemplatePolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:EmailTemplate');
@@ -66,5 +66,4 @@ class EmailTemplatePolicy
     {
         return $authUser->can('Reorder:EmailTemplate');
     }
-
 }

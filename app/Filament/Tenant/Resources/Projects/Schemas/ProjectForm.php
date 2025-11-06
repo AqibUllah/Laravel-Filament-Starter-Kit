@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources\Projects\Schemas;
 
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
+use App\Settings\TenantGeneralSettings;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -14,18 +15,16 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
-use App\Settings\TenantGeneralSettings;
 
 class ProjectForm
 {
     public static function configure(Schema $schema): Schema
     {
         $currentTeam = Filament::getTenant();
-        $settings = new TenantGeneralSettings();
+        $settings = new TenantGeneralSettings;
 
         return $schema
             ->components([
@@ -159,7 +158,7 @@ class ProjectForm
                             ->helperText('Select team members to assign to this project'),
 
                         Placeholder::make('team_info')
-                            ->content('This project belongs to: ' . $currentTeam->name)
+                            ->content('This project belongs to: '.$currentTeam->name)
                             ->columnSpanFull(),
                     ])->columns(2),
 

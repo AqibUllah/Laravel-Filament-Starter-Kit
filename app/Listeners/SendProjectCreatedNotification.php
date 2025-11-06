@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\ProjectCreated;
-use App\Models\User;
 use App\Notifications\ProjectCreatedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\DB;
@@ -17,27 +16,27 @@ class SendProjectCreatedNotification implements ShouldQueue
     {
         // Get the project's team_id to scope settings correctly
         $teamId = $event->project->team_id;
-        
-        if (!$teamId) {
+
+        if (! $teamId) {
             return;
         }
 
         // Query settings directly for the specific team
         $settings = $this->getSettingsForTeam($teamId);
-        
+
         // Check if email notifications are enabled globally
-        if (!($settings['email_notifications_enabled'] ?? false)) {
+        if (! ($settings['email_notifications_enabled'] ?? false)) {
             return;
         }
-        
+
         // Check if notifications for project changes are enabled
-        if (!($settings['notify_on_project_changes'] ?? false)) {
+        if (! ($settings['notify_on_project_changes'] ?? false)) {
             return;
         }
-        
+
         // Get team members who should be notified
         $teamMembers = $event->project->team->users;
-        
+
         foreach ($teamMembers as $user) {
             $user->notify(new ProjectCreatedNotification($event->project));
         }

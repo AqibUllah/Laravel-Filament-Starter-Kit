@@ -17,7 +17,7 @@ class SendTeamInvitationNotification implements ShouldQueue
         $settings = app(TenantGeneralSettings::class);
 
         // Check if email notifications are enabled globally
-        if (!$settings->email_notifications_enabled) {
+        if (! $settings->email_notifications_enabled) {
             return;
         }
 

@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Mail\TemplateMailable;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use App\Mail\TemplateMailable;
 
 class ProjectCreatedNotification extends Notification implements ShouldQueue
 {
@@ -56,7 +56,7 @@ class ProjectCreatedNotification extends Notification implements ShouldQueue
         return [
             'project_id' => $this->project->id,
             'project_name' => $this->project->name,
-            'message' => 'A new project has been created: ' . $this->project->name,
+            'message' => 'A new project has been created: '.$this->project->name,
         ];
     }
 }

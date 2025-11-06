@@ -2,15 +2,12 @@
 
 namespace App\Filament\Admin\Resources\Teams\Tables;
 
-use App\Filament\Admin\Resources\Teams\TeamResource;
 use App\Models\Team;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -35,7 +32,7 @@ class TeamsTable
                 TextColumn::make('currentPlan.name')
                     ->label('Current Plan')
                     ->badge()
-                    ->color(fn (?string $state): string => match($state) {
+                    ->color(fn (?string $state): string => match ($state) {
                         'Free' => 'gray',
                         'Pro' => 'primary',
                         'Enterprise' => 'success',
@@ -46,9 +43,10 @@ class TeamsTable
                     ->badge()
                     ->getStateUsing(function (Team $record): string {
                         $latestSubscription = $record->subscriptions()->latest()->first();
+
                         return $latestSubscription?->status ?? 'none';
                     })
-                    ->formatStateUsing(fn (string $state): string => match($state) {
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
                         'active' => 'Active',
                         'canceled' => 'Canceled',
                         'past_due' => 'Past Due',
@@ -56,7 +54,7 @@ class TeamsTable
                         'none' => 'No subscription',
                         default => 'Unknown',
                     })
-                    ->color(fn (string $state): string => match($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'active' => 'success',
                         'canceled' => 'danger',
                         'past_due' => 'warning',

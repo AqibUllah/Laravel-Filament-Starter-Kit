@@ -46,7 +46,7 @@ class EmailTemplateForm
                                     [
                                         TextInput::make('key')
                                             ->afterStateUpdated(
-                                                fn(Set $set, ?string $state) => $set('key', Str::slug($state))
+                                                fn (Set $set, ?string $state) => $set('key', Str::slug($state))
                                             )
                                             ->label(__('vb-email-templates::email-templates.form-fields-labels.key'))
                                             ->hint(__('vb-email-templates::email-templates.form-fields-labels.key-hint'))
@@ -81,7 +81,7 @@ class EmailTemplateForm
                                         Select::make(config('filament-email-templates.theme_table_name').'_id')
                                             ->label(__('vb-email-templates::email-templates.form-fields-labels.theme'))
                                             ->relationship(name: 'theme', titleAttribute: 'name')
-                                            ->native(false)
+                                            ->native(false),
                                     ]
                                 ),
 
@@ -105,13 +105,13 @@ class EmailTemplateForm
                                         TinyEditor::make('content')
                                             ->label(__('vb-email-templates::email-templates.form-fields-labels.content'))
                                             ->profile('default')
-                                            ->default("<p>Dear ##user.first_name##, </p>"),
+                                            ->default('<p>Dear ##user.first_name##, </p>'),
 
                                         Radio::make('logo_type')
                                             ->label(__('vb-email-templates::email-templates.form-fields-labels.logo-type'))
                                             ->options([
                                                 'browse_another' => __('vb-email-templates::email-templates.form-fields-labels.browse-another'),
-                                                'paste_url'      => __('vb-email-templates::email-templates.form-fields-labels.paste-url'),
+                                                'paste_url' => __('vb-email-templates::email-templates.form-fields-labels.paste-url'),
                                             ])
                                             ->default('browse_another')
                                             ->inline()
@@ -120,7 +120,7 @@ class EmailTemplateForm
                                         FileUpload::make('logo')
                                             ->label(__('vb-email-templates::email-templates.form-fields-labels.logo'))
                                             ->hint(__('vb-email-templates::email-templates.form-fields-labels.logo-hint'))
-                                            ->hidden(fn(Get $get) => $get('logo_type') !== 'browse_another')
+                                            ->hidden(fn (Get $get) => $get('logo_type') !== 'browse_another')
                                             ->directory(config('filament-email-templates.browsed_logo'))
                                             ->image(),
 
@@ -128,7 +128,7 @@ class EmailTemplateForm
                                             ->label(__('vb-email-templates::email-templates.form-fields-labels.logo-url'))
                                             ->hint(__('vb-email-templates::email-templates.form-fields-labels.logo-url-hint'))
                                             ->placeholder('https://www.example.com/media/test.png')
-                                            ->hidden(fn(Get $get) => $get('logo_type') !== 'paste_url')
+                                            ->hidden(fn (Get $get) => $get('logo_type') !== 'paste_url')
                                             ->activeUrl()
                                             ->maxLength(191),
                                     ]

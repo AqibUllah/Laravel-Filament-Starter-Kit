@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Plan;
 use App\Models\PlanFeature;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PlanFeatureSeeder extends Seeder
@@ -29,7 +28,7 @@ class PlanFeatureSeeder extends Seeder
                     ['name' => 'Priority Support', 'value' => 'false', 'sort_order' => 6],
                     ['name' => 'Custom Domain', 'value' => 'false', 'sort_order' => 7],
                     ['name' => 'Advanced Analytics', 'value' => 'false', 'sort_order' => 8],
-                ]
+                ],
             ],
 
             // Pro Plan Features
@@ -46,7 +45,7 @@ class PlanFeatureSeeder extends Seeder
                     ['name' => 'Advanced Analytics', 'value' => 'true', 'sort_order' => 8],
                     ['name' => 'Custom Branding', 'value' => 'false', 'sort_order' => 9],
                     ['name' => 'SSO Integration', 'value' => 'false', 'sort_order' => 10],
-                ]
+                ],
             ],
 
             // Business Plan Features
@@ -65,7 +64,7 @@ class PlanFeatureSeeder extends Seeder
                     ['name' => 'SSO Integration', 'value' => 'true', 'sort_order' => 10],
                     ['name' => 'Dedicated Account Manager', 'value' => 'true', 'sort_order' => 11],
                     ['name' => 'Custom Workflows', 'value' => 'true', 'sort_order' => 12],
-                ]
+                ],
             ],
 
             // Enterprise Plan Features
@@ -87,7 +86,7 @@ class PlanFeatureSeeder extends Seeder
                     ['name' => 'On-premise Deployment', 'value' => 'true', 'sort_order' => 13],
                     ['name' => 'Custom SLA', 'value' => 'true', 'sort_order' => 14],
                     ['name' => 'Training Sessions', 'value' => 'true', 'sort_order' => 15],
-                ]
+                ],
             ],
 
             // Yearly plans - same features as monthly counterparts
@@ -105,7 +104,7 @@ class PlanFeatureSeeder extends Seeder
                     ['name' => 'Custom Branding', 'value' => 'false', 'sort_order' => 9],
                     ['name' => 'SSO Integration', 'value' => 'false', 'sort_order' => 10],
                     ['name' => 'Yearly Savings', 'value' => '20%', 'sort_order' => 11],
-                ]
+                ],
             ],
 
             [
@@ -124,7 +123,7 @@ class PlanFeatureSeeder extends Seeder
                     ['name' => 'Dedicated Account Manager', 'value' => 'true', 'sort_order' => 11],
                     ['name' => 'Custom Workflows', 'value' => 'true', 'sort_order' => 12],
                     ['name' => 'Yearly Savings', 'value' => '20%', 'sort_order' => 13],
-                ]
+                ],
             ],
         ];
 

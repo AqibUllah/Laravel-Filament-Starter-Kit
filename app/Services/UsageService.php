@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Usage;
-use App\Models\Team;
-use App\Models\Subscription;
 use App\Models\PlanFeature;
+use App\Models\Subscription;
+use App\Models\Team;
+use App\Models\Usage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -58,7 +58,7 @@ class UsageService
      */
     public function getCurrentBillingPeriod(?Subscription $subscription): array
     {
-        if (!$subscription) {
+        if (! $subscription) {
             // Default to monthly period if no subscription
             $start = now()->startOfMonth();
             $end = now()->endOfMonth();
@@ -85,7 +85,7 @@ class UsageService
      */
     public function getPlanFeatureForMetric(?Subscription $subscription, string $metricName): ?PlanFeature
     {
-        if (!$subscription || !$subscription->plan) {
+        if (! $subscription || ! $subscription->plan) {
             return null;
         }
 
@@ -97,9 +97,9 @@ class UsageService
     /**
      * Get usage summary for a team
      */
-    public function getUsageSummary(Team $team, Carbon $start = null, Carbon $end = null): array
+    public function getUsageSummary(Team $team, ?Carbon $start = null, ?Carbon $end = null): array
     {
-        if (!$start || !$end) {
+        if (! $start || ! $end) {
             $billingPeriod = $this->getCurrentBillingPeriod($team->subscription);
             $start = $billingPeriod['start'];
             $end = $billingPeriod['end'];
@@ -127,7 +127,7 @@ class UsageService
     public function checkUsageLimits(Team $team, string $metricName, float $additionalQuantity = 0): array
     {
         $subscription = $team->subscription;
-        if (!$subscription || !$subscription->plan) {
+        if (! $subscription || ! $subscription->plan) {
             return [
                 'allowed' => true,
                 'current_usage' => 0,
@@ -137,7 +137,7 @@ class UsageService
         }
 
         $planFeature = $this->getPlanFeatureForMetric($subscription, $metricName);
-        if (!$planFeature) {
+        if (! $planFeature) {
             return [
                 'allowed' => true,
                 'current_usage' => 0,
@@ -182,12 +182,12 @@ class UsageService
     public function calculateOverageCharges(Team $team, string $metricName): float
     {
         $subscription = $team->subscription;
-        if (!$subscription || !$subscription->plan) {
+        if (! $subscription || ! $subscription->plan) {
             return 0;
         }
 
         $planFeature = $this->getPlanFeatureForMetric($subscription, $metricName);
-        if (!$planFeature) {
+        if (! $planFeature) {
             return 0;
         }
 
@@ -211,9 +211,9 @@ class UsageService
     /**
      * Get usage analytics for admin dashboard
      */
-    public function getUsageAnalytics(Carbon $start = null, Carbon $end = null): array
+    public function getUsageAnalytics(?Carbon $start = null, ?Carbon $end = null): array
     {
-        if (!$start || !$end) {
+        if (! $start || ! $end) {
             $start = now()->subMonth();
             $end = now();
         }

@@ -17,7 +17,7 @@ class PlanFeature extends Model
         'sort_order',
     ];
 
-    public function team():BelongsTo
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }

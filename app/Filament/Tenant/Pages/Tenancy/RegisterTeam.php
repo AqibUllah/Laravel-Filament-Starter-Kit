@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Filament\Tenant\Pages\Tenancy;
 
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
 use App\Enums\TaskStatusEnum;
+use App\Models\Role;
 use App\Models\Team;
 use BezhanSalleh\FilamentShield\Support\Utils;
 use Filament\Forms\Components\TextInput;
@@ -12,14 +14,14 @@ use Filament\Pages\Tenancy\RegisterTenant;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Models\Role;
 
 class RegisterTeam extends RegisterTenant
 {
-//    protected static string $view = 'filament.company.pages.register-team';
-protected string $view = 'components.team.pages.register-team';
+    //    protected static string $view = 'filament.company.pages.register-team';
+    protected string $view = 'components.team.pages.register-team';
 
-protected static string $layout = 'components.team.layout.custom-simple';
+    protected static string $layout = 'components.team.layout.custom-simple';
+
     public static function getLabel(): string
     {
         return 'Register team';
@@ -46,9 +48,9 @@ protected static string $layout = 'components.team.layout.custom-simple';
         $team_name = $team->name;
 
         $team_admin_role = Role::firstOrCreate([
-           'name'   => 'team_admin',
-           'team_id' => $team->id,
-           'guard_name' => 'web'
+            'name' => 'team_admin',
+            'team_id' => $team->id,
+            'guard_name' => 'web',
         ]);
 
         setPermissionsTeamId($team->id);

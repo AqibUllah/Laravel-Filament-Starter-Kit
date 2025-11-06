@@ -18,7 +18,6 @@ use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Schemas\Components\Form;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -145,13 +144,14 @@ class TasksRelationManager extends RelationManager
                 Tables\Filters\TernaryFilter::make('trashed')
                     ->baseQuery(fn (Builder $query) => $query->withoutGlobalScopes([
                         SoftDeletingScope::class,
-                    ]))
+                    ])),
             ])
             ->headerActions([
                 CreateAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['assigned_by'] = auth()->id();
                         $data['team_id'] = Filament::getTenant()->id;
+
                         return $data;
                     }),
             ])

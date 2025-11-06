@@ -2,15 +2,15 @@
 
 namespace App\Filament\Tenant\Pages;
 
-use Filament\Pages\Page;
 use App\Filament\Tenant\Widgets\PlansStatsWidget;
 use App\Filament\Tenant\Widgets\SubscriptionChartWidget;
 use BackedEnum;
+use Filament\Pages\Page;
 use UnitEnum;
 
 class PlansDashboard extends Page
 {
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-credit-card';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
 
     protected string $view = 'filament.tenant.pages.dashboards.plans-dashboard';
 
@@ -22,7 +22,7 @@ class PlansDashboard extends Page
 
     protected static ?int $navigationSort = 2;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Analytics';
+    protected static string|UnitEnum|null $navigationGroup = 'Analytics';
 
     public function getHeaderWidgets(): array
     {
@@ -32,7 +32,7 @@ class PlansDashboard extends Page
         ];
     }
 
-    public function getColumns(): int | array
+    public function getColumns(): int|array
     {
         return 2;
     }

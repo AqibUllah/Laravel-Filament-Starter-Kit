@@ -30,7 +30,7 @@ return new class extends Migration
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->index(['code', 'is_active']);
             $table->index(['team_id', 'is_active']);
             $table->index(['plan_id', 'is_active']);

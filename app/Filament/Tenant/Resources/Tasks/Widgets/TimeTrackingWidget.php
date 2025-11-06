@@ -14,7 +14,7 @@ class TimeTrackingWidget extends StatsOverviewWidget
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [];
         }
 
@@ -37,7 +37,7 @@ class TimeTrackingWidget extends StatsOverviewWidget
                 ->icon('heroicon-o-check-badge')
                 ->color($totalActual <= $totalEstimated ? 'success' : 'danger'),
 
-            Stat::make('Efficiency', number_format($efficiency, 1) . '%')
+            Stat::make('Efficiency', number_format($efficiency, 1).'%')
                 ->description('Actual vs Estimated')
                 ->icon('heroicon-o-chart-bar')
                 ->color($efficiency >= 90 ? 'success' : ($efficiency >= 70 ? 'warning' : 'danger')),

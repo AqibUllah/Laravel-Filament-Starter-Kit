@@ -9,7 +9,7 @@ use Filament\Pages\Page;
 
 class ProjectDashboard extends Page
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-folder-open';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-folder-open';
 
     protected static ?string $title = 'Project Analytics';
 
@@ -19,7 +19,7 @@ class ProjectDashboard extends Page
 
     protected static ?int $navigationSort = 1;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Analytics';
+    protected static string|\UnitEnum|null $navigationGroup = 'Analytics';
 
     protected function getHeaderWidgets(): array
     {
@@ -30,8 +30,7 @@ class ProjectDashboard extends Page
         ];
     }
 
-
-    public function getColumns(): int | array
+    public function getColumns(): int|array
     {
         return 2;
     }

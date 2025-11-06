@@ -7,13 +7,11 @@ use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Icons\Heroicon;
 
-enum PriorityEnum: string implements HasLabel,HasIcon,HasColor
+enum PriorityEnum: string implements HasColor, HasIcon, HasLabel
 {
-
     case LOW = 'low';
     case Medium = 'medium';
     case High = 'high';
-
 
     public function getLabel(): ?string
     {

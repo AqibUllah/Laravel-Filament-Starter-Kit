@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources\Projects\Tables;
 
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
+use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
@@ -11,8 +12,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
-use Filament\Actions\Action;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -150,7 +149,7 @@ class ProjectsTable
                         ->color('info')
                         ->action(function ($record) {
                             $newProject = $record->replicate();
-                            $newProject->name = $record->name . ' (Copy)';
+                            $newProject->name = $record->name.' (Copy)';
                             $newProject->status = ProjectStatusEnum::Planning;
                             $newProject->progress = 0;
                             $newProject->completed_at = null;

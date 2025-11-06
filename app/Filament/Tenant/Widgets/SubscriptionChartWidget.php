@@ -18,7 +18,7 @@ class SubscriptionChartWidget extends ChartWidget
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [
                 'datasets' => [],
                 'labels' => [],

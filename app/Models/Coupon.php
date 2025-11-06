@@ -69,7 +69,7 @@ class Coupon extends Model
             ->where('valid_from', '<=', now())
             ->where(function ($q) {
                 $q->whereNull('valid_until')
-                  ->orWhere('valid_until', '>=', now());
+                    ->orWhere('valid_until', '>=', now());
             });
     }
 
@@ -82,7 +82,7 @@ class Coupon extends Model
     {
         return $query->where(function ($q) use ($teamId) {
             $q->whereNull('team_id')
-              ->orWhere('team_id', $teamId);
+                ->orWhere('team_id', $teamId);
         });
     }
 
@@ -90,7 +90,7 @@ class Coupon extends Model
     {
         return $query->where(function ($q) use ($planId) {
             $q->whereNull('plan_id')
-              ->orWhere('plan_id', $planId);
+                ->orWhere('plan_id', $planId);
         });
     }
 
@@ -117,7 +117,7 @@ class Coupon extends Model
 
     public function calculateDiscount($amount): float
     {
-        if (!$this->isValid()) {
+        if (! $this->isValid()) {
             return 0;
         }
 
@@ -157,9 +157,9 @@ class Coupon extends Model
     public function getFormattedDiscount(): string
     {
         if ($this->type === 'percentage') {
-            return $this->value . '%';
+            return $this->value.'%';
         }
 
-        return '$' . number_format($this->value, 2);
+        return '$'.number_format($this->value, 2);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Tenant\Widgets;
 
-use App\Enums\ProjectStatusEnum;
 use App\Models\Plan;
 use App\Models\Project;
 use App\Models\Subscription;
@@ -17,7 +16,7 @@ class MainOverviewStatsWidget extends BaseWidget
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [];
         }
 
@@ -67,7 +66,7 @@ class MainOverviewStatsWidget extends BaseWidget
                 ]),
 
             Stat::make('Current Plan', $currentPlan?->name ?? 'No Plan')
-                ->description($currentPlan ? '$' . $currentPlan->price . '/' . $currentPlan->interval : 'No active subscription')
+                ->description($currentPlan ? '$'.$currentPlan->price.'/'.$currentPlan->interval : 'No active subscription')
                 ->descriptionIcon('heroicon-m-credit-card')
                 ->color($currentPlan ? 'success' : 'danger')
                 ->url(fn (): string => route('filament.tenant.pages.plans-dashboard', ['tenant' => filament()->getTenant()]))
@@ -76,14 +75,14 @@ class MainOverviewStatsWidget extends BaseWidget
                 ]),
 
             Stat::make('Overdue Items', $overdueProjects + $overdueTasks)
-                ->description($overdueProjects . ' projects, ' . $overdueTasks . ' tasks')
+                ->description($overdueProjects.' projects, '.$overdueTasks.' tasks')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color(($overdueProjects + $overdueTasks) > 0 ? 'danger' : 'success')
                 ->extraAttributes([
                     'class' => 'transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-red-500/25 bg-gradient-to-br from-red-50 to-rose-100 dark:from-red-900/20 dark:to-rose-800/20 rounded-xl p-4 hover:border-red-300 dark:hover:border-red-600',
                 ]),
 
-            Stat::make('Task Efficiency', number_format($efficiency, 1) . '%')
+            Stat::make('Task Efficiency', number_format($efficiency, 1).'%')
                 ->description('Actual vs Estimated time')
                 ->descriptionIcon('heroicon-m-chart-bar')
                 ->color($efficiency >= 90 ? 'success' : ($efficiency >= 70 ? 'warning' : 'danger'))
@@ -91,7 +90,7 @@ class MainOverviewStatsWidget extends BaseWidget
                     'class' => 'transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-purple-500/25 bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-900/20 dark:to-violet-800/20 rounded-xl p-4 hover:border-purple-300 dark:hover:border-purple-600',
                 ]),
 
-            Stat::make('Completion Rate', $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100, 1) . '%' : '0%')
+            Stat::make('Completion Rate', $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100, 1).'%' : '0%')
                 ->description('Tasks completed')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color($totalTasks > 0 && ($completedTasks / $totalTasks) >= 0.8 ? 'success' : ($totalTasks > 0 && ($completedTasks / $totalTasks) >= 0.6 ? 'warning' : 'danger'))

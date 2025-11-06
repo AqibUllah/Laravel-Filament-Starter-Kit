@@ -6,7 +6,6 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Team;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -23,6 +22,7 @@ class SubscriptionSeeder extends Seeder
 
         if ($teams->isEmpty() || $plans->isEmpty()) {
             $this->command->warn('No teams or plans found. Please run TeamSeeder and PlanSeeder first.');
+
             return;
         }
 
@@ -37,7 +37,7 @@ class SubscriptionSeeder extends Seeder
             $subscriptions[] = [
                 'team_id' => $team->id,
                 'plan_id' => $plan->id,
-                'stripe_subscription_id' => 'sub_' . Str::random(14),
+                'stripe_subscription_id' => 'sub_'.Str::random(14),
                 'stripe_customer_id' => 'cus_THILz9Qx4zKqlN',
                 'status' => $status,
                 'trial_ends_at' => $status === 'trialing' ? Carbon::now()->addDays(7) : null,
@@ -56,8 +56,8 @@ class SubscriptionSeeder extends Seeder
             $subscriptions[] = [
                 'team_id' => $team->id,
                 'plan_id' => $plan->id,
-                'stripe_subscription_id' => 'sub_' . Str::random(14),
-                'stripe_customer_id' => 'cus_' . Str::random(14),
+                'stripe_subscription_id' => 'sub_'.Str::random(14),
+                'stripe_customer_id' => 'cus_'.Str::random(14),
                 'status' => 'canceled',
                 'trial_ends_at' => null,
                 'ends_at' => Carbon::now()->subDays(5),
@@ -75,8 +75,8 @@ class SubscriptionSeeder extends Seeder
             $subscriptions[] = [
                 'team_id' => $team->id,
                 'plan_id' => $plan->id,
-                'stripe_subscription_id' => 'sub_' . Str::random(14),
-                'stripe_customer_id' => 'cus_' . Str::random(14),
+                'stripe_subscription_id' => 'sub_'.Str::random(14),
+                'stripe_customer_id' => 'cus_'.Str::random(14),
                 'status' => 'incomplete',
                 'trial_ends_at' => null,
                 'ends_at' => null,
@@ -91,10 +91,10 @@ class SubscriptionSeeder extends Seeder
         }
 
         $this->command->info('Subscriptions seeded successfully!');
-        $this->command->info('Active: ' . Subscription::where('status', 'active')->count());
-        $this->command->info('Trialing: ' . Subscription::where('status', 'trialing')->count());
-        $this->command->info('Past Due: ' . Subscription::where('status', 'past_due')->count());
-        $this->command->info('Canceled: ' . Subscription::where('status', 'canceled')->count());
-        $this->command->info('Incomplete: ' . Subscription::where('status', 'incomplete')->count());
+        $this->command->info('Active: '.Subscription::where('status', 'active')->count());
+        $this->command->info('Trialing: '.Subscription::where('status', 'trialing')->count());
+        $this->command->info('Past Due: '.Subscription::where('status', 'past_due')->count());
+        $this->command->info('Canceled: '.Subscription::where('status', 'canceled')->count());
+        $this->command->info('Incomplete: '.Subscription::where('status', 'incomplete')->count());
     }
 }

@@ -31,16 +31,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
-class Profile extends EditTenantProfile implements HasTable,HasSchemas
+class Profile extends EditTenantProfile implements HasSchemas, HasTable
 {
-    use InteractsWithTable;
     use InteractsWithSchemas;
+    use InteractsWithTable;
 
     protected string $view = 'filament.pages.team.profile';
 
     // current tenant/team instance
     public ?Team $team = null;
-
 
     public function mount(): void
     {
@@ -78,20 +77,20 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
                                 RepeatableEntry::make('members')
                                     ->schema([
                                         // Custom card design for team members
-                                                Split::make([
-                                                    Grid::make(1)
-                                                        ->schema([
-                                                            TextEntry::make('name')
-                                                                ->weight('bold')
-                                                                ->size('sm'),
-                                                            TextEntry::make('email')
-                                                                ->size('xs')
-                                                                ->color('gray')
-                                                                ->icon('heroicon-m-envelope'),
-                                                        ]),
-                                                ])
+                                        Split::make([
+                                            Grid::make(1)
+                                                ->schema([
+                                                    TextEntry::make('name')
+                                                        ->weight('bold')
+                                                        ->size('sm'),
+                                                    TextEntry::make('email')
+                                                        ->size('xs')
+                                                        ->color('gray')
+                                                        ->icon('heroicon-m-envelope'),
+                                                ]),
+                                        ])
                                             ->extraAttributes([
-                                                'class' => 'hover:shadow-lg transition-shadow duration-300 border border-gray-200 rounded-xl'
+                                                'class' => 'hover:shadow-lg transition-shadow duration-300 border border-gray-200 rounded-xl',
                                             ]),
                                     ])
                                     ->columns(1)
@@ -105,8 +104,7 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
     public function table(Table $table): Table
     {
         return $table
-            ->relationship(fn(): BelongsToMany =>
-            $this->team->members())
+            ->relationship(fn (): BelongsToMany => $this->team->members())
             ->modifyQueryUsing(fn ($query) => $query->whereNot('user_id', auth()->id()))
             ->inverseRelationship('teams')
             ->columns([
@@ -122,21 +120,21 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
-                    ->label('Remove from my Team')
-                ])
+                        ->label('Remove from my Team'),
+                ]),
             ]);
     }
 
     // Table builder (you can configure header actions / default sort here)
-//    protected function table(Table $table): Table
-//    {
-//        return $table
-//            ->query($this->getTableQuery())
-//            ->columns($this->getTableColumns())
-//            ->headerActions($this->getTableHeaderActions())
-//            ->actions($this->getTableRowActions())
-//            ->bulkActions($this->getTableBulkActions());
-//    }
+    //    protected function table(Table $table): Table
+    //    {
+    //        return $table
+    //            ->query($this->getTableQuery())
+    //            ->columns($this->getTableColumns())
+    //            ->headerActions($this->getTableHeaderActions())
+    //            ->actions($this->getTableRowActions())
+    //            ->bulkActions($this->getTableBulkActions());
+    //    }
 
     // Table query — scope to the current team members
     protected function getTableQuery(): Builder
@@ -186,9 +184,9 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
                 ->after(function (array $data) {
                     $member = User::create($data);
                     // `$record` is the created User — attach to team
-//                    if ($this->team && $member) {
-//                        $this->team->members()->attach($member->id);
-//                    }
+                    //                    if ($this->team && $member) {
+                    //                        $this->team->members()->attach($member->id);
+                    //                    }
                 }),
         ];
     }
@@ -205,7 +203,7 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
                             ->url()
                             ->maxLength(255),
                         Textarea::make('description')
-                        ->rows(5),
+                            ->rows(5),
                         FileUpload::make('logo')
                             ->openable()
                             ->maxSize(2048)
@@ -221,13 +219,13 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
                             ->uploadProgressIndicatorPosition('center bottom')
                             ->getUploadedFileNameForStorageUsing(
                                 static fn (TemporaryUploadedFile $file): string => (string) str($file->getClientOriginalName())
-                                    ->prepend(auth()->user()->teams()->first()->id . '_'),
+                                    ->prepend(auth()->user()->teams()->first()->id.'_'),
                             )
                             ->extraAttributes(['class' => 'w-32 h-32'])
                             ->acceptedFileTypes(['image/png', 'image/jpeg']),
                         Toggle::make('status'),
-                    ])->columns()
-                ])->columnSpanFull();
+                    ])->columns(),
+            ])->columnSpanFull();
 
     }
 
@@ -254,13 +252,15 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
                             ->searchable()
                             ->preload()
                             ->afterStateUpdated(function ($state, callable $set, callable $get, ?\App\Models\Team $record) {
-                                if (! $record) return;
+                                if (! $record) {
+                                    return;
+                                }
 
                                 // Sync users with the team
                                 $record->members()->attach($state);
                             }),
-                    ])->columns()
-                ])->columnSpanFull();
+                    ])->columns(),
+            ])->columnSpanFull();
 
     }
 
@@ -269,7 +269,7 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
         return $schema
             ->schema([
                 $this->getBasicSection(),
-//                $this->getMembersSection(),
+                //                $this->getMembersSection(),
             ]);
     }
 
@@ -277,7 +277,4 @@ class Profile extends EditTenantProfile implements HasTable,HasSchemas
     {
         return 'Team Profile';
     }
-
-
-
 }

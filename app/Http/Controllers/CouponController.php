@@ -6,8 +6,8 @@ use App\Models\Coupon;
 use App\Models\Plan;
 use App\Models\Team;
 use App\Services\CouponService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
@@ -31,7 +31,7 @@ class CouponController extends Controller
         $team = auth()->user()->currentTeam;
         $plan = Plan::findOrFail($request->plan_id);
 
-        if (!$team) {
+        if (! $team) {
             return response()->json([
                 'valid' => false,
                 'message' => 'No team selected',
@@ -42,7 +42,7 @@ class CouponController extends Controller
 
         if ($result['valid']) {
             $discountData = $this->couponService->calculateDiscount($result['coupon'], $plan->price);
-            
+
             return response()->json([
                 'valid' => true,
                 'message' => $result['message'],
@@ -77,7 +77,7 @@ class CouponController extends Controller
         $team = auth()->user()->currentTeam;
         $plan = Plan::findOrFail($request->plan_id);
 
-        if (!$team) {
+        if (! $team) {
             return response()->json([
                 'coupons' => [],
             ]);
@@ -88,7 +88,7 @@ class CouponController extends Controller
         return response()->json([
             'coupons' => $coupons->map(function ($coupon) use ($plan) {
                 $discountData = $this->couponService->calculateDiscount($coupon, $plan->price);
-                
+
                 return [
                     'id' => $coupon->id,
                     'code' => $coupon->code,
@@ -113,7 +113,7 @@ class CouponController extends Controller
     {
         $team = auth()->user()->currentTeam;
 
-        if (!$team) {
+        if (! $team) {
             return response()->json([
                 'stats' => [
                     'total_coupons_used' => 0,

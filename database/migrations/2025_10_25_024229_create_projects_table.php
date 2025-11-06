@@ -19,25 +19,25 @@ return new class extends Migration
             $table->enum('status', ['planning', 'in_progress', 'on_hold', 'completed', 'cancelled', 'archived'])->default('planning');
             $table->decimal('budget', 10, 2)->nullable();
             $table->integer('progress')->default(0);
-            
+
             // Client information
             $table->string('client_name')->nullable();
             $table->string('client_email')->nullable();
             $table->string('client_phone')->nullable();
-            
+
             // Project management
             $table->foreignId('project_manager_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('team_id')->constrained()->cascadeOnDelete();
-            
+
             // Time tracking
             $table->decimal('estimated_hours', 8, 2)->nullable();
             $table->decimal('actual_hours', 8, 2)->nullable();
-            
+
             // Additional fields
             $table->json('tags')->nullable();
             $table->text('notes')->nullable();
             $table->json('attachments')->nullable();
-            
+
             // Timestamps
             $table->timestamp('completed_at')->nullable();
             $table->timestamp('archived_at')->nullable();
@@ -52,7 +52,7 @@ return new class extends Migration
             $table->string('role')->default('member');
             $table->timestamp('joined_at')->useCurrent();
             $table->timestamps();
-            
+
             $table->unique(['project_id', 'user_id']);
         });
 

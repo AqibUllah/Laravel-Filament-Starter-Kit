@@ -58,11 +58,10 @@ class Task extends Model
             'due_date' => 'date',
             'tags' => 'array',
             'completed_at' => 'timestamp',
-            'priority' =>  PriorityEnum::class,
-            'status' =>  TaskStatusEnum::class,
+            'priority' => PriorityEnum::class,
+            'status' => TaskStatusEnum::class,
         ];
     }
-
 
     // Team relationship
     public function team(): BelongsTo
@@ -121,7 +120,7 @@ class Task extends Model
     // Helper methods
     public function isOverdue(): bool
     {
-        return $this->due_date && $this->due_date->isPast() && !in_array($this->status, [TaskStatusEnum::Completed, TaskStatusEnum::Cancelled]);
+        return $this->due_date && $this->due_date->isPast() && ! in_array($this->status, [TaskStatusEnum::Completed, TaskStatusEnum::Cancelled]);
     }
 
     public function markAsCompleted(?int $actualHours = null): void
@@ -135,7 +134,7 @@ class Task extends Model
 
     public function getPriorityColor(): string
     {
-        return match($this->priority) {
+        return match ($this->priority) {
             'high' => 'danger',
             'medium' => 'warning',
             'low' => 'success',
@@ -145,7 +144,7 @@ class Task extends Model
 
     public function getStatusColor(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'completed' => 'success',
             'in_progress' => 'primary',
             'cancelled' => 'danger',
@@ -153,7 +152,6 @@ class Task extends Model
             default => 'gray',
         };
     }
-
 
     // In app/Models/Task.php
     protected static function boot()
@@ -170,7 +168,6 @@ class Task extends Model
             }
         });
     }
-
 
     public function getActivitylogOptions(): LogOptions
     {

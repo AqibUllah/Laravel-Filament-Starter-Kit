@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Attributes\Scope;
 
 class Usage extends Model
 {
@@ -65,7 +65,7 @@ class Usage extends Model
     public function forBillingPeriod($query, $start, $end)
     {
         return $query->whereBetween('billing_period_start', [$start, $end])
-                    ->orWhereBetween('billing_period_end', [$start, $end]);
+            ->orWhereBetween('billing_period_end', [$start, $end]);
     }
 
     /**

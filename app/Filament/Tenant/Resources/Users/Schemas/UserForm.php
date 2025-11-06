@@ -51,7 +51,7 @@ class UserForm
                     ->uploadProgressIndicatorPosition('center bottom')
                     ->getUploadedFileNameForStorageUsing(
                         static fn (TemporaryUploadedFile $file): string => (string) str($file->getClientOriginalName())
-                            ->prepend(auth()->user()->id . '_'),
+                            ->prepend(auth()->user()->id.'_'),
                     )
                     ->avatar()
                     ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/jpg', 'image/webp']),

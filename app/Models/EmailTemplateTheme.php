@@ -61,6 +61,6 @@ class EmailTemplateTheme extends Model
 
     public function email_template(): HasOne
     {
-        return $this->hasOne(EmailTemplate::class,'vb_email_templates_themes_id');
+        return $this->hasOne(EmailTemplate::class, 'vb_email_templates_themes_id');
     }
 }

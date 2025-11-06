@@ -26,10 +26,10 @@ class ProjectsRelationManager extends RelationManager
 
     protected static bool $shouldSkipAuthorization = true;
 
-//    public function authorize(): bool
-//    {
-//        return true; // Allow admins to view all projects
-//    }
+    //    public function authorize(): bool
+    //    {
+    //        return true; // Allow admins to view all projects
+    //    }
 
     protected function modifyQueryUsingForRecord($query): void
     {
@@ -135,7 +135,7 @@ class ProjectsRelationManager extends RelationManager
                     ->sortable(),
                 TextColumn::make('progress')
                     ->label('Progress')
-                    ->formatStateUsing(fn ($state) => $state . '%')
+                    ->formatStateUsing(fn ($state) => $state.'%')
                     ->badge()
                     ->color(fn ($state) => match (true) {
                         $state >= 100 => 'success',

@@ -25,12 +25,12 @@
 namespace App\Providers;
 
 use App\Filament\Tenant\Resources\Tasks\Pages\ListTaskActivities;
-use App\Models\User;
-use BezhanSalleh\FilamentShield\Facades\FilamentShield;
-use Illuminate\Support\ServiceProvider;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\User;
+use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
@@ -48,11 +48,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-//        if (auth()->user()?->hasAnyRole()){
-//            Gate::before(function (User $user, $ability) {
-//                return $user->hasRole('super_admin') ? true : null;
-//            });
-//        }
+        //        if (auth()->user()?->hasAnyRole()){
+        //            Gate::before(function (User $user, $ability) {
+        //                return $user->hasRole('super_admin') ? true : null;
+        //            });
+        //        }
 
         app(\Spatie\Permission\PermissionRegistrar::class)
             ->setPermissionClass(Permission::class)

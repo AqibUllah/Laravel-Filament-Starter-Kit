@@ -12,7 +12,7 @@ class CreateEmailTemplate extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        $emailTemplateResource = new \Visualbuilder\EmailTemplates\Resources\EmailTemplateResource();
+        $emailTemplateResource = new \Visualbuilder\EmailTemplates\Resources\EmailTemplateResource;
         $sortedData = $emailTemplateResource->handleLogo($data);
 
         return static::getModel()::create($sortedData);

@@ -4,7 +4,7 @@ namespace App\Filament\Tenant\Resources\Tasks\Schemas;
 
 use App\Enums\PriorityEnum;
 use App\Enums\TaskStatusEnum;
-use App\Models\Project;
+use App\Settings\TenantGeneralSettings;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
@@ -14,17 +14,16 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use App\Settings\TenantGeneralSettings;
 
 class TaskForm
 {
     public static function configure(Schema $schema): Schema
     {
 
-//        $currentTeam = \Auth::user()->currentTeam;
+        //        $currentTeam = \Auth::user()->currentTeam;
 
         $currentTeam = Filament::getTenant();
-        $settings = new TenantGeneralSettings();
+        $settings = new TenantGeneralSettings;
 
         return $schema
             ->components([
@@ -75,12 +74,13 @@ class TaskForm
                         Placeholder::make('time_difference')
                             ->label('Time Difference')
                             ->content(function ($record) {
-                                if (!$record || !$record->estimated_hours || !$record->actual_hours) {
+                                if (! $record || ! $record->estimated_hours || ! $record->actual_hours) {
                                     return 'N/A';
                                 }
                                 $difference = $record->actual_hours - $record->estimated_hours;
                                 $color = $difference <= 0 ? 'text-success-600' : 'text-danger-600';
                                 $sign = $difference > 0 ? '+' : '';
+
                                 return "<span class='{$color}'>{$sign}{$difference} hours</span>";
                             })
                             ->visible(fn ($record) => $record && $record->estimated_hours && $record->actual_hours)
@@ -91,6 +91,4 @@ class TaskForm
                     ])->columns(2),
             ]);
     }
-
-
 }

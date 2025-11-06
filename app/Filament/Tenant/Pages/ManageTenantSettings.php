@@ -5,18 +5,17 @@ namespace App\Filament\Tenant\Pages;
 use App\Settings\TenantGeneralSettings;
 use BackedEnum;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+use Filament\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TagsInput;
-use Filament\Actions\Action;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Artisan;
 use UnitEnum;
 
 class ManageTenantSettings extends Page
@@ -24,17 +23,18 @@ class ManageTenantSettings extends Page
     use HasPageShield;
 
     protected string $view = 'filament.tenant.pages.manage-tenant-settings';
+
     protected static string $settings = TenantGeneralSettings::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
-     protected static string | UnitEnum | null $navigationGroup = 'System';
+    protected static string|UnitEnum|null $navigationGroup = 'System';
 
-     protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 8;
 
-     protected static ?string $title = 'System Settings';
+    protected static ?string $title = 'System Settings';
 
-     protected ?string $subheading = 'Manage your application configuration and preferences';
+    protected ?string $subheading = 'Manage your application configuration and preferences';
 
     protected function getHeaderActions(): array
     {
@@ -53,7 +53,7 @@ class ManageTenantSettings extends Page
                         ->action(function () {
                             // Clear settings cache and refresh
                             $this->refreshSettings();
-                        })
+                        }),
                 ])
                 ->closeModalByClickingAway(true)
                 ->after(function () {
@@ -71,7 +71,7 @@ class ManageTenantSettings extends Page
                                 ->label('Company Logo')
                                 ->image()
                                 ->disk($settings->storage_upload_disk ?? 'public')
-                                ->acceptedFileTypes(['image/jpg','image/png','image/jpeg'])
+                                ->acceptedFileTypes(['image/jpg', 'image/png', 'image/jpeg'])
                                 ->directory('tenant-logos')
                                 ->visibility('public')
                                 ->imageEditor(),
@@ -227,7 +227,7 @@ class ManageTenantSettings extends Page
                     } catch (\Throwable $e) {
                         // If settings don't exist, create a default object
                         // The repository should auto-initialize, but if it fails, use defaults
-                        $settings = (object)[
+                        $settings = (object) [
                             'company_name' => '',
                             'company_logo_path' => null,
                             'primary_color' => null,
@@ -289,14 +289,14 @@ class ManageTenantSettings extends Page
                         'sidebar_collapsed_default' => $settings->sidebar_collapsed_default ?? false,
                     ]);
 
-//                    dd($action);
+                    //                    dd($action);
                 })
                 ->action(function (array $data) {
                     // Debug tenant context
                     \Illuminate\Support\Facades\Log::info('ManageTenantSettings: Saving settings', [
                         'filament_tenant' => filament()->getTenant()?->id,
                         'auth_user' => auth()->id(),
-                        'data_keys' => array_keys($data)
+                        'data_keys' => array_keys($data),
                     ]);
 
                     try {
@@ -311,7 +311,7 @@ class ManageTenantSettings extends Page
                             // If still failing, log and throw
                             \Illuminate\Support\Facades\Log::error('Failed to load TenantGeneralSettings after auto-initialization', [
                                 'tenant_id' => filament()->getTenant()?->id,
-                                'error' => $e2->getMessage()
+                                'error' => $e2->getMessage(),
                             ]);
                             throw $e2;
                         }
@@ -376,7 +376,7 @@ class ManageTenantSettings extends Page
     {
         // Clear Laravel cache if settings are cached
         if (config('settings.cache.enabled')) {
-            cache()->forget('spatie.settings.' . TenantGeneralSettings::group());
+            cache()->forget('spatie.settings.'.TenantGeneralSettings::group());
         }
 
         // Clear the resolved instance from container to force fresh load
@@ -392,5 +392,3 @@ class ManageTenantSettings extends Page
         $this->dispatch('$refresh');
     }
 }
-
-

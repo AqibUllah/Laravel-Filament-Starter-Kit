@@ -44,7 +44,7 @@ class RecordUsageMiddleware
 
                     $metric = (string) ($rule['metric'] ?? 'custom');
                     $quantity = (float) ($rule['quantity'] ?? 1);
-                    $unitPrice = (float) ($rule['unit_price'] ?? (config('usage.unit_prices.' . $metric) ?? 0));
+                    $unitPrice = (float) ($rule['unit_price'] ?? (config('usage.unit_prices.'.$metric) ?? 0));
                     $metadataBuilder = $rule['metadata'] ?? null;
                     $metadata = is_callable($metadataBuilder) ? (array) $metadataBuilder($request) : [];
 
@@ -61,7 +61,7 @@ class RecordUsageMiddleware
     {
         $routeName = (string) ($request->route()?->getName() ?? '');
         $method = strtoupper($request->getMethod());
-        $path = '/' . ltrim($request->path(), '/');
+        $path = '/'.ltrim($request->path(), '/');
 
         // Match by HTTP method
         if (! empty($rule['http'] ?? [])) {
@@ -73,7 +73,7 @@ class RecordUsageMiddleware
 
         // Match by route name with wildcard support
         if (! empty($rule['name'])) {
-            $pattern = '#^' . str_replace(['*', '.'], ['.*', '\.'], (string) $rule['name']) . '$#';
+            $pattern = '#^'.str_replace(['*', '.'], ['.*', '\.'], (string) $rule['name']).'$#';
             if ($routeName === '' || ! preg_match($pattern, $routeName)) {
                 return false;
             }
@@ -89,5 +89,3 @@ class RecordUsageMiddleware
         return true;
     }
 }
-
-

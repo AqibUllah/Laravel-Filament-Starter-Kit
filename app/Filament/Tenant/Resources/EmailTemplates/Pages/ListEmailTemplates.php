@@ -29,8 +29,7 @@ class ListEmailTemplates extends ListRecords
     {
         return [
             Action::make('back')->label(__('Back'))
-                ->url(EmailTemplateResource::getUrl())
-            ,
+                ->url(EmailTemplateResource::getUrl()),
 
             Action::make('preview')->label(__('Preview'))->modalContent(fn (EmailTemplate $record): View => view(
                 'vb-email-templates::forms.components.iframe',
@@ -52,7 +51,7 @@ class ListEmailTemplates extends ListRecords
     {
         $data['logo_type'] = 'browse_another';
 
-        if(!is_null($data['logo']) && Str::isUrl($data['logo'])) {
+        if (! is_null($data['logo']) && Str::isUrl($data['logo'])) {
             $data['logo_type'] = 'paste_url';
             $data['logo_url'] = $data['logo'];
         }
@@ -62,7 +61,7 @@ class ListEmailTemplates extends ListRecords
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $emailTemplateResource = new EmailTemplateResource();
+        $emailTemplateResource = new EmailTemplateResource;
         $sortedData = $emailTemplateResource->handleLogo($data);
 
         // deleting previous logo

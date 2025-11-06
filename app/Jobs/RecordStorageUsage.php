@@ -29,5 +29,3 @@ class RecordStorageUsage implements ShouldQueue
         app(UsageService::class)->recordStorageUsage($team, $this->gbUsed);
     }
 }
-
-

@@ -21,8 +21,8 @@ class SubscriptionFactory extends Factory
         return [
             'team_id' => \App\Models\Team::factory(),
             'plan_id' => \App\Models\Plan::factory(),
-            'stripe_subscription_id' => 'sub_' . $this->faker->uuid(),
-            'stripe_customer_id' => 'cus_' . $this->faker->uuid(),
+            'stripe_subscription_id' => 'sub_'.$this->faker->uuid(),
+            'stripe_customer_id' => 'cus_'.$this->faker->uuid(),
             'status' => $status,
             'trial_ends_at' => $status === 'trialing' ? now()->addDays(7) : null,
             'ends_at' => $status === 'canceled' ? now()->subDays(5) : null,

@@ -7,7 +7,7 @@ use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Icons\Heroicon;
 
-enum ProjectStatusEnum: string implements HasLabel, HasIcon, HasColor
+enum ProjectStatusEnum: string implements HasColor, HasIcon, HasLabel
 {
     case Planning = 'planning';
     case InProgress = 'in_progress';
@@ -52,4 +52,3 @@ enum ProjectStatusEnum: string implements HasLabel, HasIcon, HasColor
         };
     }
 }
-

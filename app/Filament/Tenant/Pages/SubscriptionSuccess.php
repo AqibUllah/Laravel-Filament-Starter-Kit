@@ -2,44 +2,56 @@
 
 namespace App\Filament\Tenant\Pages;
 
+use App\Models\Coupon;
 use App\Models\Permission;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Team;
-use App\Models\Coupon;
-use App\Services\CouponService;
 use BackedEnum;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Stripe\Subscription as StripeSubscription;
 
 class SubscriptionSuccess extends Page
 {
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-check-badge';
-     protected string $view = 'filament.pages.subscription-success';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-check-badge';
+
+    protected string $view = 'filament.pages.subscription-success';
+
     protected static bool $shouldRegisterNavigation = false;
 
     protected static bool $isScopedToTenant = false;
 
     // Simple properties that Livewire supports
     public $sessionId;
+
     public $teamId;
+
     public $isProcessing = true;
+
     public $subscriptionId;
+
     public $planName;
+
     public $planPrice;
+
     public $planInterval;
+
     public $isOnTrial = false;
+
     public $trialEndsAt;
+
     public $status;
+
     public $isPlanSwitch = false;
+
     public $couponCode;
+
     public $discountAmount = 0;
 
     public function mount(): void
@@ -47,12 +59,13 @@ class SubscriptionSuccess extends Page
         $this->sessionId = request()->get('session_id');
         $this->teamId = request()->get('team_id');
 
-        if (!$this->sessionId || !$this->teamId) {
+        if (! $this->sessionId || ! $this->teamId) {
             Notification::make()
                 ->title('Invalid session')
                 ->danger()
                 ->send();
             $this->isProcessing = false;
+
             return;
         }
         $this->processSubscription();
@@ -106,7 +119,7 @@ class SubscriptionSuccess extends Page
     {
         $team = Team::find($this->teamId);
 
-        if (!$team) {
+        if (! $team) {
             throw new \Exception('Team not found');
         }
 
@@ -114,8 +127,8 @@ class SubscriptionSuccess extends Page
         $priceId = $stripeSubscription->items->data[0]->price->id;
         $plan = Plan::where('stripe_price_id', $priceId)->first();
 
-        if (!$plan) {
-            throw new \Exception('Plan not found for price: ' . $priceId);
+        if (! $plan) {
+            throw new \Exception('Plan not found for price: '.$priceId);
         }
 
         // Check if team already has an active subscription
@@ -135,12 +148,11 @@ class SubscriptionSuccess extends Page
             ]);
         }
 
-
         // Create or update subscription in database
         $subscription = Subscription::updateOrCreate(
             [
                 'stripe_subscription_id' => $stripeSubscription->id,
-                'team_id' => $team->id // Ensure we don't create duplicates for same team
+                'team_id' => $team->id, // Ensure we don't create duplicates for same team
             ],
             [
                 'team_id' => $team->id,
@@ -177,7 +189,7 @@ class SubscriptionSuccess extends Page
             'plan_id' => $plan->id,
             'subscription_id' => $subscription->id,
             'is_plan_switch' => $this->isPlanSwitch,
-            'old_subscription_id' => $existingSubscription?->id
+            'old_subscription_id' => $existingSubscription?->id,
         ]);
 
         if ($this->isPlanSwitch) {
@@ -223,7 +235,7 @@ class SubscriptionSuccess extends Page
                 ->latest()
                 ->first();
 
-            $this->isPlanSwitch = !is_null($oldSubscription);
+            $this->isPlanSwitch = ! is_null($oldSubscription);
 
             if ($this->isPlanSwitch) {
                 Notification::make()
@@ -264,7 +276,7 @@ class SubscriptionSuccess extends Page
         ]);
 
         // Update team permissions/roles
-        $this->updateTeamPermissions($team, $features,$plan);
+        $this->updateTeamPermissions($team, $features, $plan);
 
         \Log::info('Plan features applied to team', [
             'team_id' => $team->id,
@@ -310,12 +322,11 @@ class SubscriptionSuccess extends Page
             }
         }
 
-
         Artisan::call('optimize:clear');
 
         Log::info('Team permissions updated', [
             'team_id' => $team->id,
-            'users_count' => $team->members->count()
+            'users_count' => $team->members->count(),
         ]);
 
     }
@@ -336,6 +347,7 @@ class SubscriptionSuccess extends Page
         if ($this->subscriptionId) {
             return Subscription::find($this->subscriptionId);
         }
+
         return null;
     }
 
@@ -344,8 +356,10 @@ class SubscriptionSuccess extends Page
     {
         if ($this->subscriptionId) {
             $subscription = Subscription::find($this->subscriptionId);
+
             return $subscription->plan->features ?? collect();
         }
+
         return collect();
     }
 
@@ -369,6 +383,7 @@ class SubscriptionSuccess extends Page
 
         if ($couponCode) {
             $coupon = Coupon::where('code', $couponCode)->first();
+
             return $coupon ? $coupon->id : null;
         }
 

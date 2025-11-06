@@ -51,5 +51,3 @@ test('TaskStatusEnum exposes labels, colors, and icons', function () {
         ->and(TaskStatusEnum::Completed->getIcon())->not()->toBeNull()
         ->and(TaskStatusEnum::Cancelled->getIcon())->not()->toBeNull();
 });
-
-

@@ -5,7 +5,6 @@ namespace App\Filament\Tenant\Resources\EmailTemplates\Tables;
 use App\Filament\Tenant\Resources\EmailTemplates\EmailTemplateResource;
 use App\Models\EmailTemplate;
 use Filament\Actions\Action;
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -51,10 +50,10 @@ class EmailTemplatesTable
             ->actions(
                 [
                     Action::make('create-mail-class')
-                        ->label("Build Class")
-                        //Only show the button if the file does not exist
+                        ->label('Build Class')
+                        // Only show the button if the file does not exist
                         ->visible(function (EmailTemplate $record) {
-                            return !$record->mailable_exists;
+                            return ! $record->mailable_exists;
                         })
                         ->icon('heroicon-o-document-text')
                         // ->action('createMailClass'),
@@ -65,17 +64,17 @@ class EmailTemplatesTable
                                 ->icon($notify->icon)
                                 ->iconColor($notify->icon_color)
                                 ->duration(10000)
-                                //Fix for bug where body hides the icon
-                                ->body("<span style='overflow-wrap: anywhere;'>".$notify->body."</span>")
+                                // Fix for bug where body hides the icon
+                                ->body("<span style='overflow-wrap: anywhere;'>".$notify->body.'</span>')
                                 ->send();
                         }),
                     ViewAction::make('Preview')
                         ->icon('heroicon-o-magnifying-glass')
-                        ->modalContent(fn(EmailTemplate $record): View => view(
+                        ->modalContent(fn (EmailTemplate $record): View => view(
                             'vb-email-templates::forms.components.iframe',
                             ['record' => $record],
                         ))
-                        ->modalHeading(fn(EmailTemplate $record): string => 'Preview Email: '.$record->name)
+                        ->modalHeading(fn (EmailTemplate $record): string => 'Preview Email: '.$record->name)
                         ->modalSubmitAction(false)
                         ->modalCancelAction(false)
                         ->slideOver(),
@@ -98,5 +97,3 @@ class EmailTemplatesTable
             );
     }
 }
-
-

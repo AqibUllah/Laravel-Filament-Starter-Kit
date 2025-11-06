@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Project extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     /**
      * The event map for the model.
      *
@@ -137,7 +137,7 @@ class Project extends Model
     public function isOverdue(): bool
     {
         return $this->due_date && $this->due_date->isPast() &&
-               !in_array($this->status, [ProjectStatusEnum::Completed, ProjectStatusEnum::Cancelled, ProjectStatusEnum::Archived]);
+               ! in_array($this->status, [ProjectStatusEnum::Completed, ProjectStatusEnum::Cancelled, ProjectStatusEnum::Archived]);
     }
 
     public function isCompleted(): bool
@@ -152,7 +152,7 @@ class Project extends Model
 
     public function getDaysRemaining(): ?int
     {
-        if (!$this->due_date || $this->isCompleted()) {
+        if (! $this->due_date || $this->isCompleted()) {
             return null;
         }
 
@@ -173,7 +173,7 @@ class Project extends Model
 
     public function getBudgetRemaining(): ?float
     {
-        if (!$this->budget) {
+        if (! $this->budget) {
             return null;
         }
 
@@ -197,7 +197,7 @@ class Project extends Model
 
     public function getPriorityColor(): string
     {
-        return match($this->priority) {
+        return match ($this->priority) {
             PriorityEnum::High => 'danger',
             PriorityEnum::Medium => 'warning',
             PriorityEnum::LOW => 'success',
@@ -207,7 +207,7 @@ class Project extends Model
 
     public function getStatusColor(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             ProjectStatusEnum::Completed => 'success',
             ProjectStatusEnum::InProgress => 'warning',
             ProjectStatusEnum::Planning => 'info',
@@ -245,12 +245,12 @@ class Project extends Model
     // Accessors
     public function getFormattedBudgetAttribute(): string
     {
-        return $this->budget ? '$' . number_format($this->budget, 2) : 'Not set';
+        return $this->budget ? '$'.number_format($this->budget, 2) : 'Not set';
     }
 
     public function getDurationAttribute(): ?int
     {
-        if (!$this->start_date || !$this->due_date) {
+        if (! $this->start_date || ! $this->due_date) {
             return null;
         }
 
@@ -268,14 +268,14 @@ class Project extends Model
         parent::boot();
 
         static::creating(function (Project $project) {
-            if (!$project->project_manager_id) {
+            if (! $project->project_manager_id) {
                 $project->project_manager_id = auth()->id();
             }
         });
 
         static::updating(function (Project $project) {
             // Auto-complete project if progress reaches 100%
-            if ($project->progress >= 100 && !in_array($project->status, [ProjectStatusEnum::Completed, ProjectStatusEnum::Archived])) {
+            if ($project->progress >= 100 && ! in_array($project->status, [ProjectStatusEnum::Completed, ProjectStatusEnum::Archived])) {
                 $project->markAsCompleted();
             }
         });

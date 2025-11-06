@@ -16,20 +16,20 @@ class SubscriptionsTable
     {
         return $table
             ->columns([
-               TextColumn::make('team.name')
+                TextColumn::make('team.name')
                     ->searchable(),
-               TextColumn::make('plan.name')
+                TextColumn::make('plan.name')
                     ->searchable(),
-               TextColumn::make('status')
+                TextColumn::make('status')
                     ->badge()
                     ->color(TaskStatusEnum::class),
-               TextColumn::make('trial_ends_at')
+                TextColumn::make('trial_ends_at')
                     ->dateTime()
                     ->sortable(),
-               TextColumn::make('ends_at')
+                TextColumn::make('ends_at')
                     ->dateTime()
                     ->sortable(),
-               TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -46,7 +46,7 @@ class SubscriptionsTable
             ])
             ->recordActions([
                 EditAction::make(),
-//                ViewAction::make()
+                //                ViewAction::make()
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

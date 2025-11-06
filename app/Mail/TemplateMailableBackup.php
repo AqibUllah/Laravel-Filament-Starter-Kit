@@ -2,38 +2,46 @@
 
 namespace App\Mail;
 
+use App\Models\EmailTemplate;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Visualbuilder\EmailTemplates\Facades\TokenHelper;
-use App\Models\EmailTemplate;
 use Visualbuilder\EmailTemplates\Traits\BuildGenericEmail;
 
 class TemplateMailableBackup extends Mailable
 {
+    use BuildGenericEmail;
     use Queueable;
     use SerializesModels;
-    use BuildGenericEmail;
 
     public $template;
+
     public $sendTo;
+
     public $emailTemplate;
 
     // Public properties for token replacement
     public $user;
+
     public $project;
+
     public $task;
+
     public $team;
+
     public $acceptUrl;
+
     public $tenantId;
+
     public $teamId;
 
     /**
      * Create a new message instance.
      *
-     * @param string $template The email template key
+     * @param  string  $template  The email template key
      * @return void
      */
     public function __construct(string $template)
@@ -59,8 +67,9 @@ class TemplateMailableBackup extends Mailable
             App::currentLocale(),
             $resolvedTeamId
         );
-        if (!$this->emailTemplate) {
+        if (! $this->emailTemplate) {
             Log::warning("Email template {$this->template} was not found.");
+
             return $this;
         }
 
@@ -80,26 +89,26 @@ class TemplateMailableBackup extends Mailable
         ];
 
         $viewData = [
-            'content'       => TokenHelper::replace($this->emailTemplate->content ?? '', $tokenModels),
+            'content' => TokenHelper::replace($this->emailTemplate->content ?? '', $tokenModels),
             'preHeaderText' => TokenHelper::replace($this->emailTemplate->preheader ?? '', $tokenModels),
-            'title'         => TokenHelper::replace($this->emailTemplate->title ?? '', $tokenModels),
-            'theme'         => $themeColours,
-            'logo'          => $this->emailTemplate->logo,
+            'title' => TokenHelper::replace($this->emailTemplate->title ?? '', $tokenModels),
+            'theme' => $themeColours,
+            'logo' => $this->emailTemplate->logo,
         ];
 
         // Ensure theme has safe defaults to avoid undefined index errors in views
-        if (!is_array($viewData['theme']) || empty($viewData['theme'])) {
+        if (! is_array($viewData['theme']) || empty($viewData['theme'])) {
             $viewData['theme'] = [
-                'anchor_color'      => '#1a82e2',
-                'header_bg_color'   => '#f2f2f2',
-                'body_bg_color'     => '#f9f9f9',
-                'content_bg_color'  => '#ffffff',
-                'body_color'        => '#000000',
-                'footer_bg_color'   => '#f2f2f2',
-                'button_bg_color'   => '#1a82e2',
-                'button_color'      => '#ffffff',
-                'callout_bg_color'  => '#f2f2f2',
-                'callout_color'     => '#333333',
+                'anchor_color' => '#1a82e2',
+                'header_bg_color' => '#f2f2f2',
+                'body_bg_color' => '#f9f9f9',
+                'content_bg_color' => '#ffffff',
+                'body_color' => '#000000',
+                'footer_bg_color' => '#f2f2f2',
+                'button_bg_color' => '#1a82e2',
+                'button_color' => '#ffffff',
+                'callout_bg_color' => '#f2f2f2',
+                'callout_color' => '#333333',
             ];
         }
 

@@ -11,23 +11,21 @@ use Filament\Models\Contracts\HasDefaultTenant;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
-
-use Stripe\Stripe;
 use Stripe\Customer;
+use Stripe\Stripe;
 
-class User extends Authenticatable implements FilamentUser, HasTenants, HasDefaultTenant, HasAppAuthentication, HasAppAuthenticationRecovery
+class User extends Authenticatable implements FilamentUser, HasAppAuthentication, HasAppAuthenticationRecovery, HasDefaultTenant, HasTenants
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -44,7 +42,6 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasDefau
         'is_active',
     ];
 
-
     protected $appends = [
         'avatar_full_url',
     ];
@@ -58,7 +55,6 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasDefau
         'password',
         'remember_token',
     ];
-
 
     public function getAppAuthenticationSecret(): ?string
     {
@@ -92,6 +88,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasDefau
         // This method should return the user's saved app authentication recovery codes.
         // Use getAttribute to apply the encrypted:array cast
         $codes = $this->getAttribute('app_authentication_recovery_codes');
+
         return is_array($codes) ? $codes : null;
     }
 
@@ -141,7 +138,8 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasDefau
         return $this->latestTeam;
     }
 
-    public function currentTeam() {
+    public function currentTeam()
+    {
         return $this->belongsToMany(Team::class)->latest()->first(); // Or use session-based
     }
 
@@ -154,7 +152,6 @@ class User extends Authenticatable implements FilamentUser, HasTenants, HasDefau
     {
         return true;
     }
-
 
     public function getAvatarFullUrlAttribute()
     {

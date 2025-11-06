@@ -26,10 +26,10 @@ class TasksRelationManager extends RelationManager
 
     protected static bool $shouldSkipAuthorization = true;
 
-//    public function authorize(): bool
-//    {
-//        return true; // Allow admins to view all tasks
-//    }
+    //    public function authorize(): bool
+    //    {
+    //        return true; // Allow admins to view all tasks
+    //    }
 
     protected function modifyQueryUsingForRecord($query): void
     {

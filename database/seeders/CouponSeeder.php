@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Coupon;
 use App\Models\Admin;
+use App\Models\Coupon;
 use Illuminate\Database\Seeder;
 
 class CouponSeeder extends Seeder

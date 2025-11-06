@@ -227,7 +227,7 @@ return [
     */
 
     'custom_permissions' => [
-        'view_advanced_analytics'
+        'view_advanced_analytics',
     ],
 
     /*

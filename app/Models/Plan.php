@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-
 #[ScopedBy([PlanWithoutTenantScope::class])]
 class Plan extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'stripe_price_id',
@@ -45,10 +45,10 @@ class Plan extends Model
         return $this->hasMany(Subscription::class);
     }
 
-//    public function team():BelongsTo
-//    {
-//        return $this->belongsTo(Team::class);
-//    }
+    //    public function team():BelongsTo
+    //    {
+    //        return $this->belongsTo(Team::class);
+    //    }
 
     #[Scope]
     public function isFree(Builder $query): void
@@ -59,7 +59,7 @@ class Plan extends Model
     #[Scope]
     public function active(Builder $query): void
     {
-        $query->where('is_active',true);
+        $query->where('is_active', true);
     }
 
     // public function isFree($query): bool

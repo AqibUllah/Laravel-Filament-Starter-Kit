@@ -13,27 +13,35 @@ use Visualbuilder\EmailTemplates\Traits\BuildGenericEmail;
 
 class TemplateMailable extends Mailable
 {
+    use BuildGenericEmail;
     use Queueable;
     use SerializesModels;
-    use BuildGenericEmail;
 
     public $template;
+
     public $sendTo;
+
     public $emailTemplate;
+
     public $data = [];
 
     // Public properties for token replacement
     public $user;
+
     public $project;
+
     public $task;
+
     public $team;
+
     public $acceptUrl;
+
     public $teamId;
 
     /**
      * Create a new message instance.
      *
-     * @param string $template The email template key
+     * @param  string  $template  The email template key
      * @return void
      */
     public function __construct(string $template, array $data = [], string $sendTo = '')
@@ -61,8 +69,9 @@ class TemplateMailable extends Mailable
             $resolvedTeamId
         );
 
-        if (!$this->emailTemplate) {
+        if (! $this->emailTemplate) {
             Log::warning("Email template {$this->template} was not found.");
+
             return $this;
         }
 
@@ -82,26 +91,26 @@ class TemplateMailable extends Mailable
         ];
 
         $viewData = [
-            'content'       => TokenHelper::replace($this->emailTemplate->content ?? '', $tokenModels),
+            'content' => TokenHelper::replace($this->emailTemplate->content ?? '', $tokenModels),
             'preHeaderText' => TokenHelper::replace($this->emailTemplate->preheader ?? '', $tokenModels),
-            'title'         => TokenHelper::replace($this->emailTemplate->title ?? '', $tokenModels),
-            'theme'         => $themeColours,
-            'logo'          => $this->emailTemplate->logo,
+            'title' => TokenHelper::replace($this->emailTemplate->title ?? '', $tokenModels),
+            'theme' => $themeColours,
+            'logo' => $this->emailTemplate->logo,
         ];
 
         // Ensure theme has safe defaults to avoid undefined index errors in views
-        if (!is_array($viewData['theme']) || empty($viewData['theme'])) {
+        if (! is_array($viewData['theme']) || empty($viewData['theme'])) {
             $viewData['theme'] = [
-                'anchor_color'      => '#1a82e2',
-                'header_bg_color'   => '#f2f2f2',
-                'body_bg_color'     => '#f9f9f9',
-                'content_bg_color'  => '#ffffff',
-                'body_color'        => '#000000',
-                'footer_bg_color'   => '#f2f2f2',
-                'button_bg_color'   => '#1a82e2',
-                'button_color'      => '#ffffff',
-                'callout_bg_color'  => '#f2f2f2',
-                'callout_color'     => '#333333',
+                'anchor_color' => '#1a82e2',
+                'header_bg_color' => '#f2f2f2',
+                'body_bg_color' => '#f9f9f9',
+                'content_bg_color' => '#ffffff',
+                'body_color' => '#000000',
+                'footer_bg_color' => '#f2f2f2',
+                'button_bg_color' => '#1a82e2',
+                'button_color' => '#ffffff',
+                'callout_bg_color' => '#f2f2f2',
+                'callout_color' => '#333333',
             ];
         }
 

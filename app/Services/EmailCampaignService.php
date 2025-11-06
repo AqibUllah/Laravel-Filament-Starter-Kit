@@ -27,5 +27,3 @@ class EmailCampaignService
         return true;
     }
 }
-
-

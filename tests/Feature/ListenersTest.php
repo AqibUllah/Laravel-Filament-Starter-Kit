@@ -14,15 +14,15 @@ use Illuminate\Support\Facades\Notification;
 
 uses(RefreshDatabase::class);
 
-
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->team = Team::factory()->create([
-        'owner_id' => User::factory()
+        'owner_id' => User::factory(),
     ]);
 });
 
-function seedTenantSetting(int $teamId, string $name, array $payload): void {
+function seedTenantSetting(int $teamId, string $name, array $payload): void
+{
     DB::table('settings')->updateOrInsert(
         [
             'group' => 'tenant_general',
@@ -73,7 +73,7 @@ it('sends task assigned notifications when enabled via settings', function () {
     Notification::fake();
 
     $this->team = Team::factory()->create([
-        'owner_id' => User::factory()
+        'owner_id' => User::factory(),
     ]);
     $assigner = User::factory()->create();
     $assignee = User::factory()->create();
@@ -103,9 +103,7 @@ it('sends task assigned notifications when enabled via settings', function () {
     event(new TaskAssigned($task));
 
     Notification::assertSentTo($assignee, TaskAssignedNotification::class,
-    function ($notification) use ($task) {
-        return $notification->task->id === $task->id;
-    });
+        function ($notification) use ($task) {
+            return $notification->task->id === $task->id;
+        });
 });
-
-

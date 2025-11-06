@@ -31,6 +31,3 @@ class RecordUserUsage implements ShouldQueue
         app(UsageService::class)->recordUserUsage($team, $user);
     }
 }
-
-
-

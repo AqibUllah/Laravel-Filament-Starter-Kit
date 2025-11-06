@@ -2,18 +2,19 @@
 
 namespace App\Notifications;
 
+use App\Mail\TemplateMailable;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use App\Mail\TemplateMailable;
 
 class TeamInvitationNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected Team $team;
+
     protected string $invitationToken;
 
     /**
@@ -40,7 +41,7 @@ class TeamInvitationNotification extends Notification implements ShouldQueue
      */
     public function toMail(User $notifiable): TemplateMailable
     {
-        $acceptUrl = url('/team-invitations/' . $this->invitationToken);
+        $acceptUrl = url('/team-invitations/'.$this->invitationToken);
 
         $mailable = new TemplateMailable('team-invitation');
         $mailable->sendTo = $notifiable->email;
@@ -61,7 +62,7 @@ class TeamInvitationNotification extends Notification implements ShouldQueue
         return [
             'team_id' => $this->team->id,
             'team_name' => $this->team->name,
-            'message' => 'You have been invited to join the team: ' . $this->team->name,
+            'message' => 'You have been invited to join the team: '.$this->team->name,
         ];
     }
 }

@@ -3,9 +3,8 @@
 namespace App\Filament\Tenant\Widgets;
 
 use App\Models\Project;
-use App\Models\Task;
 use App\Models\Subscription;
-use App\Models\Plan;
+use App\Models\Task;
 use Filament\Facades\Filament;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -16,13 +15,13 @@ class QuickSummaryWidget extends BaseWidget
 
     protected static ?int $sort = 4;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected function getStats(): array
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [];
         }
 
@@ -48,7 +47,7 @@ class QuickSummaryWidget extends BaseWidget
 
         return [
             Stat::make('Projects Overview', $totalProjects)
-                ->description($activeProjects . ' active, ' . $completedProjects . ' completed, ' . $overdueProjects . ' overdue')
+                ->description($activeProjects.' active, '.$completedProjects.' completed, '.$overdueProjects.' overdue')
                 ->descriptionIcon('heroicon-m-folder-open')
                 ->color($overdueProjects > 0 ? 'warning' : 'success')
                 ->url(fn (): string => route('filament.tenant.pages.project-dashboard', ['tenant' => filament()->getTenant()]))
@@ -57,7 +56,7 @@ class QuickSummaryWidget extends BaseWidget
                 ]),
 
             Stat::make('Tasks Overview', $totalTasks)
-                ->description($myPendingTasks . ' pending, ' . $completedTasks . ' completed, ' . $overdueTasks . ' overdue')
+                ->description($myPendingTasks.' pending, '.$completedTasks.' completed, '.$overdueTasks.' overdue')
                 ->descriptionIcon('heroicon-m-clipboard-document-list')
                 ->color($overdueTasks > 0 ? 'warning' : 'success')
                 ->url(fn (): string => route('filament.tenant.pages.task-dashboard', ['tenant' => filament()->getTenant()]))
@@ -65,8 +64,8 @@ class QuickSummaryWidget extends BaseWidget
                     'class' => 'cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-green-500/25 bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-800/20 rounded-xl p-4 hover:border-green-300 dark:hover:border-green-600',
                 ]),
 
-            Stat::make('Time Tracking', number_format($totalEstimated, 1) . 'h')
-                ->description('Estimated: ' . number_format($totalEstimated, 1) . 'h | Actual: ' . number_format($totalActual, 1) . 'h | Efficiency: ' . number_format($efficiency, 1) . '%')
+            Stat::make('Time Tracking', number_format($totalEstimated, 1).'h')
+                ->description('Estimated: '.number_format($totalEstimated, 1).'h | Actual: '.number_format($totalActual, 1).'h | Efficiency: '.number_format($efficiency, 1).'%')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color($efficiency >= 90 ? 'success' : ($efficiency >= 70 ? 'warning' : 'danger'))
                 ->extraAttributes([
@@ -74,7 +73,7 @@ class QuickSummaryWidget extends BaseWidget
                 ]),
 
             Stat::make('Subscription Status', $currentPlan?->name ?? 'No Plan')
-                ->description($currentPlan ? '$' . $currentPlan->price . '/' . $currentPlan->interval . ' | ' . ($currentSubscription ? 'Active' : 'Inactive') : 'No active subscription')
+                ->description($currentPlan ? '$'.$currentPlan->price.'/'.$currentPlan->interval.' | '.($currentSubscription ? 'Active' : 'Inactive') : 'No active subscription')
                 ->descriptionIcon('heroicon-m-credit-card')
                 ->color($currentSubscription ? 'success' : 'danger')
                 ->url(fn (): string => route('filament.tenant.pages.plans-dashboard', ['tenant' => filament()->getTenant()]))

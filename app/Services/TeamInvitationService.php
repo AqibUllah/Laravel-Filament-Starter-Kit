@@ -19,13 +19,13 @@ class TeamInvitationService
             'name' => 'Invited User',
             'password' => bcrypt(Str::random(16)),
         ]);
-        
+
         // Generate invitation token
         $invitationToken = Str::random(32);
-        
+
         // Store the invitation token (you might want to create an invitations table)
         // For now, we'll just dispatch the event
-        
+
         // Dispatch the team invitation event
         event(new TeamInvitation($team, $user, $invitationToken));
     }

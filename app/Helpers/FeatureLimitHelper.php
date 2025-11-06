@@ -12,16 +12,15 @@ class FeatureLimitHelper
      * Check if the team has exceeded a feature limit
      * and return a rendered LimitAlert Blade view if so.
      *
-     * @param  string  $featureKey   The key in plan_features table (e.g., 'max_users', 'max_storage')
+     * @param  string  $featureKey  The key in plan_features table (e.g., 'max_users', 'max_storage')
      * @param  int|null  $usedValue  Current usage (optional). If null, auto-detects for common types.
-     * @param  string|null  $upgradeUrl
      * @return string|null
      */
     public static function alertIfExceeded(
         string $featureKey,
         ?int $usedValue = null,
         ?string $upgradeUrl = null
-    ): string | null | View {
+    ): string|null|View {
         $team = Filament::getTenant();
         if (! $team) {
             return null;
@@ -70,7 +69,7 @@ class FeatureLimitHelper
     {
         return match ($key) {
             'Users' => $team->members()->count(),
-//            'max_projects', 'max_tasks' => $team->projects()->count() ?? 0,
+            //            'max_projects', 'max_tasks' => $team->projects()->count() ?? 0,
             'Storage' => self::getStorageUsage($team),
             default => 0,
         };
@@ -84,12 +83,12 @@ class FeatureLimitHelper
         // Example: get total file size in MB from team folder
         $path = storage_path("app/teams/{$team->id}/uploads");
 
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             return 0;
         }
 
         $size = 0;
-        foreach (glob($path . '/*') as $file) {
+        foreach (glob($path.'/*') as $file) {
             $size += is_file($file) ? filesize($file) : 0;
         }
 

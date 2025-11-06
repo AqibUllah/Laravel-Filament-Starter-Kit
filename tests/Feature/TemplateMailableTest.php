@@ -8,7 +8,7 @@ test('can send an email with template', function () {
     Mail::fake();
 
     // Create a test template with unique key
-    $uniqueKey = 'test-template-' . uniqid();
+    $uniqueKey = 'test-template-'.uniqid();
     $template = EmailTemplate::create([
         'name' => 'Test Template',
         'key' => $uniqueKey,

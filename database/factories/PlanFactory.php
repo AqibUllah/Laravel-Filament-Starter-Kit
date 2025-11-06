@@ -18,7 +18,7 @@ class PlanFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word() . ' Plan',
+            'name' => $this->faker->word().' Plan',
             'description' => $this->faker->sentence(),
             'price' => $this->faker->randomElement([0, 9, 29, 79, 199]),
             'interval' => $this->faker->randomElement(['month', 'year']),
@@ -26,7 +26,7 @@ class PlanFactory extends Factory
             'sort_order' => $this->faker->numberBetween(1, 10),
             'is_active' => true,
             'is_featured' => $this->faker->boolean(20),
-            'stripe_price_id' => 'price_' . Str::random(10),
+            'stripe_price_id' => 'price_'.Str::random(10),
         ];
     }
 }

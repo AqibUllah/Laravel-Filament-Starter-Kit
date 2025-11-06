@@ -2,9 +2,9 @@
 
 namespace App;
 
+use App\Jobs\RecordUserUsage;
 use App\Models\Team;
 use App\Models\User;
-use App\Jobs\RecordUserUsage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

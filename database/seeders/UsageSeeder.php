@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Team;
 use App\Models\Usage;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Seeder;
 
 class UsageSeeder extends Seeder
 {

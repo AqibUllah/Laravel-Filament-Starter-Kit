@@ -33,6 +33,3 @@ class RecordProjectUsage implements ShouldQueue
         app(UsageService::class)->recordProjectUsage($team, $project, $this->quantity, $this->unitPrice);
     }
 }
-
-
-

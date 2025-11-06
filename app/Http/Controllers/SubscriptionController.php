@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Subscription;
+
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 
@@ -11,7 +11,7 @@ class SubscriptionController extends Controller
     {
         $sessionId = $request->get('session_id');
 
-        if (!$sessionId) {
+        if (! $sessionId) {
             return redirect()->route('plans')->with('error', 'Invalid session.');
         }
 

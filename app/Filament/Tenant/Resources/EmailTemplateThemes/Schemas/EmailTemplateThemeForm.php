@@ -24,19 +24,19 @@ class EmailTemplateThemeForm
                         Section::make(__('vb-email-templates::email-templates.theme-form-fields-labels.template-preview'))
                             ->schema([
                                 View::make('preview')
-                                    ->key(fn ($get) => 'preview-' . ($get('template-keys') ?? 'no-template') . '-' . md5(json_encode($get('colours') ?? [])))
+                                    ->key(fn ($get) => 'preview-'.($get('template-keys') ?? 'no-template').'-'.md5(json_encode($get('colours') ?? [])))
                                     ->view('filament.tenant.components.email-template-preview', function ($get) {
                                         $templateKey = $get('template-keys');
-                                        
+
                                         // Return empty data if no template selected
-                                        if (!$templateKey) {
+                                        if (! $templateKey) {
                                             return ['data' => null];
                                         }
 
                                         $previewData = EmailTemplateThemeResource::getPreviewData($templateKey);
 
                                         // Return empty data if no preview data
-                                        if (!$previewData) {
+                                        if (! $previewData) {
                                             return ['data' => null];
                                         }
 
@@ -69,6 +69,7 @@ class EmailTemplateThemeForm
                                         if ($record && $record->email_template) {
                                             return $record->email_template->key;
                                         }
+
                                         return null;
                                     })
                                     ->live()

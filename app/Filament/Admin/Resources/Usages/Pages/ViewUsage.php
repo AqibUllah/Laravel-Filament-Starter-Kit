@@ -21,13 +21,13 @@ class ViewUsage extends ViewRecord
     public function infolist(Schema $schema): Schema
     {
         return $schema
-        ->components([
-            // TextEntry::make('team.name')
-            //     ->label('Team'),
-            // TextEntry::make('metric_name')
-            //     ->label('Metric Name'),
-            // TextEntry::make('quantity')
-            //     ->label('Quantity'),
-        ]);
+            ->components([
+                // TextEntry::make('team.name')
+                //     ->label('Team'),
+                // TextEntry::make('metric_name')
+                //     ->label('Metric Name'),
+                // TextEntry::make('quantity')
+                //     ->label('Quantity'),
+            ]);
     }
 }

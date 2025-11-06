@@ -4,7 +4,6 @@ namespace App\Filament\Tenant\Widgets;
 
 use App\Enums\ProjectStatusEnum;
 use App\Models\Project;
-use Filament\Facades\Filament;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -57,7 +56,7 @@ class ProjectStatsWidget extends BaseWidget
                     'class' => 'cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-red-500/25 bg-gradient-to-br from-red-50 to-rose-100 dark:from-red-900/20 dark:to-rose-800/20 rounded-xl p-4 hover:border-red-300 dark:hover:border-red-600',
                 ]),
 
-            Stat::make('Average Progress', round($avgProgress, 1) . '%')
+            Stat::make('Average Progress', round($avgProgress, 1).'%')
                 ->description('Overall completion rate')
                 ->descriptionIcon('heroicon-m-chart-bar')
                 ->color(match (true) {

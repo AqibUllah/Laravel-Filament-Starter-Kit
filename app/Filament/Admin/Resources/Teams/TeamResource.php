@@ -5,7 +5,6 @@ namespace App\Filament\Admin\Resources\Teams;
 use App\Filament\Admin\Resources\Teams\Pages\CreateTeam;
 use App\Filament\Admin\Resources\Teams\Pages\EditTeam;
 use App\Filament\Admin\Resources\Teams\Pages\ListTeams;
-use App\Filament\Admin\Resources\Teams\RelationManagers;
 use App\Filament\Admin\Resources\Teams\Schemas\TeamForm;
 use App\Filament\Admin\Resources\Teams\Tables\TeamsTable;
 use App\Models\Team;
@@ -22,7 +21,7 @@ class TeamResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Tenants';
+    protected static string|UnitEnum|null $navigationGroup = 'Tenants';
 
     public static function form(Schema $schema): Schema
     {

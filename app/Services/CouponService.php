@@ -4,9 +4,8 @@ namespace App\Services;
 
 use App\Models\Coupon;
 use App\Models\Plan;
-use App\Models\Team;
 use App\Models\Subscription;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Team;
 
 class CouponService
 {
@@ -17,7 +16,7 @@ class CouponService
     {
         $coupon = Coupon::where('code', $couponCode)->first();
 
-        if (!$coupon) {
+        if (! $coupon) {
             return [
                 'valid' => false,
                 'message' => 'Invalid coupon code.',
@@ -25,7 +24,7 @@ class CouponService
             ];
         }
 
-        if (!$coupon->isValid()) {
+        if (! $coupon->isValid()) {
             return [
                 'valid' => false,
                 'message' => 'This coupon is no longer valid.',
@@ -33,7 +32,7 @@ class CouponService
             ];
         }
 
-        if (!$coupon->canBeUsedByTeam($team)) {
+        if (! $coupon->canBeUsedByTeam($team)) {
             return [
                 'valid' => false,
                 'message' => 'This coupon is not available for your team.',
@@ -41,7 +40,7 @@ class CouponService
             ];
         }
 
-        if (!$coupon->canBeUsedForPlan($plan)) {
+        if (! $coupon->canBeUsedForPlan($plan)) {
             return [
                 'valid' => false,
                 'message' => 'This coupon is not valid for the selected plan.',
@@ -105,7 +104,8 @@ class CouponService
 
             return true;
         } catch (\Exception $e) {
-            \Log::error('Failed to apply coupon to subscription: ' . $e->getMessage());
+            \Log::error('Failed to apply coupon to subscription: '.$e->getMessage());
+
             return false;
         }
     }
@@ -118,9 +118,9 @@ class CouponService
         return Coupon::active()
             ->forTeam($team->id)
             ->forPlan($plan->id)
-            ->where(function ($query) use ($team) {
+            ->where(function ($query) {
                 $query->whereNull('usage_limit')
-                      ->orWhereRaw('used_count < usage_limit');
+                    ->orWhereRaw('used_count < usage_limit');
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -136,7 +136,7 @@ class CouponService
             ->where('coupon_id', $coupon->id)
             ->exists();
 
-        return !$hasUsed && $coupon->canBeUsedByTeam($team);
+        return ! $hasUsed && $coupon->canBeUsedByTeam($team);
     }
 
     /**

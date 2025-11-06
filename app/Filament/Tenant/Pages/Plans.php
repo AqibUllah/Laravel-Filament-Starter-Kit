@@ -4,11 +4,9 @@ namespace App\Filament\Tenant\Pages;
 
 use App\Models\Plan;
 use App\Models\Subscription;
-use App\Models\Coupon;
-use App\Services\CouponService;
 use App\Providers\StripeBillingProvider;
+use App\Services\CouponService;
 use BackedEnum;
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -21,13 +19,16 @@ use UnitEnum;
 
 class Plans extends Page implements HasActions
 {
-    use InteractsWithHeaderActions;
     use InteractsWithActions;
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::CreditCard;
-    protected static bool $shouldRegisterNavigation = true;
-    protected static string | UnitEnum | null $navigationGroup = 'Billing';
+    use InteractsWithHeaderActions;
 
-    protected static ?int $navigationSort=4;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::CreditCard;
+
+    protected static bool $shouldRegisterNavigation = true;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Billing';
+
+    protected static ?int $navigationSort = 4;
 
     protected static bool $isScopedToTenant = false;
 
@@ -36,53 +37,58 @@ class Plans extends Page implements HasActions
     protected string $view = 'filament.pages.plans';
 
     public $plans;
+
     public $currentSubscription;
+
     public $couponCode = '';
+
     public $couponValidation = null;
+
     public $appliedCoupon = null;
 
     public function mount(): void
     {
-         $this->plans = Plan::with(['features'])
+        $this->plans = Plan::with(['features'])
             ->where('is_active', true)
-             ->orderBy('sort_order')
-             ->get();
+            ->orderBy('sort_order')
+            ->get();
 
         // Get current team's subscription
         $team = Filament::getTenant();
 
         if ($team) {
-            $this->currentSubscription = Subscription::where('team_id',$team->id)
-                ->where('status','active')
+            $this->currentSubscription = Subscription::where('team_id', $team->id)
+                ->where('status', 'active')
                 ->first();
         }
     }
 
     protected function getBillingPortalAction(): Action
     {
-          return  Action::make('billing_portal')
-                ->label('Manage Billing')
-                ->color('gray')
-                ->visible(fn () => $this->currentSubscription && $this->currentSubscription->stripe_customer_id)
-                ->action(function () {
-                    $billingProvider = app(StripeBillingProvider::class);
-                    return $billingProvider->getRouteAction();
-                });
+        return Action::make('billing_portal')
+            ->label('Manage Billing')
+            ->color('gray')
+            ->visible(fn () => $this->currentSubscription && $this->currentSubscription->stripe_customer_id)
+            ->action(function () {
+                $billingProvider = app(StripeBillingProvider::class);
+
+                return $billingProvider->getRouteAction();
+            });
     }
 
-//    protected function getHeaderActions(): array
-//    {
-//        return [
-//            Action::make('billing_portal')
-//                ->label('Manage Billing')
-//                ->color('gray')
-//                ->visible(fn () => $this->currentSubscription && $this->currentSubscription->stripe_customer_id)
-//                ->action(function () {
-//                    $billingProvider = app(StripeBillingProvider::class);
-//                    return $billingProvider->getRouteAction();
-//                })
-//        ];
-//    }
+    //    protected function getHeaderActions(): array
+    //    {
+    //        return [
+    //            Action::make('billing_portal')
+    //                ->label('Manage Billing')
+    //                ->color('gray')
+    //                ->visible(fn () => $this->currentSubscription && $this->currentSubscription->stripe_customer_id)
+    //                ->action(function () {
+    //                    $billingProvider = app(StripeBillingProvider::class);
+    //                    return $billingProvider->getRouteAction();
+    //                })
+    //        ];
+    //    }
 
     public function subscribe($planId): void
     {
@@ -90,11 +96,12 @@ class Plans extends Page implements HasActions
         $team = Filament::getTenant();
         $user = Filament::auth()->user();
 
-        if (!$team) {
+        if (! $team) {
             Notification::make()
                 ->title('No team selected')
                 ->danger()
                 ->send();
+
             return;
         }
 
@@ -118,6 +125,7 @@ class Plans extends Page implements HasActions
         if (empty($this->couponCode)) {
             $this->couponValidation = null;
             $this->appliedCoupon = null;
+
             return;
         }
 

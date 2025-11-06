@@ -17,7 +17,7 @@ class ProjectStatusChartWidget extends ChartWidget
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [
                 'datasets' => [],
                 'labels' => [],
@@ -54,7 +54,7 @@ class ProjectStatusChartWidget extends ChartWidget
                     'label' => 'Projects by Status',
                     'data' => $statusData,
                     'backgroundColor' => $colors,
-                    'borderColor' => array_map(function($color) {
+                    'borderColor' => array_map(function ($color) {
                         return str_replace('0.8', '1', $color);
                     }, $colors),
                     'borderWidth' => 2,

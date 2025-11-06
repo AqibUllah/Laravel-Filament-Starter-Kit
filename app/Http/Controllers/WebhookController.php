@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Team;
-use App\Models\Plan;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
-use Stripe\Webhook;
-use Stripe\Subscription as StripeSubscription;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Exception\SignatureVerificationException;
+use Stripe\Subscription as StripeSubscription;
+use Stripe\Webhook;
 use Symfony\Component\HttpFoundation\Response;
+
 class WebhookController extends Controller
 {
     public function handleWebhook(Request $request)
     {
         if (app()->environment('local')) {
             Log::info('Webhook skipped in local environment');
+
             return response()->json(['status' => 'skipped_local']);
         }
 
@@ -68,23 +70,26 @@ class WebhookController extends Controller
     {
         $teamId = $stripeSubscription->metadata->team_id ?? null;
 
-        if (!$teamId) {
+        if (! $teamId) {
             Log::error('Webhook: No team_id in subscription metadata');
+
             return;
         }
 
         $team = Team::find($teamId);
 
-        if (!$team) {
+        if (! $team) {
             Log::error('Webhook: Team not found', ['team_id' => $teamId]);
+
             return;
         }
 
         $priceId = $stripeSubscription->items->data[0]->price->id;
         $plan = Plan::where('stripe_price_id', $priceId)->first();
 
-        if (!$plan) {
+        if (! $plan) {
             Log::error('Webhook: Plan not found for price_id', ['price_id' => $priceId]);
+
             return;
         }
 
@@ -106,7 +111,7 @@ class WebhookController extends Controller
         $subscription = Subscription::updateOrCreate(
             [
                 'stripe_subscription_id' => $stripeSubscription->id,
-                'team_id' => $team->id
+                'team_id' => $team->id,
             ],
             [
                 'plan_id' => $plan->id,
@@ -131,7 +136,7 @@ class WebhookController extends Controller
             'team_id' => $team->id,
             'plan_id' => $plan->id,
             'status' => $stripeSubscription->status,
-            'was_plan_switch' => $existingActiveSubscription ? true : false
+            'was_plan_switch' => $existingActiveSubscription ? true : false,
         ]);
     }
 
@@ -164,7 +169,7 @@ class WebhookController extends Controller
 
             Log::info('Webhook: Subscription canceled', [
                 'team_id' => $team->id,
-                'subscription_id' => $subscription->id
+                'subscription_id' => $subscription->id,
             ]);
         }
     }
@@ -185,7 +190,7 @@ class WebhookController extends Controller
 
             Log::warning('Invoice payment failed', [
                 'team_id' => $subscription->team_id,
-                'subscription_id' => $subscription->id
+                'subscription_id' => $subscription->id,
             ]);
         }
     }
@@ -196,7 +201,7 @@ class WebhookController extends Controller
     private function applyPlanFeaturesToTeam(Team $team, Plan $plan)
     {
         // Get plan features
-        $features = $plan->features()->pluck( 'value', 'name');
+        $features = $plan->features()->pluck('value', 'name');
 
         // Update team limits based on plan features
         $team->update([
@@ -212,7 +217,7 @@ class WebhookController extends Controller
         Log::info('Plan features applied to team', [
             'team_id' => $team->id,
             'plan_id' => $plan->id,
-            'features' => $features->toArray()
+            'features' => $features->toArray(),
         ]);
     }
 
@@ -250,7 +255,6 @@ class WebhookController extends Controller
 
             // Add other permission updates based on features
         }
-
 
         // If you're using Filament's role system:
         $this->updateFilamentRoles($team, $features);

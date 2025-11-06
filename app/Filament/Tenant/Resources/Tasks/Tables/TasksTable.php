@@ -44,7 +44,7 @@ class TasksTable
                     ->sortable()
                     ->color(fn (Task $record) => $record->isOverdue() ? 'danger' : null),
                 BadgeColumn::make('priority')
-                    ->formatStateUsing(fn (PriorityEnum $state):string => $state->getLabel()),
+                    ->formatStateUsing(fn (PriorityEnum $state): string => $state->getLabel()),
                 BadgeColumn::make('status')
                     ->formatStateUsing(fn (TaskStatusEnum $state) => $state->getLabel()),
                 TextColumn::make('estimated_hours')
@@ -114,7 +114,7 @@ class TasksTable
                             ->numeric()
                             ->minValue(0)
                             ->step(0.5)
-                            ->hint('Optional: Enter time spent on this task')
+                            ->hint('Optional: Enter time spent on this task'),
                     ])
                     ->action(function (Task $record, array $data) {
                         $record->markAsCompleted($data['actual_hours'] ?? null);
@@ -159,7 +159,7 @@ class TasksTable
                                 ->numeric()
                                 ->minValue(0)
                                 ->step(0.5)
-                                ->hint('Optional: Enter time spent')
+                                ->hint('Optional: Enter time spent'),
                         ])
                         ->action(function ($records, array $data) {
                             $records->each(function ($record) use ($data) {
@@ -176,6 +176,7 @@ class TasksTable
     public static function canCreate(): bool
     {
         $currentTeam = Filament::getTenant();
+
         return $currentTeam && $currentTeam->userCanAssignTasks(auth()->user());
     }
 }

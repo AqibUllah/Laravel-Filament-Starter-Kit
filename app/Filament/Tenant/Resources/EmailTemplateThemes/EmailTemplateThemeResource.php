@@ -24,7 +24,7 @@ class EmailTemplateThemeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPaintBrush;
 
-    protected static string | UnitEnum | null $navigationGroup = 'System';
+    protected static string|UnitEnum|null $navigationGroup = 'System';
 
     protected static ?int $navigationSort = 9;
 
@@ -65,13 +65,13 @@ class EmailTemplateThemeResource extends Resource
     public static function getPreviewData(?string $templateKey = null)
     {
         // Only return data if a template key is provided
-        if (!$templateKey) {
+        if (! $templateKey) {
             return null;
         }
 
         $emailTemplate = EmailTemplate::where('key', $templateKey)->first();
 
-        if (!$emailTemplate) {
+        if (! $emailTemplate) {
             return null;
         }
 

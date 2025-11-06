@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Mail\TemplateMailable;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use App\Mail\TemplateMailable;
 
 class TaskAssignedNotification extends Notification implements ShouldQueue
 {
@@ -58,7 +58,7 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
             'task_id' => $this->task->id,
             'task_title' => $this->task->title,
             'project_id' => $this->task->project_id,
-            'message' => 'You have been assigned a new task: ' . $this->task->title,
+            'message' => 'You have been assigned a new task: '.$this->task->title,
         ];
     }
 }

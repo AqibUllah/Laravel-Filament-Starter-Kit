@@ -13,7 +13,9 @@ class TeamInvitation
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Team $team;
+
     public User $user;
+
     public string $invitationToken;
 
     /**

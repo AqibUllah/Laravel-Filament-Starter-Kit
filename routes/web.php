@@ -1,17 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CouponController;
 use App\Models\Plan;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
     $plans = Plan::with(['features'])
-            ->where('is_active', true)
-             ->orderBy('sort_order')
-             ->get();
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
 
-    return view('welcome',compact('plans'));
+    return view('welcome', compact('plans'));
 });
 
 Route::get('/landing', function () {
@@ -24,5 +24,3 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/coupons/available', [CouponController::class, 'available']);
     Route::get('/api/coupons/stats', [CouponController::class, 'stats']);
 });
-
-

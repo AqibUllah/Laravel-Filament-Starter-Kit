@@ -6,13 +6,11 @@ use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
 use App\Enums\TaskStatusEnum;
 use Filament\Facades\Filament;
-use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\LaravelSettings\SettingsRepositories\SettingsRepository;
+use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository;
 
 class TenantSettingsRepository extends DatabaseSettingsRepository
 {
-
     public function getBuilder(): Builder
     {
         $builder = parent::getBuilder();
@@ -22,6 +20,7 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
 
         if ($tenantId) {
             $builder->where('tenant_id', $tenantId);
+
             return $builder;
         }
 
@@ -29,7 +28,7 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
         // This allows the panel provider to load default settings
         $builder->where(function ($query) {
             $query->whereNull('tenant_id')
-                  ->orWhere('tenant_id', 1);
+                ->orWhere('tenant_id', 1);
         });
 
         return $builder;
@@ -56,33 +55,33 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
         // return filament()->getTenant() ?? null;
 
         // 1. Filament context first
-    if (function_exists('filament') && filament()->getTenant()) {
-        return method_exists(filament()->getTenant(), 'getKey')
-            ? filament()->getTenant()->getKey()
-            : filament()->getTenant();
-    }
+        if (function_exists('filament') && filament()->getTenant()) {
+            return method_exists(filament()->getTenant(), 'getKey')
+                ? filament()->getTenant()->getKey()
+                : filament()->getTenant();
+        }
 
-    // 2. Auth context fallback
-    if (auth()->check() && isset(auth()->user()->team)) {
-        return auth()->user()->team->id;
-    }
+        // 2. Auth context fallback
+        if (auth()->check() && isset(auth()->user()->team)) {
+            return auth()->user()->team->id;
+        }
 
-    // 3. Fallback: Get ID from URL segment (assuming structure: /tenant/{id}/...)
-    $request = request();
-    if ($request->route('tenant')) {
-        return is_object($request->route('tenant'))
-            ? $request->route('tenant')->getKey()
-            : $request->route('tenant');
-    }
+        // 3. Fallback: Get ID from URL segment (assuming structure: /tenant/{id}/...)
+        $request = request();
+        if ($request->route('tenant')) {
+            return is_object($request->route('tenant'))
+                ? $request->route('tenant')->getKey()
+                : $request->route('tenant');
+        }
 
-    // 4. Optionally, fallback to URL segment manually
-    $segments = $request->segments();
-    $tenantIndex = array_search('tenant', $segments);
-    if ($tenantIndex !== false && isset($segments[$tenantIndex + 1])) {
-        return (int) $segments[$tenantIndex + 1];
-    }
+        // 4. Optionally, fallback to URL segment manually
+        $segments = $request->segments();
+        $tenantIndex = array_search('tenant', $segments);
+        if ($tenantIndex !== false && isset($segments[$tenantIndex + 1])) {
+            return (int) $segments[$tenantIndex + 1];
+        }
 
-    return null;
+        return null;
     }
 
     public function updatePropertiesPayload(string $group, array $properties): void
@@ -100,7 +99,6 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
             })
             ->values()
             ->toArray();
-
 
         $this->getBuilder()
             ->where('group', $group)
@@ -122,7 +120,7 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
             if ($tenantProps->isNotEmpty()) {
                 return $tenantProps
                     ->mapWithKeys(fn ($object) => [
-                        $object->name => $this->decode($object->payload, true)
+                        $object->name => $this->decode($object->payload, true),
                     ])
                     ->toArray();
             }
@@ -141,7 +139,7 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
             if ($tenantProps->isNotEmpty()) {
                 return $tenantProps
                     ->mapWithKeys(fn ($object) => [
-                        $object->name => $this->decode($object->payload, true)
+                        $object->name => $this->decode($object->payload, true),
                     ])
                     ->toArray();
             }
@@ -163,7 +161,7 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
 
         return $defaultProps
             ->mapWithKeys(fn ($object) => [
-                $object->name => $this->decode($object->payload, true)
+                $object->name => $this->decode($object->payload, true),
             ])
             ->toArray();
     }

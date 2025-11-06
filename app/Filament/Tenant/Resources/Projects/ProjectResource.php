@@ -26,7 +26,7 @@ class ProjectResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Project Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Project Management';
 
     protected static ?string $navigationLabel = 'Projects';
 
@@ -90,7 +90,7 @@ class ProjectResource extends Resource
         return [
             'Status' => $record->status->getLabel(),
             'Priority' => $record->priority->getLabel(),
-            'Progress' => $record->progress . '%',
+            'Progress' => $record->progress.'%',
             'Due Date' => $record->due_date?->format('M j, Y'),
         ];
     }

@@ -2,28 +2,31 @@
 
 namespace App\Filament\Tenant\Widgets;
 
+use App\Enums\PriorityEnum;
 use App\Enums\TaskStatusEnum;
+use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
-
-use App\Enums\PriorityEnum;
-use App\Models\Project;
-use App\Models\User;
 
 class TaskProgressChartWidget extends ChartWidget
 {
     use ChartWidget\Concerns\HasFiltersSchema;
 
     protected static ?int $sort = 2;
+
     public ?string $statusFilter = '';
+
     public ?string $projectFilter = '';
+
     public ?string $priorityFilter = '';
+
     public ?string $assigneeFilter = '';
+
     public ?string $dateRangeFilter = '30';
 
     public function getHeading(): string
@@ -31,7 +34,7 @@ class TaskProgressChartWidget extends ChartWidget
         $filters = [];
 
         if ($this->statusFilter) {
-            $filters[] = ucfirst($this->statusFilter) . ' Tasks';
+            $filters[] = ucfirst($this->statusFilter).' Tasks';
         } else {
             $filters[] = 'All Tasks';
         }
@@ -59,24 +62,25 @@ class TaskProgressChartWidget extends ChartWidget
     public function filtersSchema(Schema $schema): Schema
     {
         $currentTeam = Filament::getTenant();
+
         return $schema->components([
             Select::make('status')
                 ->options(TaskStatusEnum::class),
             Select::make('project')
                 ->options(Project::pluck('name', 'id')
-                        ->toArray()),
+                    ->toArray()),
             Select::make('priority')
                 ->options(PriorityEnum::class),
             Select::make('assignee')
                 ->options(User::whereHas('teams', function ($query) use ($currentTeam) {
-                        $query->where('team_id', $currentTeam->id);
-                    })->pluck('name', 'id')->toArray()),
+                    $query->where('team_id', $currentTeam->id);
+                })->pluck('name', 'id')->toArray()),
             Select::make('dateRange')
                 ->options([
-                    '7' => 'Last 7 days',
-                    '30' => 'Last 30 days',
-                    '90' => 'Last 90 days',
-                    '365' => 'Last year',
+                '7' => 'Last 7 days',
+                '30' => 'Last 30 days',
+                '90' => 'Last 90 days',
+                '365' => 'Last year',
                 ]),
         ]);
     }
@@ -85,7 +89,7 @@ class TaskProgressChartWidget extends ChartWidget
     {
         $currentTeam = Filament::getTenant();
 
-        if (!$currentTeam) {
+        if (! $currentTeam) {
             return [
                 'datasets' => [],
                 'labels' => [],
@@ -93,17 +97,16 @@ class TaskProgressChartWidget extends ChartWidget
         }
 
         // Get task completion data for the last 30 days
-        $completedTasks = Task::
-            when($this->filters['project'],function ($q) {
-                $q->where('project_id', $this->filters['project']);
-            })
-            ->when($this->filters['status'],function ($q) {
+        $completedTasks = Task::when($this->filters['project'], function ($q) {
+            $q->where('project_id', $this->filters['project']);
+        })
+            ->when($this->filters['status'], function ($q) {
                 $q->where('status', $this->filters['status']);
             })
-            ->when($this->filters['priority'],function ($q) {
+            ->when($this->filters['priority'], function ($q) {
                 $q->where('priority', $this->filters['priority']);
             })
-            ->when($this->filters['assignee'],function ($q) {
+            ->when($this->filters['assignee'], function ($q) {
                 $q->where('assigned_by', $this->filters['assignee']);
             })
             ->where('updated_at', '>=', Carbon::now()->subDays(30))

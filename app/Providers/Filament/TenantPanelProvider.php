@@ -4,20 +4,22 @@ namespace App\Providers\Filament;
 
 use Alizharb\FilamentThemesManager\FilamentThemesManagerPlugin;
 use App\Filament\Tenant\Pages\Dashboard;
+use App\Filament\Tenant\Pages\Plans;
 use App\Filament\Tenant\Pages\PlansDashboard;
 use App\Filament\Tenant\Pages\ProjectDashboard;
 use App\Filament\Tenant\Pages\TaskDashboard;
-use App\Filament\Tenant\Pages\Plans;
 use App\Filament\Tenant\Pages\Team\Profile as TeamProfile;
 use App\Filament\Tenant\Pages\Tenancy\RegisterTeam;
 use App\Filament\Tenant\Resources\Tasks\Widgets\TimeTrackingWidget;
 use App\Filament\Tenant\Widgets\TaskStatsWidget;
+use App\Http\Middleware\RecordUsageMiddleware;
 use App\Http\Middleware\RedirectIfUserNotSubscribedMiddleware;
 use App\Models\Team;
 use App\Providers\StripeBillingProvider;
 use App\Settings\TenantGeneralSettings;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
+use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\Http\Middleware\Authenticate;
@@ -28,17 +30,14 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
-use Carbon\Carbon;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Http\Middleware\RecordUsageMiddleware;
-use RickDBCN\FilamentEmail\FilamentEmail;
 use Saade\FilamentLaravelLog\FilamentLaravelLogPlugin;
 
 class TenantPanelProvider extends PanelProvider
@@ -50,13 +49,13 @@ class TenantPanelProvider extends PanelProvider
             try {
                 $settings = app(TenantGeneralSettings::class);
                 // Verify that all required properties are set
-                if (!isset($settings->company_name)) {
+                if (! isset($settings->company_name)) {
                     throw new \Exception('Settings properties missing');
                 }
             } catch (\Throwable $e) {
                 // The settings table might not be ready or filled, or properties are missing
                 // Fallback to default values
-                $settings = (object)[
+                $settings = (object) [
                     'company_name' => 'Team',
                     'company_logo_path' => null,
                     'primary_color' => null,
@@ -81,7 +80,7 @@ class TenantPanelProvider extends PanelProvider
             }
         } else {
             // Table does not exist: fallback to default values for first-time setup
-            $settings = (object)[
+            $settings = (object) [
                 'company_name' => 'Team',
                 'company_logo_path' => null,
                 'primary_color' => null,
@@ -104,6 +103,7 @@ class TenantPanelProvider extends PanelProvider
                 'sidebar_collapsed_default' => false,
             ];
         }
+
         return $panel
             ->default()
             ->brandName($settings->company_name ?? 'Team')
@@ -118,12 +118,12 @@ class TenantPanelProvider extends PanelProvider
             ])
             ->multiFactorAuthentication([
                 AppAuthentication::make()
-                ->recoverable()
-                ->recoveryCodeCount(10)
-                ->brandName($settings->company_name ?? 'Team'),
-            ],isRequired: $settings->require_2fa ?? false)
+                    ->recoverable()
+                    ->recoveryCodeCount(10)
+                    ->brandName($settings->company_name ?? 'Team'),
+            ], isRequired: $settings->require_2fa ?? false)
             // Sidebar behavior from tenant settings
-            ->sidebarCollapsibleOnDesktop((bool)($settings->sidebar_collapsed_default ?? false))
+            ->sidebarCollapsibleOnDesktop((bool) ($settings->sidebar_collapsed_default ?? false))
             ->discoverResources(in: app_path('Filament/Tenant/Resources'), for: 'App\Filament\Tenant\Resources')
             ->discoverPages(in: app_path('Filament/Tenant/Pages'), for: 'App\Filament\Tenant\Pages')
             ->discoverLivewireComponents(app_path('Filament/Schemas/Components'), for: 'App\Filament\Schemas\Components')
@@ -153,7 +153,7 @@ class TenantPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 \Filament\Navigation\NavigationItem::make('Billing')
-                    ->url(fn (): string => route('filament.tenant.tenant.billing',['tenant' => filament()->getTenant()]))
+                    ->url(fn (): string => route('filament.tenant.tenant.billing', ['tenant' => filament()->getTenant()]))
                     ->icon('heroicon-o-credit-card')
                     ->sort(3),
             ])
@@ -185,11 +185,11 @@ class TenantPanelProvider extends PanelProvider
                 FilamentLaravelLogPlugin::make()
                     ->navigationGroup('Settings')
                     ->logDirs([
-                        storage_path('logs')
+                        storage_path('logs'),
                     ])
-                ->authorize(
-                    fn () => isset(auth()->user()->teamOwner)
-                )
+                    ->authorize(
+                        fn () => isset(auth()->user()->teamOwner)
+                    ),
 
             ])
             ->tenantMiddleware([
@@ -203,7 +203,7 @@ class TenantPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->tenantBillingProvider(new StripeBillingProvider())
+            ->tenantBillingProvider(new StripeBillingProvider)
             ->simplePageMaxContentWidth(Width::ExtraLarge)
             ->searchableTenantMenu()
             ->tenantMenuItems([

@@ -71,15 +71,15 @@ class AdminPanelProvider extends PanelProvider
                 EmailTemplatesPlugin::make(),
                 FilamentEmail::make(),
                 FilamentLaravelLogPlugin::make()
-                ->navigationGroup('Admin')
-                ->navigationSort('5')
+                    ->navigationGroup('Admin')
+                    ->navigationSort('5')
                     ->navigationIcon('heroicon-o-bug-ant')
                     ->activeNavigationIcon('heroicon-s-bug-ant')
                     ->navigationBadge('+10')
                     ->navigationBadgeColor('danger')
                     ->navigationBadgeTooltip('New logs available')
                     ->navigationSort(1)
-                    ->title('Application Logs')
+                    ->title('Application Logs'),
             ]);
     }
 

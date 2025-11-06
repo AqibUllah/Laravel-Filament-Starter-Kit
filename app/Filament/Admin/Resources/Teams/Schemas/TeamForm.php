@@ -2,8 +2,6 @@
 
 namespace App\Filament\Admin\Resources\Teams\Schemas;
 
-use App\Models\Plan;
-use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;

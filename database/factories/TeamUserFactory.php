@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Team;
-use App\Models\User;
 use App\TeamUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -21,7 +20,7 @@ class TeamUserFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
-            'user_id' => random_int(1,3),
+            'user_id' => random_int(1, 3),
             'team_id' => $team->id,
         ];
     }

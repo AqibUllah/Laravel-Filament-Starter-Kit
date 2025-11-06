@@ -59,7 +59,7 @@ return [
         'scan_malicious_code' => true,
         'allowed_file_types' => [
             'php', 'blade.php', 'css', 'scss', 'js', 'vue', 'json',
-            'md', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'
+            'md', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp',
         ],
         'protected_themes' => ['default'], // Cannot be deleted/disabled
     ],
