@@ -18,7 +18,6 @@ class FeatureLimiterService
     {
         $currentUsers = $this->tenant->members()->count();
         $maxUsers = $this->getFeatureLimit('Users');
-
         return $currentUsers < $maxUsers;
     }
 
@@ -93,4 +92,15 @@ class FeatureLimiterService
             Cache::forget("tenant_{$this->tenant->id}_feature_{$feature}");
         }
     }
+
+    public function canCreate(string $featureKey): bool
+    {
+        return match ($featureKey) {
+            'Users' => $this->canCreateUser(),
+            'Projects' => $this->canCreateProject(),
+            'Tasks' => $this->canCreateTask(),
+            default => false,
+        };
+    }
+
 }
