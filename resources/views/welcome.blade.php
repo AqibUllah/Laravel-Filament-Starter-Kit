@@ -62,10 +62,6 @@
             animation: fadeInUp 0.6s ease-out;
         }
 
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
