@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone')->unique()->nullable();
             $table->text('bio')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
