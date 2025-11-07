@@ -792,43 +792,46 @@
                     Choose the plan that fits your needs. All plans include a free trial.
                 </p>
             </div>
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-3 gap-8 items-stretch">
                 @foreach($plans as $plan)
                 <!-- Pro Plan -->
-                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl {{  $plan->is_featured ? 'border-purple-500 relative transform scale-105 border-2' : '' }}">
-                    @if($plan->is_featured)
-                        <div class="absolute top-0 right-0 bg-purple-500 text-white px-4 py-1 rounded-bl-lg rounded-tr-2xl text-sm font-semibold">
-                            Most Popular
+                <div class="relative group h-full">
+                    <div class="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-70 transition-opacity duration-500 blur-3xl {{ $plan->is_featured ? 'bg-gradient-to-br from-purple-500/30 via-fuchsia-400/25 to-purple-600/20' : 'bg-gradient-to-br from-gray-400/20 via-purple-300/20 to-gray-200/10 dark:from-purple-900/20 dark:via-indigo-800/20 dark:to-purple-900/10' }}"></div>
+                    <div class="relative flex h-full flex-col bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-[0_40px_120px_-40px_rgba(79,70,229,0.35)] dark:shadow-[0_40px_120px_-50px_rgba(79,70,229,0.45)] border border-gray-100 dark:border-gray-800 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_45px_140px_-40px_rgba(99,102,241,0.45)] dark:hover:shadow-[0_45px_140px_-45px_rgba(129,140,248,0.55)] hover:border-purple-200 dark:hover:border-purple-500 {{  $plan->is_featured ? 'border-2 border-purple-500 shadow-[0_45px_140px_-35px_rgba(124,58,237,0.55)] scale-105 hover:border-purple-400 dark:hover:border-purple-400' : '' }}">
+                        @if($plan->is_featured)
+                            <div class="absolute top-0 right-0 bg-purple-500 text-white px-4 py-1 rounded-bl-lg rounded-tr-2xl text-sm font-semibold">
+                                Most Popular
+                            </div>
+                        @endif
+                        <h3 class="text-2xl font-bold mb-2">{{ $plan->name }}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">{{ $plan->description }}</p>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold">${{ $plan->price }}</span>
+                            <span class="text-gray-600 dark:text-gray-400">/{{ $plan->interval }}</span>
                         </div>
-                    @endif
-                    <h3 class="text-2xl font-bold mb-2">{{ $plan->name }}</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">{{ $plan->description }}</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold">${{ $plan->price }}</span>
-                        <span class="text-gray-600 dark:text-gray-400">/{{ $plan->interval }}</span>
-                    </div>
-                    <ul class="space-y-3 mb-8">
-                        @foreach(json_decode($plan->features) as $feature)
-                            <li class="flex items-center">
-                                <span class="text-sm flex justify-between w-full">
+                        <ul class="space-y-3 mb-8 flex-1">
+                            @foreach(json_decode($plan->features) as $feature)
+                                <li class="flex items-center">
+                                    <span class="text-sm flex justify-between w-full">
 
-                                <span>{{ $feature->name }}</span>
-                                @if(is_bool($feature->value))
-                                    @if (is_bool($feature->value) && $feature->value)
-                                        <x-heroicon-o-check-circle class="h-5 w-5 text-success-500" />
+                                    <span>{{ $feature->name }}</span>
+                                    @if(is_bool($feature->value))
+                                        @if (is_bool($feature->value) && $feature->value)
+                                            <x-heroicon-o-check-circle class="h-5 w-5 text-success-500" />
+                                        @else
+                                            <x-heroicon-o-x-circle class="h-5 w-5 text-danger-500" />
+                                        @endif
                                     @else
-                                        <x-heroicon-o-x-circle class="h-5 w-5 text-danger-500" />
+                                        {{ $feature->value }}
                                     @endif
-                                @else
-                                    {{ $feature->value }}
-                                @endif
-                                </span>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <a href="{{ Route::has('filament.tenant.auth.register') ? route('filament.tenant.auth.register') : '#' }}" class="block w-full text-center dark:text-gray-800 px-6 py-3 {{ $plan->is_featured ? 'bg-purple-600 text-white rounded-lg hover:bg-purple-700' : 'bg-gray-200' }} transition">
-                        Get Started
-                    </a>
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <a href="{{ Route::has('filament.tenant.auth.register') ? route('filament.tenant.auth.register') : '#' }}" class="block w-full text-center dark:text-gray-800 px-6 py-3 rounded-lg font-semibold transition duration-300 {{ $plan->is_featured ? 'bg-purple-600 text-white dark:hover:text-gray-200 group-hover:bg-purple-700' : 'bg-gray-200 text-gray-700 group-hover:bg-purple-100 group-hover:text-purple-600' }}">
+                            Get Started
+                        </a>
+                    </div>
                 </div>
                 @endforeach
 
