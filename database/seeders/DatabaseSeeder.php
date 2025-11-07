@@ -33,9 +33,9 @@ class DatabaseSeeder extends Seeder
             PlanSeeder::class,
             PlanFeatureSeeder::class,
             CouponSeeder::class,
-            //            SubscriptionSeeder::class
+            //            SubscriptionSeeder::class // default plans seeding data
             UsageSeeder::class,
-            ShieldSeeder::class,
+            //            ShieldSeeder::class, // uncomment it if you want to do it manually
             CustomEmailTemplateSeeder::class,
             EmailTemplateSeeder::class,
             EmailTemplateThemeSeeder::class,
