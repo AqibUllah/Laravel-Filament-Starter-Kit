@@ -201,6 +201,105 @@
         <div class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white dark:from-gray-900 to-transparent"></div>
     </section>
 
+    <!-- Tenant & Admin Panels Section -->
+    <section id="panels" class="section-padding bg-gray-50 dark:bg-gray-900/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Built for Every Team Member</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    A tailored experience for tenants managing their workspaces and administrators running the platform.
+                </p>
+            </div>
+            <div class="grid gap-10 lg:grid-cols-2">
+                <article class="bg-white dark:bg-gray-900 shadow-xl rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 transition hover:-translate-y-1 hover:shadow-2xl">
+                    <div class="relative h-60 overflow-hidden">
+                        <img
+                            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80"
+                            alt="Tenant dashboard preview"
+                            class="w-full h-full object-cover"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-purple-900/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 px-3 py-1 bg-white/90 dark:bg-gray-900/90 text-purple-600 dark:text-purple-300 text-xs font-semibold rounded-full uppercase tracking-wide">
+                            Tenant Portal
+                        </div>
+                    </div>
+                    <div class="p-8 space-y-6">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-2">Tenant Workspace</h3>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Empower teams with a focused workspace. Manage projects, collaborate with members, and keep every task on track with intuitive tools built around productivity.
+                            </p>
+                        </div>
+                        <ul class="space-y-3 text-sm text-gray-600 dark:text-gray-400">
+                            <li class="flex items-center gap-3">
+                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300">✓</span>
+                                Seamless team switching and isolated data per tenant
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300">✓</span>
+                                Task, project, and member management in one place
+                            </li>
+                        </ul>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a
+                                href="{{ Route::has('filament.tenant.auth.login') ? route('filament.tenant.auth.login') : (Route::has('login') ? route('login') : '#') }}"
+                                class="flex-1 text-center px-6 py-3 rounded-lg font-semibold bg-purple-600 text-white hover:bg-purple-700 transition"
+                            >
+                                Access Tenant Portal
+                            </a>
+                            <a href="#features" class="flex-1 text-center px-6 py-3 rounded-lg font-semibold border border-purple-200 text-purple-600 hover:bg-purple-50 dark:border-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30 transition">
+                                Explore Features
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="bg-white dark:bg-gray-900 shadow-xl rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 transition hover:-translate-y-1 hover:shadow-2xl">
+                    <div class="relative h-60 overflow-hidden">
+                        <img
+                            src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1600&q=80"
+                            alt="Admin panel preview"
+                            class="w-full h-full object-cover"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 px-3 py-1 bg-white/90 dark:bg-gray-900/90 text-indigo-600 dark:text-indigo-300 text-xs font-semibold rounded-full uppercase tracking-wide">
+                            Admin Panel
+                        </div>
+                    </div>
+                    <div class="p-8 space-y-6">
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-2">Administrator Control Center</h3>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Oversee the entire platform with advanced insights. Configure plans, manage tenants, and monitor usage with streamlined administrative workflows.
+                            </p>
+                        </div>
+                        <ul class="space-y-3 text-sm text-gray-600 dark:text-gray-400">
+                            <li class="flex items-center gap-3">
+                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-300">✓</span>
+                                Real-time analytics across tenants and subscriptions
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-300">✓</span>
+                                Centralized billing, roles, and security management
+                            </li>
+                        </ul>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a
+                                href="{{ Route::has('filament.admin.auth.login') ? route('filament.admin.auth.login') : (Route::has('login') ? route('login') : '#') }}"
+                                class="flex-1 text-center px-6 py-3 rounded-lg font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                            >
+                                Go to Admin Panel
+                            </a>
+                            <a href="#pricing" class="flex-1 text-center px-6 py-3 rounded-lg font-semibold border border-indigo-200 text-indigo-600 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-300 dark:hover:bg-indigo-900/30 transition">
+                                View Plans
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
     <!-- Features Section -->
     <section id="features" class="section-padding bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
