@@ -20,6 +20,8 @@ use App\Settings\TenantGeneralSettings;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
 use Carbon\Carbon;
+use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Actions\Action;
 use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\Http\Middleware\Authenticate;
@@ -175,6 +177,16 @@ class TenantPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->plugins([
+                FilamentSocialitePlugin::make()
+                ->registration()
+                ->providers([
+                    Provider::make('google')
+                        ->color('danger')
+                        ->icon('fab-google'),
+                    Provider::make('github')
+                    ->icon('fab-github'),
+
+                ]),
                 FilamentShieldPlugin::make()
                     ->globallySearchable()
                     ->ScopeToTenant()
