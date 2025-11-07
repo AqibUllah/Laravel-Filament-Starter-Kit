@@ -119,7 +119,7 @@
                                 Log in
                             </a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                                <a href="{{ route('register') }}" class="px-4 py-2 bg-purple-600 text-white dark:text-gray-800 rounded-lg hover:bg-purple-700 transition">
                                     Get Started
                                 </a>
                             @endif
@@ -165,7 +165,7 @@
                     @else
                         <a href="{{ route('login') }}" class="block text-gray-700 dark:text-gray-300">Log in</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="block px-4 py-2 bg-purple-600 text-white rounded-lg text-center">
+                            <a href="{{ route('register') }}" class="block px-4 py-2 bg-purple-600 text-white dark:text-gray-800 rounded-lg text-center">
                                 Get Started
                             </a>
                         @endif
@@ -731,7 +731,7 @@
                             </li>
                         @endforeach
                     </ul>
-                    <a href="{{ Route::has('filament.tenant.auth.register') ? route('filament.tenant.auth.register') : '#' }}" class="block w-full text-center px-6 py-3 {{ $plan->is_featured ? 'bg-purple-600 text-white rounded-lg hover:bg-purple-700' : 'bg-gray-200' }} transition">
+                    <a href="{{ Route::has('filament.tenant.auth.register') ? route('filament.tenant.auth.register') : '#' }}" class="block w-full text-center dark:text-gray-800 px-6 py-3 {{ $plan->is_featured ? 'bg-purple-600 text-white rounded-lg hover:bg-purple-700' : 'bg-gray-200' }} transition">
                         Get Started
                     </a>
                 </div>
