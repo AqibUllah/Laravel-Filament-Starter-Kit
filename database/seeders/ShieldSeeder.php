@@ -7,6 +7,7 @@ use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Widgets\Widget;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Spatie\Permission\PermissionRegistrar;
