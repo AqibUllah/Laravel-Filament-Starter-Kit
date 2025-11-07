@@ -24,6 +24,8 @@ return new class extends SettingsMigration
             ['group' => 'tenant_general', 'name' => 'date_format', 'payload' => json_encode('d-m-y'), 'tenant_id' => $defaultTenantId],
             ['group' => 'tenant_general', 'name' => 'time_format', 'payload' => json_encode('H:i'), 'tenant_id' => $defaultTenantId],
             ['group' => 'tenant_general', 'name' => 'require_2fa', 'payload' => json_encode(false), 'tenant_id' => $defaultTenantId],
+            ['group' => 'tenant_general', 'name' => 'google_login', 'payload' => json_encode(true), 'tenant_id' => $defaultTenantId],
+            ['group' => 'tenant_general', 'name' => 'github_login', 'payload' => json_encode(true), 'tenant_id' => $defaultTenantId],
             ['group' => 'tenant_general', 'name' => 'password_policy', 'payload' => json_encode(''), 'tenant_id' => $defaultTenantId],
             ['group' => 'tenant_general', 'name' => 'project_default_priority', 'payload' => json_encode(PriorityEnum::Medium), 'tenant_id' => $defaultTenantId],
             ['group' => 'tenant_general', 'name' => 'project_default_status', 'payload' => json_encode(ProjectStatusEnum::OnHold), 'tenant_id' => $defaultTenantId],

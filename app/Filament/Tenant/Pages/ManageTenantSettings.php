@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use UnitEnum;
@@ -122,8 +123,7 @@ class ManageTenantSettings extends Page
 
                     Section::make('Security')
                         ->schema([
-                            Toggle::make('require_2fa')
-                                ->label('Require Two-Factor Authentication'),
+
                             Select::make('password_policy')
                                 ->label('Password Policy')
                                 ->options([
@@ -132,6 +132,15 @@ class ManageTenantSettings extends Page
                                     'strong' => 'Strong (12+ characters, mixed case, numbers, symbols)',
                                 ])
                                 ->nullable(),
+                            Grid::make(3)
+                            ->schema([
+                                Toggle::make('google_login')
+                                    ->label('Require Google Authentication'),
+                                Toggle::make('github_login')
+                                    ->label('Require Github Authentication'),
+                                Toggle::make('require_2fa')
+                                    ->label('Require Two-Factor Authentication'),
+                            ])
                         ]),
 
                     Section::make('Project Defaults')
@@ -236,6 +245,8 @@ class ManageTenantSettings extends Page
                             'date_format' => null,
                             'time_format' => null,
                             'require_2fa' => false,
+                            'google_login' => true,
+                            'github_login' => true,
                             'password_policy' => null,
                             'project_default_priority' => null,
                             'project_default_status' => null,
@@ -265,6 +276,8 @@ class ManageTenantSettings extends Page
 
                         // Security
                         'require_2fa' => $settings->require_2fa ?? false,
+                        'google_login' => $settings->google_login ?? false,
+                        'github_login' => $settings->github_login ?? false,
                         'password_policy' => $settings->password_policy ?? null,
 
                         // Projects
@@ -330,6 +343,8 @@ class ManageTenantSettings extends Page
 
                     // Security
                     $settings->require_2fa = $data['require_2fa'] ?? false;
+                    $settings->google_login = $data['google_login'] ?? false;
+                    $settings->github_login = $data['github_login'] ?? false;
                     $settings->password_policy = $data['password_policy'] ?? null;
 
                     // Projects

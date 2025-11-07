@@ -49,11 +49,6 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
 
     protected function currentTenantId(): ?int
     {
-        // return app()->bound('currentTenantId')
-        // ? app('currentTenantId')
-        // : null;
-        // return filament()->getTenant() ?? null;
-
         // 1. Filament context first
         if (function_exists('filament') && filament()->getTenant()) {
             return method_exists(filament()->getTenant(), 'getKey')
@@ -234,6 +229,8 @@ class TenantSettingsRepository extends DatabaseSettingsRepository
             ['name' => 'date_format', 'payload' => json_encode('d-m-y')],
             ['name' => 'time_format', 'payload' => json_encode('H:i')],
             ['name' => 'require_2fa', 'payload' => json_encode(false)],
+            ['name' => 'google_login', 'payload' => json_encode(true)],
+            ['name' => 'github_login', 'payload' => json_encode(true)],
             ['name' => 'password_policy', 'payload' => json_encode('')],
             ['name' => 'project_default_priority', 'payload' => json_encode(PriorityEnum::Medium->value)],
             ['name' => 'project_default_status', 'payload' => json_encode(ProjectStatusEnum::OnHold->value)],

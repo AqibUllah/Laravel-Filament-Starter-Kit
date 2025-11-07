@@ -66,6 +66,8 @@ class TenantPanelProvider extends PanelProvider
                     'date_format' => null,
                     'time_format' => null,
                     'require_2fa' => false,
+                    'google_login' => true,
+                    'github_login' => true,
                     'password_policy' => null,
                     'project_default_priority' => null,
                     'project_default_status' => null,
@@ -91,6 +93,8 @@ class TenantPanelProvider extends PanelProvider
                 'date_format' => null,
                 'time_format' => null,
                 'require_2fa' => false,
+                'google_login' => true,
+                'github_login' => true,
                 'password_policy' => null,
                 'project_default_priority' => null,
                 'project_default_status' => null,
@@ -181,9 +185,11 @@ class TenantPanelProvider extends PanelProvider
                 ->registration()
                 ->providers([
                     Provider::make('google')
+                        ->visible(fn () => $settings->google_login)
                         ->color('danger')
                         ->icon('fab-google'),
                     Provider::make('github')
+                        ->visible(fn () => $settings->github_login)
                     ->icon('fab-github'),
 
                 ]),

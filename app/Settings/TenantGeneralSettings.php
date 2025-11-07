@@ -29,6 +29,8 @@ class TenantGeneralSettings extends Settings
 
     // Security
     public ?bool $require_2fa;
+    public ?bool $google_login;
+    public ?bool $github_login;
 
     public ?string $password_policy;
 

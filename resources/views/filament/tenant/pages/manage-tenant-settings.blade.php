@@ -2,10 +2,10 @@
     @php
         // Always get fresh settings by clearing any cached instance first
         app()->forgetInstance(\App\Settings\TenantGeneralSettings::class);
-        
+
         try {
             $settings = app(\App\Settings\TenantGeneralSettings::class);
-            
+
             // Ensure we refresh to get latest data
             if (method_exists($settings, 'refresh')) {
                 $settings->refresh();
@@ -21,6 +21,8 @@
                 'date_format' => null,
                 'time_format' => null,
                 'require_2fa' => false,
+                'google_login' => true,
+                'github_login' => true,
                 'password_policy' => null,
                 'project_default_priority' => null,
                 'project_default_status' => null,
@@ -160,6 +162,26 @@
                         </div>
                         <x-filament::badge color="gray">
                             {{ ucfirst($settings->password_policy ?? 'Standard') }}
+                        </x-filament::badge>
+                    </div>
+
+                    <div class="flex items-center justify-between py-2">
+                        <div>
+                            <p class="font-medium text-gray-700 dark:text-gray-300">Google Login</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Enable or Disable Google authentication</p>
+                        </div>
+                        <x-filament::badge color="{{ $settings->google_login ? 'success' : 'gray' }}">
+                            {{ ucfirst($settings->google_login ? 'Enabled' : 'Disabled') }}
+                        </x-filament::badge>
+                    </div>
+
+                    <div class="flex items-center justify-between py-2">
+                        <div>
+                            <p class="font-medium text-gray-700 dark:text-gray-300">Github Login</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Enable or Disable Github authentication</p>
+                        </div>
+                        <x-filament::badge color="{{ $settings->github_login ? 'success' : 'gray' }}">
+                            {{ ucfirst($settings->github_login ? 'Enabled' : 'Disabled') }}
                         </x-filament::badge>
                     </div>
                 </div>
