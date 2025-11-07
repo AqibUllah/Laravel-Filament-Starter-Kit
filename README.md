@@ -20,15 +20,15 @@
 
 This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)** with additional commercial use restrictions.
 
-### 📋 What This Means
+### This Means
 
-✅ **You CAN:**
+✅ **CAN:**
 - Use this software for **personal/non-commercial projects**
 - Study the code and learn from it
 - Modify and extend it for your own use
 - Contribute improvements back to the project
 
-❌ **You CANNOT:**
+❌ **CANNOT:**
 - Use this software for **commercial purposes** without written permission
 - Use it for client projects without licensing
 - Resell or rebrand it as your own product
