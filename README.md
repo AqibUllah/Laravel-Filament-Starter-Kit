@@ -141,7 +141,7 @@ php artisan key:generate
 # Set up your DB credentials in .env
 # Then run migrations and seeders
 php artisan migrate:fresh
-php artisan shield:generate --panel=tenant --option=permissions
+php artisan shield:generate --panel=tenant --option=permissions --all
 php artisan db:seed
 
 # Start local development server
