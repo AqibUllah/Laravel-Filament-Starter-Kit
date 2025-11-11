@@ -11,47 +11,22 @@
   <img alt="PHP" src="https://img.shields.io/badge/PHP-^8.2-blue">
   <img alt="Laravel" src="https://img.shields.io/badge/Laravel-12-red">
   <img alt="Filament" src="https://img.shields.io/badge/Filament-^4.x-orange">
-  <img alt="License" src="https://img.shields.io/badge/license-AGPL--3.0-blue">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
 </p>
 
 ---
 
-## ⚠️ License and Usage
+## ⚖️ License
 
-This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)** with additional commercial use restrictions.
+This project is licensed under the **MIT License**.
 
-### This Means
+### Summary
 
-✅ **CAN:**
-- Use this software for **personal/non-commercial projects**
-- Study the code and learn from it
-- Modify and extend it for your own use
-- Contribute improvements back to the project
+- Permission is granted to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.
+- Include the original copyright notice and this permission notice in all copies or substantial portions of the Software.
+- The Software is provided "as is", without warranty of any kind.
 
-❌ **CANNOT:**
-- Use this software for **commercial purposes** without written permission
-- Use it for client projects without licensing
-- Resell or rebrand it as your own product
-- Use it in any commercial SaaS offering without permission
-
-### 🔒 Commercial Licensing
-
-If you want to use this software commercially, please contact the author for a commercial license. This ensures:
-- Proper attribution and support
-- Legal protection for both parties
-- Fair compensation for the original work
-
-### 📝 Attribution Requirements
-
-If you use this software (even non-commercially), you must:
-1. Include the original copyright notice
-2. Link back to this repository
-3. Keep the LICENSE file intact
-4. Disclose any modifications you make
-
-**Unauthorized commercial use will be considered a copyright violation and may result in legal action.**
-
-For licensing inquiries: [aqibullah3312@gmail.com]
+See the `LICENSE` file for the full text of the MIT License.
 
 ## 🧩 Overview
 
