@@ -14,6 +14,29 @@
   <img alt="License" src="https://img.shields.io/badge/license-AGPL--3.0-blue">
 </p>
 
+<p align="center">
+  <a href="https://github.com/AqibUllah/Laravel-Filament-Starter-Kit/stargazers">
+    <img src="https://img.shields.io/github/stars/AqibUllah/Laravel-Filament-Starter-Kit?style=social" alt="Stars">
+  </a>
+  <a href="https://github.com/AqibUllah/Laravel-Filament-Starter-Kit/network/members">
+    <img src="https://img.shields.io/github/forks/AqibUllah/Laravel-Filament-Starter-Kit?style=social" alt="Forks">
+  </a>
+  <a href="https://github.com/AqibUllah/Laravel-Filament-Starter-Kit/issues">
+    <img src="https://img.shields.io/github/issues/AqibUllah/Laravel-Filament-Starter-Kit" alt="Issues">
+  </a>
+</p>
+
+
+## 📚 Table of Contents
+- [Overview](#-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [License & Usage](#️-license-and-usage)
+- [Contributing](#-contributing)
+- [Support](#-support)
+
+
 ---
 
 ## ⚠️ License and Usage
@@ -99,6 +122,13 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
 
 ---
 
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!  
+Feel free to fork this repository and submit a pull request.
+
+If you like this project, **please give it a ⭐** — it really helps others find it!
+
+
 
 ## 🛠 Tech Stack
 
@@ -154,3 +184,13 @@ Password: password
 # tenant panel
 Email: teamadmin@example.com
 Password: password
+
+
+
+---
+
+## 💬 Support
+
+If you found this project helpful, consider giving it a ⭐  
+For commercial licensing or support:
+📧 **aqibullah3312@gmail.com**
