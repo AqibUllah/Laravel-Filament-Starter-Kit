@@ -21,6 +21,10 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use pxlrbt\FilamentExcel\Actions\ExportAction;
+use pxlrbt\FilamentExcel\Actions\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class TasksTable
 {
@@ -127,6 +131,20 @@ class TasksTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    ExportAction::make()->exports([
+                        ExcelExport::make()->withColumns([
+                            Column::make('title'),
+                            Column::make('assignee.name')
+                            ->heading('Assigned To'),
+                            Column::make(name: 'due_date'),
+                            Column::make('priority'),
+                            Column::make(name: 'status'),
+                            Column::make('estimated_hours'),
+                            Column::make('actual_hours'),
+                            Column::make('created_at'),
+                            Column::make('deleted_at'),
+                        ])
+                    ]),
                     DeleteBulkAction::make(),
                     BulkAction::make('logTime')
                         ->label('Log Time')

@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.10.1",
         "owenvoke/blade-fontawesome": "^2.9",
         "pxlrbt/filament-activity-log": "^2.0",
+        "pxlrbt/filament-excel": "^3.2",
         "rickdbcn/filament-email": "^2.1",
         "saade/filament-laravel-log": "^4.0",
         "spatie/laravel-activitylog": "^4.10",

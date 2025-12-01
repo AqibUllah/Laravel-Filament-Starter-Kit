@@ -10,6 +10,7 @@ use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Tables\Columns\TextColumn;
@@ -19,6 +20,9 @@ use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use pxlrbt\FilamentExcel\Actions\ExportAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class ProjectsTable
 {
@@ -207,6 +211,22 @@ class ProjectsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    ExportAction::make()->exports([
+                        ExcelExport::make()->withColumns([
+                            Column::make('name'),
+                            Column::make(name: 'projectManager.name')
+                            ->heading('manager'),
+                            Column::make('status'),
+                            Column::make('priority'),
+                            Column::make(name: 'progress'),
+                            Column::make('start_date'),
+                            Column::make('due_date'),
+                            Column::make('budget'),
+                            Column::make('users_count'),
+                            Column::make('created_at'),
+                            Column::make('deleted_at'),
+                        ])
+                    ]),
                     DeleteBulkAction::make(),
                     BulkAction::make('archive_selected')
                         ->label('Archive Selected')
