@@ -18,13 +18,76 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema as TableSchema;
 
 class ProjectForm
 {
     public static function configure(Schema $schema): Schema
     {
         $currentTeam = Filament::getTenant();
-        $settings = new TenantGeneralSettings;
+        $settings = null;
+        if (TableSchema::hasTable('settings')) {
+            try {
+                $settings = app(TenantGeneralSettings::class);
+                // Verify that all required properties are set
+                if (! isset($settings->company_name)) {
+                    throw new \Exception('Settings properties missing');
+                }
+            } catch (\Throwable $e) {
+                // The settings table might not be ready or filled, or properties are missing
+                // Fallback to default values
+                $settings = (object) [
+                    'company_name' => 'Team',
+                    'company_logo_path' => null,
+                    'primary_color' => null,
+                    'locale' => 'en',
+                    'timezone' => null,
+                    'date_format' => null,
+                    'time_format' => null,
+                    'require_2fa' => false,
+                    'google_login' => true,
+                    'github_login' => true,
+                    'password_policy' => null,
+                    'project_default_priority' => null,
+                    'project_default_status' => null,
+                    'task_default_priority' => null,
+                    'task_default_status' => null,
+                    'email_notifications_enabled' => false,
+                    'notify_on_project_changes' => false,
+                    'notify_on_task_assign' => false,
+                    'storage_upload_disk' => null,
+                    'storage_max_file_mb' => null,
+                    'allowed_file_types' => [],
+                    'sidebar_collapsed_default' => false,
+                ];
+            }
+        } else {
+            // Table does not exist: fallback to default values for first-time setup
+            $settings = (object) [
+                'company_name' => 'Team',
+                'company_logo_path' => null,
+                'primary_color' => null,
+                'locale' => 'en',
+                'timezone' => null,
+                'date_format' => null,
+                'time_format' => null,
+                'require_2fa' => false,
+                'google_login' => true,
+                'github_login' => true,
+                'password_policy' => null,
+                'project_default_priority' => null,
+                'project_default_status' => null,
+                'task_default_priority' => null,
+                'task_default_status' => null,
+                'email_notifications_enabled' => false,
+                'notify_on_project_changes' => false,
+                'notify_on_task_assign' => false,
+                'storage_upload_disk' => null,
+                'storage_max_file_mb' => null,
+                'allowed_file_types' => [],
+                'sidebar_collapsed_default' => false,
+            ];
+        }
 
         return $schema
             ->components([
