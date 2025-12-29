@@ -165,8 +165,8 @@ Password: password
 ---
 
 
-##  Windows users:
-# Make sure the following directories exist after cloning:
+# Windows users:
+## Make sure the following directories exist after cloning:
 ``` 
     - storage/framework/cache
     - storage/framework/sessions
