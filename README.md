@@ -164,6 +164,16 @@ Password: password
 
 ---
 
+
+##  Windows users:
+# Make sure the following directories exist after cloning:
+``` 
+    - storage/framework/cache
+    - storage/framework/sessions
+    - storage/framework/views
+    - bootstrap/cache
+```
+
 ## 💬 Support
 
 If you found this project helpful, consider giving it a ⭐  
