@@ -136,10 +136,8 @@ git clone https://github.com/AqibUllah/Laravel-Filament-Starter-Kit
 cd laravel-filament-saas-kit
 
 # creating databsae file
-```bash 
 # on mac
 touch database/database.sqlite
-
 # (or on Windows)
 type nul > database\database.sqlite
 
