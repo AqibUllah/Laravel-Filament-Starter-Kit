@@ -135,6 +135,9 @@ git clone https://github.com/AqibUllah/Laravel-Filament-Starter-Kit
 
 cd laravel-filament-saas-kit
 
+# creating databsae file
+touch database/database.sqlite
+
 # Install dependencies
 composer install
 npm install && npm run build
