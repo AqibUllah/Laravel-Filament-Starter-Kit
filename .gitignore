@@ -20,6 +20,7 @@
 /storage/*.key
 /storage/pail
 bootstrap/cache/*.php
+storage/framework/views/*.php
 /vendor
 Homestead.json
 Homestead.yaml
