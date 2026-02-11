@@ -5,7 +5,6 @@ namespace App\Filament\Tenant\Pages;
 use App\Models\History;
 use App\Services\SupportChatService;
 use Filament\Pages\Page;
-use App\Models\SupportChat as SupportChatModel;
 use BackedEnum;
 use Laravel\Ai\Messages\Message;
 
