@@ -16,7 +16,7 @@ use Laravel\Ai\Contracts\HasStructuredOutput;
 use Laravel\Ai\Concerns\RemembersConversations;
 use Laravel\Ai\Messages\Message;
 
-#[Provider('gemini')]
+#[Provider('groq')]
 class SupportBot implements Agent, Conversational, HasTools
 {
     use Promptable,RemembersConversations;
