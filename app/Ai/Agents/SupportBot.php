@@ -2,6 +2,7 @@
 
 namespace App\Ai\Agents;
 
+use App\Ai\Tools\ProjectTool;
 use App\Models\History;
 use App\Models\User;
 use Laravel\Ai\Attributes\Provider;
@@ -61,7 +62,7 @@ class SupportBot implements Agent, Conversational, HasTools
     public function tools(): iterable
     {
         return [
-
+            new ProjectTool
         ];
     }
 }
