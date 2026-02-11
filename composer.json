@@ -14,6 +14,7 @@
         "dutchcodingcompany/filament-socialite": "^3.0",
         "filament/filament": "^4.0",
         "filament/spark-billing-provider": "^4.1",
+        "laravel/ai": "^0.1.3",
         "laravel/cashier": "^16.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
