@@ -1,33 +1,33 @@
 <?php return array (
-  'broadcasting' => 
+  'broadcasting' =>
   array (
     'default' => 'log',
-    'connections' => 
+    'connections' =>
     array (
-      'reverb' => 
+      'reverb' =>
       array (
         'driver' => 'reverb',
         'key' => NULL,
         'secret' => NULL,
         'app_id' => NULL,
-        'options' => 
+        'options' =>
         array (
           'host' => NULL,
           'port' => 443,
           'scheme' => 'https',
           'useTLS' => true,
         ),
-        'client_options' => 
+        'client_options' =>
         array (
         ),
       ),
-      'pusher' => 
+      'pusher' =>
       array (
         'driver' => 'pusher',
         'key' => NULL,
         'secret' => NULL,
         'app_id' => NULL,
-        'options' => 
+        'options' =>
         array (
           'cluster' => NULL,
           'host' => 'api-mt1.pusher.com',
@@ -36,67 +36,67 @@
           'encrypted' => true,
           'useTLS' => true,
         ),
-        'client_options' => 
+        'client_options' =>
         array (
         ),
       ),
-      'ably' => 
+      'ably' =>
       array (
         'driver' => 'ably',
         'key' => NULL,
       ),
-      'log' => 
+      'log' =>
       array (
         'driver' => 'log',
       ),
-      'null' => 
+      'null' =>
       array (
         'driver' => 'null',
       ),
     ),
   ),
-  'concurrency' => 
+  'concurrency' =>
   array (
     'default' => 'process',
   ),
-  'cors' => 
+  'cors' =>
   array (
-    'paths' => 
+    'paths' =>
     array (
       0 => 'api/*',
       1 => 'sanctum/csrf-cookie',
     ),
-    'allowed_methods' => 
+    'allowed_methods' =>
     array (
       0 => '*',
     ),
-    'allowed_origins' => 
+    'allowed_origins' =>
     array (
       0 => '*',
     ),
-    'allowed_origins_patterns' => 
+    'allowed_origins_patterns' =>
     array (
     ),
-    'allowed_headers' => 
+    'allowed_headers' =>
     array (
       0 => '*',
     ),
-    'exposed_headers' => 
+    'exposed_headers' =>
     array (
     ),
     'max_age' => 0,
     'supports_credentials' => false,
   ),
-  'hashing' => 
+  'hashing' =>
   array (
     'driver' => 'bcrypt',
-    'bcrypt' => 
+    'bcrypt' =>
     array (
       'rounds' => '12',
       'verify' => true,
       'limit' => NULL,
     ),
-    'argon' => 
+    'argon' =>
     array (
       'memory' => 65536,
       'threads' => 1,
@@ -105,15 +105,15 @@
     ),
     'rehash_on_login' => true,
   ),
-  'view' => 
+  'view' =>
   array (
-    'paths' => 
+    'paths' =>
     array (
       0 => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\resources\\views',
     ),
     'compiled' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\framework\\views',
   ),
-  'activitylog' => 
+  'activitylog' =>
   array (
     'enabled' => true,
     'delete_records_older_than_days' => 365,
@@ -124,7 +124,7 @@
     'table_name' => 'activity_log',
     'database_connection' => NULL,
   ),
-  'ai' => 
+  'ai' =>
   array (
     'default' => 'gemini',
     'default_for_images' => 'gemini',
@@ -132,85 +132,85 @@
     'default_for_transcription' => 'openai',
     'default_for_embeddings' => 'openai',
     'default_for_reranking' => 'cohere',
-    'caching' => 
+    'caching' =>
     array (
-      'embeddings' => 
+      'embeddings' =>
       array (
         'cache' => false,
         'store' => 'database',
       ),
     ),
-    'providers' => 
+    'providers' =>
     array (
-      'anthropic' => 
+      'anthropic' =>
       array (
         'driver' => 'anthropic',
         'key' => '',
       ),
-      'cohere' => 
+      'cohere' =>
       array (
         'driver' => 'cohere',
         'key' => '',
       ),
-      'deepseek' => 
+      'deepseek' =>
       array (
         'driver' => 'deepseek',
         'key' => NULL,
       ),
-      'eleven' => 
+      'eleven' =>
       array (
         'driver' => 'eleven',
         'key' => '',
       ),
-      'gemini' => 
+      'gemini' =>
       array (
         'driver' => 'gemini',
         'key' => 'AIzaSyBvzqPJepwpqZTUOKmLRcSWL2j_myJG3Ng',
       ),
-      'groq' => 
+      'groq' =>
       array (
         'driver' => 'groq',
         'key' => NULL,
       ),
-      'jina' => 
+      'jina' =>
       array (
         'driver' => 'jina',
         'key' => '',
       ),
-      'mistral' => 
+      'mistral' =>
       array (
         'driver' => 'mistral',
         'key' => '',
       ),
-      'ollama' => 
+      'ollama' =>
       array (
         'driver' => 'ollama',
         'key' => '',
         'url' => 'http://localhost:11434',
       ),
-      'openai' => 
+      'openai' =>
       array (
         'driver' => 'openai',
         'key' => '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',
       ),
-      'openrouter' => 
+      'openrouter' =>
       array (
         'driver' => 'openrouter',
         'key' => NULL,
       ),
-      'voyageai' => 
+      'voyageai' =>
       array (
         'driver' => 'voyageai',
         'key' => '',
       ),
-      'xai' => 
+      'xai' =>
       array (
         'driver' => 'xai',
         'key' => '',
       ),
     ),
   ),
-  'app' => 
+  'app' =>
   array (
     'name' => 'Laravel',
     'env' => 'local',
@@ -224,15 +224,15 @@
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
     'key' => 'base64:J9UL13GWLIahNgjbQY4yCrq7aHC6HLCnfWrs9fdcmcc=',
-    'previous_keys' => 
+    'previous_keys' =>
     array (
     ),
-    'maintenance' => 
+    'maintenance' =>
     array (
       'driver' => 'file',
       'store' => 'database',
     ),
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Illuminate\\Auth\\AuthServiceProvider',
       1 => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
@@ -264,7 +264,7 @@
       27 => 'App\\Providers\\StripeBillingProvider',
       28 => 'CodeWithDennis\\SimpleAlert\\SimpleAlertServiceProvider',
     ),
-    'aliases' => 
+    'aliases' =>
     array (
       'App' => 'Illuminate\\Support\\Facades\\App',
       'Arr' => 'Illuminate\\Support\\Arr',
@@ -314,49 +314,49 @@
       'Vite' => 'Illuminate\\Support\\Facades\\Vite',
     ),
   ),
-  'auth' => 
+  'auth' =>
   array (
-    'defaults' => 
+    'defaults' =>
     array (
       'guard' => 'web',
       'passwords' => 'users',
     ),
-    'guards' => 
+    'guards' =>
     array (
-      'web' => 
+      'web' =>
       array (
         'driver' => 'session',
         'provider' => 'users',
       ),
-      'admin' => 
+      'admin' =>
       array (
         'driver' => 'session',
         'provider' => 'admins',
       ),
     ),
-    'providers' => 
+    'providers' =>
     array (
-      'users' => 
+      'users' =>
       array (
         'driver' => 'eloquent',
         'model' => 'App\\Models\\User',
       ),
-      'admins' => 
+      'admins' =>
       array (
         'driver' => 'eloquent',
         'model' => 'App\\Models\\Admin',
       ),
     ),
-    'passwords' => 
+    'passwords' =>
     array (
-      'users' => 
+      'users' =>
       array (
         'provider' => 'users',
         'table' => 'password_reset_tokens',
         'expire' => 60,
         'throttle' => 60,
       ),
-      'admins' => 
+      'admins' =>
       array (
         'provider' => 'admins',
         'table' => 'password_reset_tokens',
@@ -366,22 +366,22 @@
     ),
     'password_timeout' => 10800,
   ),
-  'cache' => 
+  'cache' =>
   array (
     'default' => 'database',
-    'stores' => 
+    'stores' =>
     array (
-      'array' => 
+      'array' =>
       array (
         'driver' => 'array',
         'serialize' => false,
       ),
-      'session' => 
+      'session' =>
       array (
         'driver' => 'session',
         'key' => '_cache',
       ),
-      'database' => 
+      'database' =>
       array (
         'driver' => 'database',
         'connection' => NULL,
@@ -389,27 +389,27 @@
         'lock_connection' => NULL,
         'lock_table' => NULL,
       ),
-      'file' => 
+      'file' =>
       array (
         'driver' => 'file',
         'path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\framework/cache/data',
         'lock_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\framework/cache/data',
       ),
-      'memcached' => 
+      'memcached' =>
       array (
         'driver' => 'memcached',
         'persistent_id' => NULL,
-        'sasl' => 
+        'sasl' =>
         array (
           0 => NULL,
           1 => NULL,
         ),
-        'options' => 
+        'options' =>
         array (
         ),
-        'servers' => 
+        'servers' =>
         array (
-          0 => 
+          0 =>
           array (
             'host' => '127.0.0.1',
             'port' => 11211,
@@ -417,13 +417,13 @@
           ),
         ),
       ),
-      'redis' => 
+      'redis' =>
       array (
         'driver' => 'redis',
         'connection' => 'cache',
         'lock_connection' => 'default',
       ),
-      'dynamodb' => 
+      'dynamodb' =>
       array (
         'driver' => 'dynamodb',
         'key' => '',
@@ -432,14 +432,14 @@
         'table' => 'cache',
         'endpoint' => NULL,
       ),
-      'octane' => 
+      'octane' =>
       array (
         'driver' => 'octane',
       ),
-      'failover' => 
+      'failover' =>
       array (
         'driver' => 'failover',
-        'stores' => 
+        'stores' =>
         array (
           0 => 'database',
           1 => 'array',
@@ -448,12 +448,12 @@
     ),
     'prefix' => 'laravel-cache-',
   ),
-  'database' => 
+  'database' =>
   array (
     'default' => 'mysql',
-    'connections' => 
+    'connections' =>
     array (
-      'sqlite' => 
+      'sqlite' =>
       array (
         'driver' => 'sqlite',
         'url' => NULL,
@@ -465,7 +465,7 @@
         'synchronous' => NULL,
         'transaction_mode' => 'DEFERRED',
       ),
-      'mysql' => 
+      'mysql' =>
       array (
         'driver' => 'mysql',
         'url' => NULL,
@@ -481,11 +481,11 @@
         'prefix_indexes' => true,
         'strict' => true,
         'engine' => NULL,
-        'options' => 
+        'options' =>
         array (
         ),
       ),
-      'mariadb' => 
+      'mariadb' =>
       array (
         'driver' => 'mariadb',
         'url' => NULL,
@@ -501,11 +501,11 @@
         'prefix_indexes' => true,
         'strict' => true,
         'engine' => NULL,
-        'options' => 
+        'options' =>
         array (
         ),
       ),
-      'pgsql' => 
+      'pgsql' =>
       array (
         'driver' => 'pgsql',
         'url' => NULL,
@@ -520,7 +520,7 @@
         'search_path' => 'public',
         'sslmode' => 'prefer',
       ),
-      'sqlsrv' => 
+      'sqlsrv' =>
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
@@ -534,21 +534,21 @@
         'prefix_indexes' => true,
       ),
     ),
-    'migrations' => 
+    'migrations' =>
     array (
       'table' => 'migrations',
       'update_date_on_publish' => true,
     ),
-    'redis' => 
+    'redis' =>
     array (
       'client' => 'phpredis',
-      'options' => 
+      'options' =>
       array (
         'cluster' => 'redis',
         'prefix' => 'laravel-database-',
         'persistent' => false,
       ),
-      'default' => 
+      'default' =>
       array (
         'url' => NULL,
         'host' => '127.0.0.1',
@@ -561,7 +561,7 @@
         'backoff_base' => 100,
         'backoff_cap' => 1000,
       ),
-      'cache' => 
+      'cache' =>
       array (
         'url' => NULL,
         'host' => '127.0.0.1',
@@ -576,26 +576,26 @@
       ),
     ),
   ),
-  'filament' => 
+  'filament' =>
   array (
-    'broadcasting' => 
+    'broadcasting' =>
     array (
     ),
     'default_filesystem_disk' => 'local',
     'assets_path' => NULL,
     'cache_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\bootstrap/cache/filament',
     'livewire_loading_delay' => 'default',
-    'file_generation' => 
+    'file_generation' =>
     array (
-      'flags' => 
+      'flags' =>
       array (
       ),
     ),
     'system_route_prefix' => 'filament',
   ),
-  'filament-email' => 
+  'filament-email' =>
   array (
-    'resource' => 
+    'resource' =>
     array (
       'class' => 'RickDBCN\\FilamentEmail\\Filament\\Resources\\EmailResource',
       'model' => 'RickDBCN\\FilamentEmail\\Models\\Email',
@@ -606,7 +606,7 @@
       'default_sort_column' => 'created_at',
       'default_sort_direction' => 'desc',
       'datetime_format' => 'Y-m-d H:i:s',
-      'table_search_fields' => 
+      'table_search_fields' =>
       array (
         0 => 'subject',
         1 => 'from',
@@ -620,13 +620,13 @@
     'label' => NULL,
     'prune_enabled' => true,
     'prune_crontab' => '0 0 * * *',
-    'can_access' => 
+    'can_access' =>
     array (
-      'role' => 
+      'role' =>
       array (
       ),
     ),
-    'pagination_page_options' => 
+    'pagination_page_options' =>
     array (
       0 => 10,
       1 => 25,
@@ -636,45 +636,45 @@
     'attachments_disk' => 'local',
     'store_attachments' => true,
   ),
-  'filament-email-templates' => 
+  'filament-email-templates' =>
   array (
     'table_name' => 'vb_email_templates',
     'theme_table_name' => 'vb_email_templates_themes',
     'mailable_directory' => 'Mail/Visualbuilder/EmailTemplates',
     'tokenHelperClass' => 'Visualbuilder\\EmailTemplates\\DefaultTokenHelper',
-    'known_tokens' => 
+    'known_tokens' =>
     array (
       0 => 'tokenUrl',
       1 => 'verificationUrl',
       2 => 'message',
     ),
-    'navigation' => 
+    'navigation' =>
     array (
       'enabled' => true,
-      'templates' => 
+      'templates' =>
       array (
         'sort' => 10,
         'label' => 'Email Templates',
         'icon' => 'heroicon-o-envelope',
         'group' => 'Content',
         'cluster' => false,
-        'position' => 
+        'position' =>
         \Filament\Pages\Enums\SubNavigationPosition::Top,
       ),
-      'themes' => 
+      'themes' =>
       array (
         'sort' => 20,
         'label' => 'Email Template Themes',
         'icon' => 'heroicon-o-paint-brush',
         'group' => 'Content',
         'cluster' => false,
-        'position' => 
+        'position' =>
         \Filament\Pages\Enums\SubNavigationPosition::Top,
       ),
     ),
     'default_view' => 'default',
     'template_view_path' => 'vb-email-templates::email',
-    'template_keys' => 
+    'template_keys' =>
     array (
       'user-welcome' => 'User Welcome Email',
       'user-request-reset' => 'User Request Password Reset',
@@ -689,20 +689,20 @@
     'logo_width' => '500',
     'logo_height' => '126',
     'content_width' => '600',
-    'customer-services' => 
+    'customer-services' =>
     array (
       'email' => 'support@yourcompany.com',
       'phone' => '+441273 455702',
     ),
-    'links' => 
+    'links' =>
     array (
-      0 => 
+      0 =>
       array (
         'name' => 'Website',
         'url' => 'https://yourwebsite.com',
         'title' => 'Goto website',
       ),
-      1 => 
+      1 =>
       array (
         'name' => 'Privacy Policy',
         'url' => 'https://yourwebsite.com/privacy-policy',
@@ -710,50 +710,50 @@
       ),
     ),
     'default_locale' => 'en_GB',
-    'languages' => 
+    'languages' =>
     array (
-      'en_GB' => 
+      'en_GB' =>
       array (
         'display' => 'British',
         'flag-icon' => 'gb',
       ),
-      'en_US' => 
+      'en_US' =>
       array (
         'display' => 'USA',
         'flag-icon' => 'us',
       ),
-      'es' => 
+      'es' =>
       array (
         'display' => 'Español',
         'flag-icon' => 'es',
       ),
-      'fr' => 
+      'fr' =>
       array (
         'display' => 'Français',
         'flag-icon' => 'fr',
       ),
-      'pt' => 
+      'pt' =>
       array (
         'display' => 'Brasileiro',
         'flag-icon' => 'br',
       ),
-      'in' => 
+      'in' =>
       array (
         'display' => 'Hindi',
         'flag-icon' => 'in',
       ),
     ),
-    'recipients' => 
+    'recipients' =>
     array (
       0 => 'App\\Models\\User',
     ),
-    'config_keys' => 
+    'config_keys' =>
     array (
       0 => 'app.name',
       1 => 'app.url',
       2 => 'email-templates.customer-services',
     ),
-    'send_emails' => 
+    'send_emails' =>
     array (
       'new_user_registered' => true,
       'verification' => true,
@@ -763,21 +763,21 @@
       'locked_out' => true,
     ),
   ),
-  'filament-laravel-log' => 
+  'filament-laravel-log' =>
   array (
     'maxLines' => 50,
     'minLines' => 10,
     'fontSize' => 12,
     'limit' => 5,
   ),
-  'filament-shield' => 
+  'filament-shield' =>
   array (
-    'shield_resource' => 
+    'shield_resource' =>
     array (
       'slug' => 'shield/roles',
       'show_model_path' => true,
       'cluster' => NULL,
-      'tabs' => 
+      'tabs' =>
       array (
         'pages' => true,
         'widgets' => true,
@@ -787,30 +787,30 @@
     ),
     'tenant_model' => 'App\\Models\\Team',
     'auth_provider_model' => 'App\\Models\\User',
-    'super_admin' => 
+    'super_admin' =>
     array (
       'enabled' => true,
       'name' => 'super_admin',
       'define_via_gate' => false,
       'intercept_gate' => 'before',
     ),
-    'panel_user' => 
+    'panel_user' =>
     array (
       'enabled' => true,
       'name' => 'panel_user',
     ),
-    'permissions' => 
+    'permissions' =>
     array (
       'separator' => ':',
       'case' => 'pascal',
       'generate' => true,
     ),
-    'policies' => 
+    'policies' =>
     array (
       'path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\app\\Policies',
       'merge' => true,
       'generate' => false,
-      'methods' => 
+      'methods' =>
       array (
         0 => 'viewAny',
         1 => 'view',
@@ -824,7 +824,7 @@
         9 => 'replicate',
         10 => 'reorder',
       ),
-      'single_parameter_methods' => 
+      'single_parameter_methods' =>
       array (
         0 => 'viewAny',
         1 => 'create',
@@ -834,17 +834,17 @@
         5 => 'reorder',
       ),
     ),
-    'localization' => 
+    'localization' =>
     array (
       'enabled' => false,
       'key' => 'filament-shield::filament-shield',
     ),
-    'resources' => 
+    'resources' =>
     array (
       'subject' => 'model',
-      'manage' => 
+      'manage' =>
       array (
-        'BezhanSalleh\\FilamentShield\\Resources\\Roles\\RoleResource' => 
+        'BezhanSalleh\\FilamentShield\\Resources\\Roles\\RoleResource' =>
         array (
           0 => 'viewAny',
           1 => 'view',
@@ -853,33 +853,33 @@
           4 => 'delete',
         ),
       ),
-      'exclude' => 
+      'exclude' =>
       array (
       ),
     ),
-    'pages' => 
+    'pages' =>
     array (
       'subject' => 'class',
       'prefix' => 'view',
-      'exclude' => 
+      'exclude' =>
       array (
       ),
     ),
-    'widgets' => 
+    'widgets' =>
     array (
       'subject' => 'class',
       'prefix' => 'view',
-      'exclude' => 
+      'exclude' =>
       array (
         0 => 'Filament\\Widgets\\AccountWidget',
         1 => 'Filament\\Widgets\\FilamentInfoWidget',
       ),
     ),
-    'custom_permissions' => 
+    'custom_permissions' =>
     array (
       0 => 'view_advanced_analytics',
     ),
-    'discovery' => 
+    'discovery' =>
     array (
       'discover_all_resources' => false,
       'discover_all_widgets' => false,
@@ -887,9 +887,9 @@
     ),
     'register_role_policy' => true,
   ),
-  'filament-socialite' => 
+  'filament-socialite' =>
   array (
-    'middleware' => 
+    'middleware' =>
     array (
       0 => 'Illuminate\\Cookie\\Middleware\\EncryptCookies',
       1 => 'Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse',
@@ -898,11 +898,11 @@
       4 => 'Illuminate\\View\\Middleware\\ShareErrorsFromSession',
     ),
   ),
-  'filament-themes-manager' => 
+  'filament-themes-manager' =>
   array (
-    'discovery' => 
+    'discovery' =>
     array (
-      'paths' => 
+      'paths' =>
       array (
         'themes' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\themes',
         'resources' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\resources\\themes',
@@ -910,9 +910,9 @@
       'cache_duration' => 3600,
       'auto_discover' => true,
     ),
-    'installation' => 
+    'installation' =>
     array (
-      'allowed_sources' => 
+      'allowed_sources' =>
       array (
         0 => 'zip',
         1 => 'github',
@@ -922,21 +922,21 @@
       'backup_existing' => true,
       'auto_enable' => false,
     ),
-    'upload' => 
+    'upload' =>
     array (
       'disk' => 'public',
       'directory' => 'themes/uploads',
       'max_size' => 52428800,
-      'allowed_extensions' => 
+      'allowed_extensions' =>
       array (
         0 => 'zip',
       ),
     ),
-    'security' => 
+    'security' =>
     array (
       'validate_theme_structure' => true,
       'scan_malicious_code' => true,
-      'allowed_file_types' => 
+      'allowed_file_types' =>
       array (
         0 => 'php',
         1 => 'blade.php',
@@ -954,19 +954,19 @@
         13 => 'svg',
         14 => 'webp',
       ),
-      'protected_themes' => 
+      'protected_themes' =>
       array (
         0 => 'default',
       ),
     ),
-    'preview' => 
+    'preview' =>
     array (
       'enabled' => true,
       'route_prefix' => 'theme-preview',
       'session_duration' => 3600,
       'cache_screenshots' => true,
     ),
-    'navigation' => 
+    'navigation' =>
     array (
       'register' => true,
       'sort' => 200,
@@ -974,19 +974,19 @@
       'group' => 'System',
       'label' => 'filament-themes-manager::theme.navigation.label',
     ),
-    'widgets' => 
+    'widgets' =>
     array (
       'enabled' => true,
       'page' => true,
       'dashboard' => true,
-      'widgets' => 
+      'widgets' =>
       array (
         0 => 'Alizharb\\FilamentThemesManager\\Widgets\\ThemesOverview',
       ),
     ),
-    'validation' => 
+    'validation' =>
     array (
-      'required_fields' => 
+      'required_fields' =>
       array (
         0 => 'name',
         1 => 'version',
@@ -996,7 +996,7 @@
       'max_name_length' => 50,
       'max_description_length' => 200,
     ),
-    'performance' => 
+    'performance' =>
     array (
       'cache_theme_data' => true,
       'preload_active_theme' => true,
@@ -1004,12 +1004,12 @@
       'minify_output' => false,
     ),
   ),
-  'filesystems' => 
+  'filesystems' =>
   array (
     'default' => 'local',
-    'disks' => 
+    'disks' =>
     array (
-      'local' => 
+      'local' =>
       array (
         'driver' => 'local',
         'root' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\app/private',
@@ -1017,7 +1017,7 @@
         'throw' => false,
         'report' => false,
       ),
-      'public' => 
+      'public' =>
       array (
         'driver' => 'local',
         'root' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\app/public',
@@ -1026,7 +1026,7 @@
         'throw' => false,
         'report' => false,
       ),
-      's3' => 
+      's3' =>
       array (
         'driver' => 's3',
         'key' => '',
@@ -1039,45 +1039,45 @@
         'throw' => false,
         'report' => false,
       ),
-      'filament-excel' => 
+      'filament-excel' =>
       array (
         'driver' => 'local',
         'root' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\app/filament-excel',
         'url' => 'http://laravel-filament-starter-kit.test/filament-excel',
       ),
     ),
-    'links' => 
+    'links' =>
     array (
       'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\public\\storage' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\app/public',
     ),
   ),
-  'logging' => 
+  'logging' =>
   array (
     'default' => 'stack',
-    'deprecations' => 
+    'deprecations' =>
     array (
       'channel' => NULL,
       'trace' => false,
     ),
-    'channels' => 
+    'channels' =>
     array (
-      'stack' => 
+      'stack' =>
       array (
         'driver' => 'stack',
-        'channels' => 
+        'channels' =>
         array (
           0 => 'single',
         ),
         'ignore_exceptions' => false,
       ),
-      'single' => 
+      'single' =>
       array (
         'driver' => 'single',
         'path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
-      'daily' => 
+      'daily' =>
       array (
         'driver' => 'daily',
         'path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\logs/laravel.log',
@@ -1085,7 +1085,7 @@
         'days' => 14,
         'replace_placeholders' => true,
       ),
-      'slack' => 
+      'slack' =>
       array (
         'driver' => 'slack',
         'url' => NULL,
@@ -1094,67 +1094,67 @@
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
-      'papertrail' => 
+      'papertrail' =>
       array (
         'driver' => 'monolog',
         'level' => 'debug',
         'handler' => 'Monolog\\Handler\\SyslogUdpHandler',
-        'handler_with' => 
+        'handler_with' =>
         array (
           'host' => NULL,
           'port' => NULL,
           'connectionString' => 'tls://:',
         ),
-        'processors' => 
+        'processors' =>
         array (
           0 => 'Monolog\\Processor\\PsrLogMessageProcessor',
         ),
       ),
-      'stderr' => 
+      'stderr' =>
       array (
         'driver' => 'monolog',
         'level' => 'debug',
         'handler' => 'Monolog\\Handler\\StreamHandler',
-        'handler_with' => 
+        'handler_with' =>
         array (
           'stream' => 'php://stderr',
         ),
         'formatter' => NULL,
-        'processors' => 
+        'processors' =>
         array (
           0 => 'Monolog\\Processor\\PsrLogMessageProcessor',
         ),
       ),
-      'syslog' => 
+      'syslog' =>
       array (
         'driver' => 'syslog',
         'level' => 'debug',
         'facility' => 8,
         'replace_placeholders' => true,
       ),
-      'errorlog' => 
+      'errorlog' =>
       array (
         'driver' => 'errorlog',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
-      'null' => 
+      'null' =>
       array (
         'driver' => 'monolog',
         'handler' => 'Monolog\\Handler\\NullHandler',
       ),
-      'emergency' => 
+      'emergency' =>
       array (
         'path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\logs/laravel.log',
       ),
     ),
   ),
-  'mail' => 
+  'mail' =>
   array (
     'default' => 'smtp',
-    'mailers' => 
+    'mailers' =>
     array (
-      'smtp' => 
+      'smtp' =>
       array (
         'transport' => 'smtp',
         'scheme' => NULL,
@@ -1166,46 +1166,46 @@
         'timeout' => NULL,
         'local_domain' => 'laravel-filament-starter-kit.test',
       ),
-      'ses' => 
+      'ses' =>
       array (
         'transport' => 'ses',
       ),
-      'postmark' => 
+      'postmark' =>
       array (
         'transport' => 'postmark',
       ),
-      'resend' => 
+      'resend' =>
       array (
         'transport' => 'resend',
       ),
-      'sendmail' => 
+      'sendmail' =>
       array (
         'transport' => 'sendmail',
         'path' => '/usr/sbin/sendmail -bs -i',
       ),
-      'log' => 
+      'log' =>
       array (
         'transport' => 'log',
         'channel' => NULL,
       ),
-      'array' => 
+      'array' =>
       array (
         'transport' => 'array',
       ),
-      'failover' => 
+      'failover' =>
       array (
         'transport' => 'failover',
-        'mailers' => 
+        'mailers' =>
         array (
           0 => 'smtp',
           1 => 'log',
         ),
         'retry_after' => 60,
       ),
-      'roundrobin' => 
+      'roundrobin' =>
       array (
         'transport' => 'roundrobin',
-        'mailers' => 
+        'mailers' =>
         array (
           0 => 'ses',
           1 => 'postmark',
@@ -1213,28 +1213,28 @@
         'retry_after' => 60,
       ),
     ),
-    'from' => 
+    'from' =>
     array (
       'address' => 'hello@example.com',
       'name' => 'Laravel',
     ),
-    'markdown' => 
+    'markdown' =>
     array (
       'theme' => 'default',
-      'paths' => 
+      'paths' =>
       array (
         0 => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\resources\\views/vendor/mail',
       ),
     ),
   ),
-  'permission' => 
+  'permission' =>
   array (
-    'models' => 
+    'models' =>
     array (
       'permission' => 'App\\Models\\Permission',
       'role' => 'App\\Models\\Role',
     ),
-    'table_names' => 
+    'table_names' =>
     array (
       'roles' => 'roles',
       'permissions' => 'permissions',
@@ -1242,7 +1242,7 @@
       'model_has_roles' => 'model_has_roles',
       'role_has_permissions' => 'role_has_permissions',
     ),
-    'column_names' => 
+    'column_names' =>
     array (
       'role_pivot_key' => NULL,
       'permission_pivot_key' => NULL,
@@ -1258,9 +1258,9 @@
     'display_permission_in_exception' => false,
     'display_role_in_exception' => false,
     'enable_wildcard_permission' => false,
-    'cache' => 
+    'cache' =>
     array (
-      'expiration_time' => 
+      'expiration_time' =>
       \DateInterval::__set_state(array(
          'from_string' => true,
          'date_string' => '24 hours',
@@ -1269,16 +1269,16 @@
       'store' => 'default',
     ),
   ),
-  'queue' => 
+  'queue' =>
   array (
     'default' => 'database',
-    'connections' => 
+    'connections' =>
     array (
-      'sync' => 
+      'sync' =>
       array (
         'driver' => 'sync',
       ),
-      'database' => 
+      'database' =>
       array (
         'driver' => 'database',
         'connection' => NULL,
@@ -1287,7 +1287,7 @@
         'retry_after' => 90,
         'after_commit' => false,
       ),
-      'beanstalkd' => 
+      'beanstalkd' =>
       array (
         'driver' => 'beanstalkd',
         'host' => 'localhost',
@@ -1296,7 +1296,7 @@
         'block_for' => 0,
         'after_commit' => false,
       ),
-      'sqs' => 
+      'sqs' =>
       array (
         'driver' => 'sqs',
         'key' => '',
@@ -1307,7 +1307,7 @@
         'region' => 'us-east-1',
         'after_commit' => false,
       ),
-      'redis' => 
+      'redis' =>
       array (
         'driver' => 'redis',
         'connection' => 'default',
@@ -1316,76 +1316,76 @@
         'block_for' => NULL,
         'after_commit' => false,
       ),
-      'deferred' => 
+      'deferred' =>
       array (
         'driver' => 'deferred',
       ),
-      'failover' => 
+      'failover' =>
       array (
         'driver' => 'failover',
-        'connections' => 
+        'connections' =>
         array (
           0 => 'database',
           1 => 'sync',
         ),
       ),
     ),
-    'batching' => 
+    'batching' =>
     array (
       'database' => 'mysql',
       'table' => 'job_batches',
     ),
-    'failed' => 
+    'failed' =>
     array (
       'driver' => 'database-uuids',
       'database' => 'mysql',
       'table' => 'failed_jobs',
     ),
   ),
-  'services' => 
+  'services' =>
   array (
-    'postmark' => 
+    'postmark' =>
     array (
       'token' => NULL,
     ),
-    'resend' => 
+    'resend' =>
     array (
       'key' => NULL,
     ),
-    'ses' => 
+    'ses' =>
     array (
       'key' => '',
       'secret' => '',
       'region' => 'us-east-1',
     ),
-    'slack' => 
+    'slack' =>
     array (
-      'notifications' => 
+      'notifications' =>
       array (
         'bot_user_oauth_token' => NULL,
         'channel' => NULL,
       ),
     ),
-    'stripe' => 
+    'stripe' =>
     array (
       'secret' => 'sk_test_51K3fZbCdDYiPm1gGXeyCMk126E6FJ7GFHsdUhVy5ABXELAeb1j6ROfgBRmrdPctvhzsLhHxmGWhtqpRNvSi3luXt00ydw29F5L',
       'channel' => 'pk_test_51K3fZbCdDYiPm1gGOxHfBEY17BERofPx7SC2wqWVuWadB9mwnIPq0opvcQVdph9USGft0B1qtCUSnVcmfDD3mryu00E8a3bUp5',
       'webhook_secret' => 'whsec_tQC8rqh4czx0VOxW4hhNZobgXdX4nKtv',
     ),
-    'github' => 
+    'github' =>
     array (
       'client_id' => NULL,
       'client_secret' => NULL,
       'redirect' => NULL,
     ),
-    'google' => 
+    'google' =>
     array (
       'client_id' => NULL,
       'client_secret' => NULL,
       'redirect' => NULL,
     ),
   ),
-  'session' => 
+  'session' =>
   array (
     'driver' => 'database',
     'lifetime' => 120,
@@ -1395,7 +1395,7 @@
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
-    'lottery' => 
+    'lottery' =>
     array (
       0 => 2,
       1 => 100,
@@ -1408,28 +1408,28 @@
     'same_site' => 'lax',
     'partitioned' => false,
   ),
-  'settings' => 
+  'settings' =>
   array (
-    'settings' => 
+    'settings' =>
     array (
       0 => 'App\\Settings\\TenantGeneralSettings',
     ),
     'setting_class_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\app\\Settings',
-    'migrations_paths' => 
+    'migrations_paths' =>
     array (
       0 => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\database\\settings',
     ),
     'default_repository' => 'database',
-    'repositories' => 
+    'repositories' =>
     array (
-      'database' => 
+      'database' =>
       array (
         'type' => 'App\\Settings\\Repositories\\TenantSettingsRepository',
         'model' => NULL,
         'table' => 'settings',
         'connection' => NULL,
       ),
-      'redis' => 
+      'redis' =>
       array (
         'type' => 'Spatie\\LaravelSettings\\SettingsRepositories\\RedisSettingsRepository',
         'connection' => NULL,
@@ -1438,74 +1438,74 @@
     ),
     'encoder' => NULL,
     'decoder' => NULL,
-    'cache' => 
+    'cache' =>
     array (
       'enabled' => false,
       'store' => NULL,
       'prefix' => NULL,
       'ttl' => NULL,
     ),
-    'global_casts' => 
+    'global_casts' =>
     array (
       'DateTimeInterface' => 'Spatie\\LaravelSettings\\SettingsCasts\\DateTimeInterfaceCast',
       'DateTimeZone' => 'Spatie\\LaravelSettings\\SettingsCasts\\DateTimeZoneCast',
       'Spatie\\LaravelData\\Data' => 'Spatie\\LaravelSettings\\SettingsCasts\\DataCast',
     ),
-    'auto_discover_settings' => 
+    'auto_discover_settings' =>
     array (
       0 => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\app\\Settings',
     ),
     'discovered_settings_cache_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\bootstrap/cache',
-    'extra_columns' => 
+    'extra_columns' =>
     array (
       0 => 'tenant_id',
     ),
-    'resolvers' => 
+    'resolvers' =>
     array (
-      'tenant_id' => 
+      'tenant_id' =>
       array (
         0 => 'App\\Settings\\Resolvers\\TenantResolver',
         1 => 'tenantId',
       ),
     ),
   ),
-  'settings-old' => 
+  'settings-old' =>
   array (
     'repository' => 'Spatie\\LaravelSettings\\SettingsRepositories\\DatabaseSettingsRepository',
     'default_repository' => 'Spatie\\LaravelSettings\\SettingsRepositories\\DatabaseSettingsRepository',
     'connection' => NULL,
     'table' => 'settings',
     'setting_class_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\app\\Settings',
-    'migrations_paths' => 
+    'migrations_paths' =>
     array (
       0 => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\database\\settings',
     ),
-    'extra_columns' => 
+    'extra_columns' =>
     array (
       0 => 'tenant_id',
     ),
-    'resolvers' => 
+    'resolvers' =>
     array (
-      'tenant_id' => 
+      'tenant_id' =>
       array (
         0 => 'App\\Settings\\Resolvers\\TenantResolver',
         1 => 'tenantId',
       ),
     ),
-    'settings' => 
+    'settings' =>
     array (
       0 => 'App\\Settings\\TenantGeneralSettings',
     ),
-    'repositories' => 
+    'repositories' =>
     array (
-      'database' => 
+      'database' =>
       array (
         'type' => 'Spatie\\LaravelSettings\\SettingsRepositories\\DatabaseSettingsRepository',
         'model' => NULL,
         'table' => NULL,
         'connection' => NULL,
       ),
-      'redis' => 
+      'redis' =>
       array (
         'type' => 'Spatie\\LaravelSettings\\SettingsRepositories\\RedisSettingsRepository',
         'connection' => NULL,
@@ -1514,40 +1514,40 @@
     ),
     'encoder' => NULL,
     'decoder' => NULL,
-    'cache' => 
+    'cache' =>
     array (
       'enabled' => false,
       'store' => NULL,
       'prefix' => NULL,
       'ttl' => NULL,
     ),
-    'global_casts' => 
+    'global_casts' =>
     array (
       'DateTimeInterface' => 'Spatie\\LaravelSettings\\SettingsCasts\\DateTimeInterfaceCast',
       'DateTimeZone' => 'Spatie\\LaravelSettings\\SettingsCasts\\DateTimeZoneCast',
       'Spatie\\LaravelData\\Data' => 'Spatie\\LaravelSettings\\SettingsCasts\\DataCast',
     ),
-    'auto_discover_settings' => 
+    'auto_discover_settings' =>
     array (
       0 => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\app\\Settings',
     ),
     'discovered_settings_cache_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\bootstrap/cache',
   ),
-  'usage' => 
+  'usage' =>
   array (
     'enabled' => true,
-    'unit_prices' => 
+    'unit_prices' =>
     array (
       'api_calls' => 0.001,
       'storage_gb' => 0.1,
       'active_users' => 2.0,
     ),
-    'routes' => 
+    'routes' =>
     array (
-      0 => 
+      0 =>
       array (
         'name' => 'filament.tenant.pages.*',
-        'http' => 
+        'http' =>
         array (
           0 => 'GET',
         ),
@@ -1556,10 +1556,10 @@
         'unit_price' => 0.0,
         'metadata' => NULL,
       ),
-      1 => 
+      1 =>
       array (
         'name' => 'filament.tenant.export*',
-        'http' => 
+        'http' =>
         array (
           0 => 'POST',
         ),
@@ -1569,41 +1569,41 @@
       ),
     ),
   ),
-  'blade-heroicons' => 
+  'blade-heroicons' =>
   array (
     'prefix' => 'heroicon',
     'fallback' => '',
     'class' => '',
-    'attributes' => 
+    'attributes' =>
     array (
     ),
   ),
-  'blade-icons' => 
+  'blade-icons' =>
   array (
-    'sets' => 
+    'sets' =>
     array (
     ),
     'class' => '',
-    'attributes' => 
+    'attributes' =>
     array (
     ),
     'fallback' => '',
-    'components' => 
+    'components' =>
     array (
       'disabled' => false,
       'default' => 'icon',
     ),
   ),
-  'cashier' => 
+  'cashier' =>
   array (
     'key' => 'pk_test_51K3fZbCdDYiPm1gGOxHfBEY17BERofPx7SC2wqWVuWadB9mwnIPq0opvcQVdph9USGft0B1qtCUSnVcmfDD3mryu00E8a3bUp5',
     'secret' => 'sk_test_51K3fZbCdDYiPm1gGXeyCMk126E6FJ7GFHsdUhVy5ABXELAeb1j6ROfgBRmrdPctvhzsLhHxmGWhtqpRNvSi3luXt00ydw29F5L',
     'path' => 'stripe',
-    'webhook' => 
+    'webhook' =>
     array (
       'secret' => 'whsec_tQC8rqh4czx0VOxW4hhNZobgXdX4nKtv',
       'tolerance' => 300,
-      'events' => 
+      'events' =>
       array (
         0 => 'customer.subscription.created',
         1 => 'customer.subscription.updated',
@@ -1618,10 +1618,10 @@
     'currency' => 'usd',
     'currency_locale' => 'en',
     'payment_notification' => NULL,
-    'invoices' => 
+    'invoices' =>
     array (
       'renderer' => 'Laravel\\Cashier\\Invoices\\DompdfInvoiceRenderer',
-      'options' => 
+      'options' =>
       array (
         'paper' => 'letter',
         'remote_enabled' => false,
@@ -1629,19 +1629,19 @@
     ),
     'logger' => NULL,
   ),
-  'livewire' => 
+  'livewire' =>
   array (
     'class_namespace' => 'App\\Livewire',
     'view_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\resources\\views/livewire',
     'layout' => 'components.layouts.app',
     'lazy_placeholder' => NULL,
-    'temporary_file_upload' => 
+    'temporary_file_upload' =>
     array (
       'disk' => NULL,
       'rules' => NULL,
       'directory' => NULL,
       'middleware' => NULL,
-      'preview_mimes' => 
+      'preview_mimes' =>
       array (
         0 => 'png',
         1 => 'gif',
@@ -1666,7 +1666,7 @@
     'render_on_redirect' => false,
     'legacy_model_binding' => false,
     'inject_assets' => true,
-    'navigate' => 
+    'navigate' =>
     array (
       'show_progress_bar' => true,
       'progress_bar_color' => '#2299dd',
@@ -1674,14 +1674,14 @@
     'inject_morph_markers' => true,
     'pagination_theme' => 'tailwind',
   ),
-  'excel' => 
+  'excel' =>
   array (
-    'exports' => 
+    'exports' =>
     array (
       'chunk_size' => 1000,
       'pre_calculate_formulas' => false,
       'strict_null_comparison' => false,
-      'csv' => 
+      'csv' =>
       array (
         'delimiter' => ',',
         'enclosure' => '"',
@@ -1693,7 +1693,7 @@
         'output_encoding' => '',
         'test_auto_detect' => true,
       ),
-      'properties' => 
+      'properties' =>
       array (
         'creator' => '',
         'lastModifiedBy' => '',
@@ -1706,15 +1706,15 @@
         'company' => '',
       ),
     ),
-    'imports' => 
+    'imports' =>
     array (
       'read_only' => true,
       'ignore_empty' => false,
-      'heading_row' => 
+      'heading_row' =>
       array (
         'formatter' => 'slug',
       ),
-      'csv' => 
+      'csv' =>
       array (
         'delimiter' => NULL,
         'enclosure' => '"',
@@ -1722,7 +1722,7 @@
         'contiguous' => false,
         'input_encoding' => 'guess',
       ),
-      'properties' => 
+      'properties' =>
       array (
         'creator' => '',
         'lastModifiedBy' => '',
@@ -1734,14 +1734,14 @@
         'manager' => '',
         'company' => '',
       ),
-      'cells' => 
+      'cells' =>
       array (
-        'middleware' => 
+        'middleware' =>
         array (
         ),
       ),
     ),
-    'extension_detector' => 
+    'extension_detector' =>
     array (
       'xlsx' => 'Xlsx',
       'xlsm' => 'Xlsx',
@@ -1760,35 +1760,35 @@
       'tsv' => 'Csv',
       'pdf' => 'Dompdf',
     ),
-    'value_binder' => 
+    'value_binder' =>
     array (
       'default' => 'Maatwebsite\\Excel\\DefaultValueBinder',
     ),
-    'cache' => 
+    'cache' =>
     array (
       'driver' => 'memory',
-      'batch' => 
+      'batch' =>
       array (
         'memory_limit' => 60000,
       ),
-      'illuminate' => 
+      'illuminate' =>
       array (
         'store' => NULL,
       ),
       'default_ttl' => 10800,
     ),
-    'transactions' => 
+    'transactions' =>
     array (
       'handler' => 'db',
-      'db' => 
+      'db' =>
       array (
         'connection' => NULL,
       ),
     ),
-    'temporary_files' => 
+    'temporary_files' =>
     array (
       'local_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\storage\\framework/cache/laravel-excel',
-      'local_permissions' => 
+      'local_permissions' =>
       array (
       ),
       'remote_disk' => NULL,
@@ -1796,137 +1796,137 @@
       'force_resync_remote' => NULL,
     ),
   ),
-  'blade-fontawesome' => 
+  'blade-fontawesome' =>
   array (
-    'brands' => 
+    'brands' =>
     array (
       'prefix' => 'fab',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'regular' => 
+    'regular' =>
     array (
       'prefix' => 'far',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'solid' => 
+    'solid' =>
     array (
       'prefix' => 'fas',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'duotone' => 
+    'duotone' =>
     array (
       'prefix' => 'fad',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'light' => 
+    'light' =>
     array (
       'prefix' => 'fal',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'thin' => 
+    'thin' =>
     array (
       'prefix' => 'fat',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'sharp-light' => 
+    'sharp-light' =>
     array (
       'prefix' => 'fal:sharp',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'sharp-regular' => 
+    'sharp-regular' =>
     array (
       'prefix' => 'far:sharp',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'sharp-solid' => 
+    'sharp-solid' =>
     array (
       'prefix' => 'fas:sharp',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'sharp-duotone-solid' => 
+    'sharp-duotone-solid' =>
     array (
       'prefix' => 'fad:sharp',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'sharp-thin' => 
+    'sharp-thin' =>
     array (
       'prefix' => 'fat:sharp',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
-    'custom' => 
+    'custom' =>
     array (
       'prefix' => 'fak',
       'fallback' => '',
       'class' => '',
-      'attributes' => 
+      'attributes' =>
       array (
       ),
     ),
   ),
-  'prism' => 
+  'prism' =>
   array (
-    'prism_server' => 
+    'prism_server' =>
     array (
-      'middleware' => 
+      'middleware' =>
       array (
       ),
       'enabled' => false,
     ),
     'request_timeout' => 30,
-    'providers' => 
+    'providers' =>
     array (
-      'openai' => 
+      'openai' =>
       array (
         'url' => 'https://api.openai.com/v1',
-        'api_key' => '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',
+        'api_key' => '',
         'organization' => NULL,
         'project' => NULL,
       ),
-      'anthropic' => 
+      'anthropic' =>
       array (
         'api_key' => '',
         'version' => '2023-06-01',
@@ -1934,50 +1934,50 @@
         'default_thinking_budget' => 1024,
         'anthropic_beta' => NULL,
       ),
-      'ollama' => 
+      'ollama' =>
       array (
         'url' => 'http://localhost:11434',
       ),
-      'mistral' => 
+      'mistral' =>
       array (
         'api_key' => '',
         'url' => 'https://api.mistral.ai/v1',
       ),
-      'groq' => 
+      'groq' =>
       array (
         'api_key' => '',
         'url' => 'https://api.groq.com/openai/v1',
       ),
-      'xai' => 
+      'xai' =>
       array (
         'api_key' => '',
         'url' => 'https://api.x.ai/v1',
       ),
-      'gemini' => 
+      'gemini' =>
       array (
         'api_key' => 'AIzaSyBvzqPJepwpqZTUOKmLRcSWL2j_myJG3Ng',
         'url' => 'https://generativelanguage.googleapis.com/v1beta/models',
       ),
-      'deepseek' => 
+      'deepseek' =>
       array (
         'api_key' => '',
         'url' => 'https://api.deepseek.com/v1',
       ),
-      'elevenlabs' => 
+      'elevenlabs' =>
       array (
         'api_key' => '',
         'url' => 'https://api.elevenlabs.io/v1/',
       ),
-      'voyageai' => 
+      'voyageai' =>
       array (
         'api_key' => '',
         'url' => 'https://api.voyageai.com/v1',
       ),
-      'openrouter' => 
+      'openrouter' =>
       array (
         'api_key' => '',
         'url' => 'https://openrouter.ai/api/v1',
-        'site' => 
+        'site' =>
         array (
           'http_referer' => NULL,
           'x_title' => NULL,
@@ -1985,18 +1985,18 @@
       ),
     ),
   ),
-  'theme' => 
+  'theme' =>
   array (
     'active' => NULL,
     'parent' => NULL,
     'base_path' => 'E:\\Extra\\Laravel\\Laravel-Filament-Starter-Kit\\themes',
   ),
-  'filament-tinyeditor' => 
+  'filament-tinyeditor' =>
   array (
-    'version' => 
+    'version' =>
     array (
       'tiny' => '7.3.0',
-      'language' => 
+      'language' =>
       array (
         'version' => '24.7.29',
         'package' => 'langs7',
@@ -2005,57 +2005,57 @@
     ),
     'provider' => 'cloud',
     'darkMode' => 'auto',
-    'skins' => 
+    'skins' =>
     array (
       'ui' => 'oxide',
       'content' => 'default',
     ),
-    'profiles' => 
+    'profiles' =>
     array (
-      'default' => 
+      'default' =>
       array (
         'plugins' => 'accordion autoresize codesample directionality advlist link image lists preview pagebreak searchreplace wordcount code fullscreen insertdatetime media table emoticons',
         'toolbar' => 'undo redo removeformat | fontfamily fontsize fontsizeinput font_size_formats styles | bold italic underline | rtl ltr | alignjustify alignleft aligncenter alignright | numlist bullist outdent indent | forecolor backcolor | blockquote table toc hr | image link media codesample emoticons | wordcount fullscreen',
         'upload_directory' => NULL,
       ),
-      'simple' => 
+      'simple' =>
       array (
         'plugins' => 'autoresize directionality emoticons link wordcount',
         'toolbar' => 'removeformat | bold italic | rtl ltr | numlist bullist | link emoticons',
         'upload_directory' => NULL,
       ),
-      'minimal' => 
+      'minimal' =>
       array (
         'plugins' => 'link wordcount',
         'toolbar' => 'bold italic link numlist bullist',
         'upload_directory' => NULL,
       ),
-      'full' => 
+      'full' =>
       array (
         'plugins' => 'accordion autoresize codesample directionality advlist autolink link image lists charmap preview anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media table emoticons help',
         'toolbar' => 'undo redo removeformat | fontfamily fontsize fontsizeinput font_size_formats styles | bold italic underline | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist outdent indent accordion | forecolor backcolor | blockquote table toc hr | image link anchor media codesample emoticons | visualblocks print preview wordcount fullscreen help',
         'upload_directory' => NULL,
       ),
     ),
-    'languages' => 
+    'languages' =>
     array (
     ),
-    'extra' => 
+    'extra' =>
     array (
-      'toolbar' => 
+      'toolbar' =>
       array (
       ),
     ),
   ),
-  'tinker' => 
+  'tinker' =>
   array (
-    'commands' => 
+    'commands' =>
     array (
     ),
-    'alias' => 
+    'alias' =>
     array (
     ),
-    'dont_alias' => 
+    'dont_alias' =>
     array (
       0 => 'App\\Nova',
     ),
