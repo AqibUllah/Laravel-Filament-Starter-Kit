@@ -137,6 +137,13 @@
       0 => 'Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider',
     ),
   ),
+  'laravel/ai' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Ai\\AiServiceProvider',
+    ),
+  ),
   'laravel/cashier' => 
   array (
     'providers' => 
@@ -187,6 +194,17 @@
       0 => 'Livewire\\LivewireServiceProvider',
     ),
   ),
+  'maatwebsite/excel' => 
+  array (
+    'aliases' => 
+    array (
+      'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
+    ),
+    'providers' => 
+    array (
+      0 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    ),
+  ),
   'malzariey/filament-daterangepicker-filter' => 
   array (
     'aliases' => 
@@ -233,11 +251,29 @@
       0 => 'Pest\\Laravel\\PestServiceProvider',
     ),
   ),
+  'prism-php/prism' => 
+  array (
+    'aliases' => 
+    array (
+      'PrismServer' => 'Prism\\Prism\\Facades\\PrismServer',
+    ),
+    'providers' => 
+    array (
+      0 => 'Prism\\Prism\\PrismServiceProvider',
+    ),
+  ),
   'pxlrbt/filament-activity-log' => 
   array (
     'providers' => 
     array (
       0 => '\\pxlrbt\\FilamentActivityLog\\FilamentActivityLogServiceProvider',
+    ),
+  ),
+  'pxlrbt/filament-excel' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'pxlrbt\\FilamentExcel\\FilamentExcelServiceProvider',
     ),
   ),
   'qirolab/laravel-themer' => 
