@@ -16,17 +16,16 @@ class SupportChat extends Page
 
 
     public $message = '';
-    public $messages = [];
 
-    public function mount(){
-        $this->messages = History::where('user_id', auth()->id())
+    public function getMessagesProperty(){
+        return History::orderBy('id', 'desc')->where('user_id', auth()->id())
         ->latest()
         ->limit(50)
         ->get()
         ->reverse()
         ->map(function ($message) {
             return new Message($message->role, $message->content);
-        })->toArray();
+        });
     }
 
     public function send()
