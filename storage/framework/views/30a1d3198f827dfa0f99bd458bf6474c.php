@@ -1033,4 +1033,4 @@
     </script>
     </body>
 </html>
-<?php /**PATH /Users/aqibullah/developement/Laravel/filament-saas-starter-kit/resources/views/welcome.blade.php ENDPATH**/ ?>
+<?php /**PATH E:\Extra\Laravel\Laravel-Filament-Starter-Kit\resources\views/welcome.blade.php ENDPATH**/ ?>
