@@ -2,11 +2,12 @@
 
 namespace App\Ai\Tools;
 
+use App\Enums\PriorityEnum;
+use App\Enums\TaskStatusEnum;
 use App\Models\Project;
 use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Tools\Request;
 use Stringable;
@@ -30,31 +31,33 @@ class CreateTaskTool implements Tool
 
         $project_for_task = $request['project_for_task'] ?? '';
         if(isset($project_for_task)){
-            $project_id = $this->findProject($project_for_task);
+            $project_id = $this->findProject($project_for_task)->id;
         }
 
-        $users_for_task = $request['users_for_task'] ?? '';
-        if(isset($project_for_task)){
-            $assigned_user_ids = $this->assigned_users($users_for_task);
-        }
+//        $assigned_to = $request['assigned_to'] ?? '';
+//        if(isset($assigned_to)){
+//            $currentTeam = Filament::getTenant();
+//            $assigned_to = $currentTeam->members()->where('email','LIKE',"%{$assigned_to}%")->first()?->id;
+////            $assigned_to = $this->assigned_user($request['assigned_to']);
+//        }
 
         $title = $request['title'] ?? '';
         $description = $request['description'] ?? '';
         $due_date = $request['due_date'] ?? '';
-        $priority = $request['priority'] ?? '';
-        $status = $request['status'] ?? '';
+        $priority = $request['priority'] ?? PriorityEnum::Medium;
+        $status = $request['status'] ?? TaskStatusEnum::Pending;
         $estimated_hours = $request['estimated_hours'] ?? '';
         $actual_hours = $request['actual_hours'] ?? '';
         $tags = $request['tags'] ?? '';
         $team_id = filament()->getTenant();
 
-        $project = Task::create([
-            'assigned_by' => Auth::id(),
+        return Task::create([
             'title' => $title,
             'description' => $description ?? null,
             'due_date' => Carbon::createFromDate($due_date) ?? null,
-            'assigned_to' => $assigned_user_ids ?? null,
-            'priority' => $priority ?? null,
+            'assigned_by' => auth()->id(),
+            'assigned_to' => 2,
+            'priority' => $priority,
             'status' => $status ?? null,
             'estimated_hours' => (double)$estimated_hours ?? null,
             'actual_hours' => (double)$actual_hours ?? null,
@@ -62,19 +65,19 @@ class CreateTaskTool implements Tool
             'team_id' => $team_id ?? null,
             'project_id' => $project_id ?? null,
         ]);
-
-        return $project;
     }
 
     public function findProject($project_name): Project
     {
-        return Project::where('name','LIKE',"%{$project_name}%")->firstOrFail();
+        return Project::where('name','LIKE',"%{$project_name}%")
+            ->where('team_id', Filament::getTenant()?->id)
+            ->firstOrFail();
     }
 
-    public function assigned_users($user_name): Project
+    public function assigned_user($user_email): ?int
     {
         $currentTeam = Filament::getTenant();
-        return $currentTeam->members()->where('name','LIKE',"%{$user_name}%")->pluck('user_id');
+        return $currentTeam->members()->where('email','LIKE',"%{$user_email}%")->first()?->id;
     }
 
     /**
@@ -86,8 +89,6 @@ class CreateTaskTool implements Tool
             'title' => $schema->string()->required(),
             'description' => $schema->string()->nullable(),
             'due_date' => $schema->string()->nullable(),
-            'assigned_by' => $schema->integer()->nullable(),
-            'assigned_to' => $schema->array()->required(),
             'priority' => $schema->string()->nullable(),
             'estimated_hours' => $schema->integer()->nullable(),
             'actual_hours' => $schema->integer()->nullable(),
