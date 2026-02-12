@@ -2,6 +2,8 @@
 
 namespace App\Ai\Agents;
 
+use App\Ai\Tools\CreateProjectTool;
+use App\Ai\Tools\CreateTaskTool;
 use App\Ai\Tools\ProjectTool;
 use App\Models\History;
 use App\Models\User;
@@ -64,6 +66,8 @@ class SupportBot implements Agent, Conversational, HasTools
     {
         return [
             new ProjectTool,
+            new CreateProjectTool,
+            new CreateTaskTool
         ];
     }
 }
