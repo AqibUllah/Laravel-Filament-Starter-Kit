@@ -48,7 +48,15 @@
     }
 
     #chat-container {
+        /* Use 80% of the dynamic viewport height, or whatever fits your UI */
+        height: 80dvh;
+
+        /* Ensures it doesn't get ridiculously small on tiny phones */
+        min-height: 300px;
+
+        /* Standard styling */
         scroll-behavior: smooth;
+        overflow-y: auto;
     }
 
 
@@ -60,19 +68,17 @@
     <div id="chat-container"
          class="flex-1 overflow-y-auto p-6 space-y-4">
 
-        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $this->messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
             <!-- User Message -->
             <!--[if BLOCK]><![endif]--><?php if($chat->role->value == 'user'): ?>
-            <div class="flex justify-end">
-                <div class="bg-primary-600 text-white px-4 py-2 rounded-2xl max-w-lg">
-                        <?php echo e($chat->content); ?>
+                <div class="flex justify-end">
+                    <div class="bg-primary-600 text-white px-4 py-2 rounded-2xl max-w-lg">
+                            <?php echo e($chat->content); ?>
 
                     </div>
                 </div>
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                <!-- AI Response -->
-            <!--[if BLOCK]><![endif]--><?php if($chat->role->value == 'assistant'): ?>
+            <?php else: ?>
                 <div class="flex justify-start">
                     <div class="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-2xl max-w-lg">
                         <?php echo e($chat->content); ?>
@@ -95,9 +101,9 @@
 
     </div>
 
-    <div class="border-t border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 sticky bottom-0">
-        <div class="max-w-4xl mx-auto">
-            <form wire:submit.prevent="send" class="relative flex items-end gap-2 shadow-sm border border-gray-300 dark:border-gray-600 rounded-2xl bg-gray-50 dark:bg-gray-800 focus-within:ring-1 focus-within:ring-primary-500 transition-all p-2">
+    <div class="bg-white dark:bg-gray-900 sticky bottom-0">
+        <div class="max-w-full mx-auto">
+            <form wire:submit.prevent="send" class="relative flex items-end gap-2 shadow-sm rounded-tl-none rounded-tr-none border border-gray-300 dark:border-gray-800 rounded-xl bg-gray-50 dark:bg-gray-800 focus-within:ring-1 focus-within:ring-primary-500 transition-all p-1">
 
                 <textarea
                     wire:model.defer="message"
@@ -111,14 +117,14 @@
                 <div class="flex items-center pr-2 pb-1">
                     <?php if (isset($component)) { $__componentOriginal6330f08526bbb3ce2a0da37da512a11f = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal6330f08526bbb3ce2a0da37da512a11f = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament::components.button.index','data' => ['type' => 'submit','size' => 'sm','color' => 'primary','class' => 'rounded-lg']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament::components.button.index','data' => ['type' => 'submit','size' => 'lg','color' => 'primary','class' => 'rounded-lg']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('filament::button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['type' => 'submit','size' => 'sm','color' => 'primary','class' => 'rounded-lg']); ?>
+<?php $component->withAttributes(['type' => 'submit','size' => 'lg','color' => 'primary','class' => 'rounded-lg']); ?>
                         <?php if (isset($component)) { $__componentOriginalbef7c2371a870b1887ec3741fe311a10 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalbef7c2371a870b1887ec3741fe311a10 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'filament::components.loading-indicator','data' => ['wire:loading' => true,'wire:target' => 'send','class' => 'h-5 w-5']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -174,10 +180,6 @@
 <?php endif; ?>
                 </div>
             </form>
-
-            <p class="mt-2 text-center text-[10px] text-gray-500">
-                Press Enter to send. AI can make mistakes.
-            </p>
         </div>
     </div>
 

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Ai\Agents\SupportBot;
+use App\Models\History;
 use App\Models\SupportChat;
 
 class SupportChatService
@@ -13,6 +14,11 @@ class SupportChatService
 
         $conversation = $bot->forUser($user); // bind to user
 
-        return $conversation->prompt($message);
+        $response = $conversation->prompt($message);
+
+        History::where('conversation_id',$response->conversationId)
+        ->update(['team_id' => filament()->getTenant()?->id]);
+
+        return $response;
     }
 }

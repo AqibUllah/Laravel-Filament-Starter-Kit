@@ -19,6 +19,7 @@ class SupportChat extends Page
     public function getMessagesProperty(){
         return History::orderBy('id', 'desc')->where('user_id', auth()->id())
         ->latest()
+        ->current_team()
         ->limit(50)
         ->get()
         ->reverse()

@@ -23,6 +23,7 @@ return new class extends AiMigration
         Schema::create('agent_conversation_messages', function (Blueprint $table) {
             $table->string('id', 36)->primary();
             $table->string('conversation_id', 36)->index();
+            $table->foreignId('team_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('user_id');
             $table->string('agent');
             $table->string('role', 25);
