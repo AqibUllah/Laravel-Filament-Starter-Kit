@@ -63,7 +63,7 @@ class SupportBot implements Agent, Conversational, HasTools
     public function tools(): iterable
     {
         return [
-            new ProjectTool
+            new ProjectTool,
         ];
     }
 }

@@ -142,7 +142,6 @@
         Livewire.on('scrollToBottom', () => {
             const container = document.getElementById('chat-container');
 
-            console.log(container)
             if (!container) return;
 
 
