@@ -78,11 +78,32 @@ class TaskListTool implements Tool
 
         $output = "Here are the tasks:\n\n";
 
+        $html = '<table class="min-w-full border border-gray-200 text-sm">';
+        $html .= '<thead class="bg-gray-100">';
+        $html .= '<tr>
+                <th class="border px-3 py-2 text-left">Title</th>
+                <th class="border px-3 py-2 text-left">Status</th>
+                <th class="border px-3 py-2 text-left">Priority</th>
+                <th class="border px-3 py-2 text-left">Due Date</th>
+              </tr>';
+        $html .= '</thead><tbody>';
+
         foreach ($tasks as $task) {
-            $output .= "- {$task->title} (Status: {$task->status->value}, Priority: {$task->priority->value})\n";
+            $html .= "<tr>
+                    <td class='border px-3 py-2'>{$task->title}</td>
+                    <td class='border px-3 py-2'>{$task->status->value}</td>
+                    <td class='border px-3 py-2'>{$task->priority->value}</td>
+                    <td class='border px-3 py-2'>" . optional($task->due_date)?->format('Y-m-d') . "</td>
+                  </tr>";
         }
 
-        return $output;
+        $html .= '</tbody></table>';
+
+//        foreach ($tasks as $task) {
+//            $output .= "- {$task->title} (Status: {$task->status->value}, Priority: {$task->priority->value})\n";
+//        }
+
+        return $html;
     }
 
     /**
