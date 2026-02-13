@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Ai\Agents\SupportBot;
 use App\Models\History;
-use App\Models\SupportChat;
 
 class SupportChatService
 {
