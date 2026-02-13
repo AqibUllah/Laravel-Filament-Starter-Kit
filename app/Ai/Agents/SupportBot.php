@@ -2,6 +2,7 @@
 
 namespace App\Ai\Agents;
 
+use App\Ai\Tools\CreateBlogTool;
 use App\Ai\Tools\CreateProjectTool;
 use App\Ai\Tools\CreateTaskTool;
 use App\Ai\Tools\ProjectSearch;
@@ -72,6 +73,8 @@ class SupportBot implements Agent, Conversational, HasTools
             new TaskListTool,
             new CreateTaskTool,
             new UpdateTaskTool,
+
+            new CreateBlogTool
         ];
     }
 }
