@@ -4,7 +4,9 @@ namespace App\Ai\Agents;
 
 use App\Ai\Tools\CreateProjectTool;
 use App\Ai\Tools\CreateTaskTool;
-use App\Ai\Tools\ProjectTool;
+use App\Ai\Tools\ProjectSearch;
+use App\Ai\Tools\TaskListTool;
+use App\Ai\Tools\UpdateTaskTool;
 use App\Models\History;
 use App\Models\User;
 use Laravel\Ai\Attributes\Provider;
@@ -65,9 +67,11 @@ class SupportBot implements Agent, Conversational, HasTools
     public function tools(): iterable
     {
         return [
-            new ProjectTool,
+            new ProjectSearch,
             new CreateProjectTool,
-            new CreateTaskTool
+            new TaskListTool,
+            new CreateTaskTool,
+            new UpdateTaskTool,
         ];
     }
 }

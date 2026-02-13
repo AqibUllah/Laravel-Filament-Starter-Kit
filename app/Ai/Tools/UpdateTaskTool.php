@@ -15,7 +15,7 @@ use Laravel\Ai\Tools\Request;
 use Stringable;
 use Filament\Facades\Filament;
 
-class CreateTaskTool implements Tool
+class UpdateTaskTool implements Tool
 {
     /**
      * Get the description of the tool's purpose.
@@ -30,7 +30,27 @@ class CreateTaskTool implements Tool
      */
     public function handle(Request $request): Stringable|string
     {
-        $project_for_task = null;
+
+        $task_title = $request['task'] ?? null;
+        if (!$task_title) {
+            return "Task title is required.";
+        }
+
+        $tenant = Filament::getTenant();
+        $task = $tenant->tasks()
+            ->where('title', 'LIKE', "%{$task_title}%")
+            ->first();
+        if (!$task) {
+            return "Task '{$task_title}' not found in this team.";
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Resolve Related Models
+        |--------------------------------------------------------------------------
+        */
+
+        $project_for_task = $task->project_id;
         if(!empty($request['project_for_task'])){
             $project = $this->findProject($request['project_for_task']);
             if(isset($project['error']) and !empty($project['error'])){
@@ -39,7 +59,7 @@ class CreateTaskTool implements Tool
             $project_for_task = $project['id'];
         }
 
-        $user_for_task = null;
+        $user_for_task = $task->assigned_to;
         if(!empty($request['user_for_task'])){
             $find_user = $this->assigned_user($request['user_for_task']);
             if(isset($find_user['error']) and !empty($find_user['error'])){
@@ -48,46 +68,75 @@ class CreateTaskTool implements Tool
             $user_for_task = $find_user['id'];
         }
 
-        $user = (int)Auth::id();
+        /*
+        |--------------------------------------------------------------------------
+        | Build Update Payload
+        |--------------------------------------------------------------------------
+        */
 
-        if(!$request['title']){
-            return "Title for new task is required";
+        $updates = [];
+
+        if (!empty($request['title'])) {
+            $updates['title'] = $request['title'];
         }
 
-        if(!$request['user_for_task']){
-            return "User is required because i'll assign this task to a user so let me know user for task";
+        if (!empty($request['description'])) {
+            $updates['description'] = $request['description'];
         }
 
-        $title = $request['title'];
-        $description = $request['description'] ?? '';
-        $due_date = $request['due_date'] ?? '';
-        $priority = $request['priority'] ?? PriorityEnum::Medium;
-        $status = $request['status'] ?? TaskStatusEnum::Pending;
-        $estimated_hours = $request['estimated_hours'] ?? '';
-        $actual_hours = $request['actual_hours'] ?? '';
-        $tags = $request['tags'] ?? '';
-        $team_id = filament()->getTenant();
+        if (!empty($request['due_date'])) {
+            try {
+                $updates['due_date'] = Carbon::parse($request['due_date']);
+            } catch (\Exception $e) {
+                return "Invalid due date format.";
+            }
+        }
 
-        $task = Task::create([
-            'title' => $title,
-            'description' => $description ?? null,
-            'due_date' => Carbon::parse($due_date) ?? null,
-            'assigned_by' => $user,
-            'assigned_to' => $user_for_task,
-            'priority' => $priority,
-            'status' => $status ?? null,
-            'estimated_hours' => (double)$estimated_hours ?? null,
-            'actual_hours' => (double)$actual_hours ?? null,
-            'tags' => $tags ?? null,
-            'team_id' => $team_id ?? null,
-            'project_id' => $project_for_task ?? null,
-        ]);
+        if (!empty($request['priority'])) {
+            $updates['priority'] = $request['priority'];
+        }
+
+        if (!empty($request['status'])) {
+            $updates['status'] = $request['status'];
+        }
+
+        if (isset($request['estimated_hours']) && $request['estimated_hours'] !== null && $request['estimated_hours'] !== '') {
+            $updates['estimated_hours'] = (double) $request['estimated_hours'];
+        }
+
+        if (isset($request['actual_hours']) && $request['actual_hours'] !== null && $request['actual_hours'] !== '') {
+            $updates['actual_hours'] = (double) $request['actual_hours'];
+        }
+
+        if (!empty($request['tags']) && is_array($request['tags'])) {
+            $updates['tags'] = $request['tags'];
+        }
+
+        if ($project_for_task) {
+            $updates['project_id'] = $project_for_task;
+        }
+
+        if ($user_for_task) {
+            $updates['assigned_to'] = $user_for_task;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Perform Update
+        |--------------------------------------------------------------------------
+        */
+
+        if (empty($updates)) {
+            return "No valid fields provided to update.";
+        }
+
+        $task->update($updates);
 
         Notification::make()
-            ->title('Task Created')
-            ->body("Task '{$task->title}' created successfully with status '{$task->status->value}'.")
-            ->success()
-            ->color('success')
+            ->title('Task Updated')
+            ->body("Task '{$task->title}' updated successfully with status '{$task->status->value}'.")
+            ->info()
+            ->color('primary')
             ->send();
 
         // logging activity
@@ -95,10 +144,10 @@ class CreateTaskTool implements Tool
             ->causedBy(auth()->user())
             ->performedOn($task)
             ->withProperties(['updated_by_ai' => true])
-            ->log('Task created via AI tool');
+            ->log('Task updated via AI tool');
 
-        return "Task '{$task->title}' created successfully with status '{$task->status->value}'.";
 
+        return "Task '{$task->title}' updated successfully with status '{$task->status->value}'.";
     }
 
     public function findProject($project_name): ?array
@@ -106,10 +155,7 @@ class CreateTaskTool implements Tool
         $tenant = Filament::getTenant();
 
         if (!$tenant) {
-            return [
-                'id' => null,
-                'error' => 'No Team found',
-            ];
+            return null;
         }
 
         $projects = Project::query()
@@ -185,9 +231,10 @@ class CreateTaskTool implements Tool
     public function schema(JsonSchema|\Illuminate\JsonSchema\JsonSchema $schema): array
     {
         return [
+            'task' => $schema->string()->nullable(),
             'project_for_task' => $schema->string()->nullable(),
-            'user_for_task' => $schema->string()->required(),
-            'title' => $schema->string()->required(),
+            'user_for_task' => $schema->string()->nullable(),
+            'title' => $schema->string()->nullable(),
             'description' => $schema->string()->nullable(),
             'due_date' => $schema->string()->nullable(),
             'priority' => $schema->string()->nullable(),

@@ -8,7 +8,7 @@ use App\Models\SupportChat;
 
 class SupportChatService
 {
-    public function send(string $message, $user, $tenant = null)
+    public function send(string $message, $user)
     {
         $bot = new SupportBot($user);
 

@@ -8,7 +8,7 @@ use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Tools\Request;
 use Stringable;
 
-class ProjectTool implements Tool
+class ProjectSearch implements Tool
 {
     /**
      * Get the description of the tool's purpose.
@@ -24,7 +24,7 @@ class ProjectTool implements Tool
     public function handle(Request $request): Stringable|string
     {
         // Example: search by keyword
-        $keyword = $arguments['keyword'] ?? '';
+        $keyword = $request['keyword'] ?? '';
 
         return Project::query()
             ->whereNested(

@@ -40,8 +40,8 @@ class SupportChat extends Page
 
         $this->message = '';
 
-        $chat = app(SupportChatService::class)
-            ->send($prompt, auth()->user(), tenant: filament()->getTenant());
+        app(SupportChatService::class)
+            ->send($prompt, auth()->user());
 
     }
 
