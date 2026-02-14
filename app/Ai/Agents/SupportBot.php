@@ -5,8 +5,10 @@ namespace App\Ai\Agents;
 use App\Ai\Tools\CreateBlogTool;
 use App\Ai\Tools\CreateProjectTool;
 use App\Ai\Tools\CreateTaskTool;
+use App\Ai\Tools\GenerateImageTool;
 use App\Ai\Tools\ProjectSearch;
 use App\Ai\Tools\TaskListTool;
+use App\Ai\Tools\TextToAudioTool;
 use App\Ai\Tools\UpdateTaskTool;
 use App\Models\History;
 use App\Models\User;
@@ -26,7 +28,7 @@ class SupportBot implements Agent, Conversational, HasTools
 {
     use Promptable,RemembersConversations;
 
-    public function __construct(public User $user) {}
+    public function __construct(public User $user,public $prompt) {}
 
     /**
      * Get the instructions that the agent should follow.
@@ -35,7 +37,7 @@ class SupportBot implements Agent, Conversational, HasTools
     {
         return <<<EOT
             You are a professional SaaS support assistant.
-
+            You can create project,task and generate images and audios and also get records of projects and tasks
             Rules:
             - Be polite and professional.
             - Give short and clear answers.
@@ -74,7 +76,9 @@ class SupportBot implements Agent, Conversational, HasTools
             new CreateTaskTool,
             new UpdateTaskTool,
 
-            new CreateBlogTool
+            new CreateBlogTool,
+            new GenerateImageTool($this->prompt),
+            new TextToAudioTool($this->prompt)
         ];
     }
 }
