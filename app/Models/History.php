@@ -21,6 +21,6 @@ class History extends Model
 
     #[Scope]
     public function current_team(Builder $q){
-        $q->where('team_id',filament()->getTenant()?->id);
+       return $q->where('team_id',filament()->getTenant()?->id);
     }
 }
