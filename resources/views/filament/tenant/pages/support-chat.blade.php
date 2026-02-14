@@ -185,7 +185,7 @@
                     />
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Support Chat</h2>
                 </div>
-                <span class="text-sm text-gray-500 dark:text-gray-400">|</span>
+{{--                <span class="text-sm text-gray-500 dark:text-gray-400">|</span>--}}
 {{--                <div class="mode-selector">--}}
 {{--                    <select wire:model.live="selectedMode" wire:change="changeMode($event.target.value)">--}}
 {{--                        <option value="chat">💬 General Chat</option>--}}
@@ -263,7 +263,7 @@
                         class="h-12 w-12 mx-auto mb-3 text-gray-400 dark:text-gray-600"
                     />
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-1">Welcome to Support Chat</h3>
-                    <p class="text-sm max-w-md">
+                    <p class="text-sm max-w-full">
                         @switch($selectedMode)
                             @case('image')
                                 Describe the image you want to generate, and I'll create it for you.
