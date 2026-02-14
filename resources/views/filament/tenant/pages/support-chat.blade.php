@@ -281,7 +281,8 @@
                                 What would you like me to translate?
                                 @break
                             @default
-                                How can I help you today?
+                                How can I help you today?<br>
+                                I can create Project, Task, Blog and generate Image and Audios for you
                         @endswitch
                     </p>
                 </div>
