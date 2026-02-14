@@ -62,21 +62,13 @@ class CreateBlogTool implements Tool
         - Full detailed content in HTML format.
         ";
 
-        $bot = new SupportBot($user);
+        $bot = new SupportBot($user,$prompt);
         $conversation = $bot->forUser($user);
         $content = $conversation->prompt($prompt);
 
 
         $featured_image_prompt = "
         generate a {$tone} and visually appealing feature image for a blog post about '{$topic}'.";
-//        $image = Image::of($featured_image_prompt)
-//            ->quality('high')
-//            ->landscape()
-//            ->timeout(120)
-//            ->generate();
-//
-//        $image_name = time().rand(0,999999);
-//        $path = $image->storeAs("blogs/{$image_name}.jpg");
 
         // Basic parsing (you can improve later)
         $title = $topic;
@@ -86,7 +78,6 @@ class CreateBlogTool implements Tool
             'team_id' => $team->id,
             'user_id' => $user->id,
             'title' => $title,
-//            'featured_image' => $path,
             'slug' => Str::slug($title) . '-' . uniqid(),
             'excerpt' => $excerpt,
             'content' => $content,
@@ -121,7 +112,6 @@ class CreateBlogTool implements Tool
         return [
             'tone' => $schema->string()->nullable(),
             'topic' => $schema->string()->required(),
-            'featured_image' => $schema->string()->nullable(),
             'excerpt' => $schema->string()->nullable(),
             'content' => $schema->string()->nullable(),
             'published_at' => $schema->string()->nullable(),
