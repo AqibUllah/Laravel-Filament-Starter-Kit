@@ -168,7 +168,7 @@ class CreateProjectTool implements Tool
             'client_phone' => $schema->string()->nullable(),
             'estimated_hours' => $schema->integer()->nullable(),
             'actual_hours' => $schema->integer()->nullable(),
-            'tags' => $schema->array()->nullable(),
+            'tags' => $schema->string()->nullable(),
             'notes' => $schema->string()->nullable(),
         ];
     }
