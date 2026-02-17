@@ -39,6 +39,8 @@ class DatabaseSeeder extends Seeder
             CustomEmailTemplateSeeder::class,
             EmailTemplateSeeder::class,
             EmailTemplateThemeSeeder::class,
+            CategorySeeder::class,
+            ProductSeeder::class,
         ]);
 
     }

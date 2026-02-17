@@ -33,10 +33,26 @@ class FeatureLimiterService
 
     public function canCreateProject(): bool
     {
-        $currentTasks = $this->tenant->projects()->count();
-        $maxTasks = $this->getFeatureLimit('Projects');
+        $currentProjects = $this->tenant->projects()->count();
+        $maxProjects = $this->getFeatureLimit('Projects');
 
-        return $currentTasks < $maxTasks;
+        return $currentProjects < $maxProjects;
+    }
+
+    public function canCreateProduct(): bool
+    {
+        $currentProducts = $this->tenant->products()->count();
+        $maxProducts = $this->getFeatureLimit('Products');
+
+        return $currentProducts < $maxProducts;
+    }
+
+    public function canCreateCategory(): bool
+    {
+        $currentCategories = $this->tenant->categories()->count();
+        $maxCategories = $this->getFeatureLimit('Categories');
+
+        return $currentCategories < $maxCategories;
     }
 
     public function canUseStorage(int $additionalBytes = 0): bool
@@ -89,7 +105,7 @@ class FeatureLimiterService
     // Clear cache when features change
     public function clearCache(): void
     {
-        $features = ['max_users', 'max_tasks', 'max_storage'];
+        $features = ['max_users', 'max_tasks', 'max_storage', 'max_products', 'max_categories'];
 
         foreach ($features as $feature) {
             Cache::forget("tenant_{$this->tenant->id}_feature_{$feature}");
@@ -102,6 +118,8 @@ class FeatureLimiterService
             'Users' => $this->canCreateUser(),
             'Projects' => $this->canCreateProject(),
             'Tasks' => $this->canCreateTask(),
+            'Products' => $this->canCreateProduct(),
+            'Categories' => $this->canCreateCategory(),
             default => false,
         };
     }
