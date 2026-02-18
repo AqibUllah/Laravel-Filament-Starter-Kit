@@ -95,5 +95,20 @@ class CategorySeeder extends Seeder
                 ]));
             }
         }
+
+        // Create additional categories to reach the limit of 20
+        $currentCategoryCount = Category::where('team_id', $team->id)->count();
+        $categoriesToCreate = max(0, 20 - $currentCategoryCount);
+
+        for ($i = 0; $i < $categoriesToCreate; $i++) {
+            Category::create([
+                'name' => 'Category ' . ($i + 1),
+                'slug' => 'category-' . ($i + 1),
+                'description' => 'Additional category ' . ($i + 1),
+                'team_id' => $team->id,
+                'is_active' => true,
+                'sort_order' => rand(1, 20),
+            ]);
+        }
     }
 }

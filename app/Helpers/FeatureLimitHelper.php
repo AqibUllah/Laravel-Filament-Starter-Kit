@@ -78,6 +78,8 @@ class FeatureLimitHelper
                 ->count('user_id'),
             'Projects' => $team->projects()->count(),
             'Tasks' => $team->tasks()->count(),
+            'Products' => $team->products()->count(),
+            'Categories' => $team->categories()->count(),
             'Storage' => self::getStorageUsage($team),
             default => 0,
         };
@@ -113,6 +115,8 @@ class FeatureLimitHelper
             'Users' => 'User Limit Reached',
             'Projects' => 'Project Limit Reached',
             'Tasks' => 'Task Limit Reached',
+            'Products' => 'Product Limit Reached',
+            'Categories' => 'Category Limit Reached',
             'Storage' => 'Storage Limit Reached',
             default => 'Limit Reached',
         };

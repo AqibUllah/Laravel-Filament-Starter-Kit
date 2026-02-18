@@ -6,8 +6,10 @@ use App\Filament\Tenant\Resources\Categories\Pages\CreateCategory;
 use App\Filament\Tenant\Resources\Categories\Pages\EditCategory;
 use App\Filament\Tenant\Resources\Categories\Pages\ListCategories;
 use App\Filament\Tenant\Resources\Categories\Pages\ViewCategory;
+use App\Helpers\FeatureLimitHelper;
 use App\Models\Category;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -99,6 +101,9 @@ class CategoryResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $team = Filament::getTenant();
+        $count = $team->categories()->count();
+
         return $table
             ->columns([
                 ImageColumn::make('image')
@@ -149,7 +154,8 @@ class CategoryResource extends Resource
                 ]),
             ])
             ->reorderable('sort_order')
-            ->defaultSort('sort_order');
+            ->defaultSort('sort_order')
+            ->contentFooter(fn () => FeatureLimitHelper::alertIfExceeded('Categories', $count, route('filament.tenant.pages.plans', ['tenant' => $team]), $team));
     }
 
     public static function getPages(): array

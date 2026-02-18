@@ -110,8 +110,11 @@ class ProductSeeder extends Seeder
             }
         }
 
-        // Create some additional random products
-        for ($i = 0; $i < 20; $i++) {
+        // Create additional random products to reach the limit
+        $currentProductCount = Product::where('team_id', $team->id)->count();
+        $productsToCreate = max(0, 50 - $currentProductCount);
+        
+        for ($i = 0; $i < $productsToCreate; $i++) {
             $category = $categories->random();
             
             Product::create([
