@@ -8,6 +8,7 @@ use App\Policies\ProjectPolicy;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
+// Helper class for testing
 class StubUser extends AuthUser
 {
     public bool $canValue = false;
