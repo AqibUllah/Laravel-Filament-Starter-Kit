@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             TeamUserSeeder::class,
             RolePermissionSeeder::class,
             TaskSeeder::class,
+            ProjectSeeder::class,
             PlanSeeder::class,
             PlanFeatureSeeder::class,
             CouponSeeder::class,

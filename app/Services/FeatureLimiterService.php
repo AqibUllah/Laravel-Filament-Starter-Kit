@@ -17,7 +17,10 @@ class FeatureLimiterService
 
     public function canCreateUser(): bool
     {
-        $currentUsers = $this->tenant->members()->count();
+        $currentUsers = \DB::table('team_user')
+            ->where('team_id', $this->tenant->id)
+            ->distinct('user_id')
+            ->count('user_id');
         $maxUsers = $this->getFeatureLimit('Users');
 
         return $currentUsers < $maxUsers;
@@ -65,7 +68,10 @@ class FeatureLimiterService
 
     public function getRemainingUsers(): int
     {
-        $currentUsers = $this->tenant->members()->count();
+        $currentUsers = \DB::table('team_user')
+            ->where('team_id', $this->tenant->id)
+            ->distinct('user_id')
+            ->count('user_id');
         $maxUsers = $this->getFeatureLimit('max_users');
 
         return max(0, $maxUsers - $currentUsers);

@@ -12,6 +12,7 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        Task::factory(50)->create();
+        // Create 950 additional tasks to reach the limit of 1000
+        Task::factory(950)->create();
     }
 }

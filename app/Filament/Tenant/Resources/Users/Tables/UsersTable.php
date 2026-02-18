@@ -22,7 +22,10 @@ class UsersTable
 
         // Check plan limit
         $limit = $team->featureValue('Users', 0);
-        $count = $team->members()->count();
+        $count = \DB::table('team_user')
+            ->where('team_id', $team->id)
+            ->distinct('user_id')
+            ->count('user_id');
         $limitReached = $limit && $count >= $limit;
 
         return $table

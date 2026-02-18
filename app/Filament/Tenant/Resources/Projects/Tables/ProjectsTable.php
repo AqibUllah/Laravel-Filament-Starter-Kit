@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources\Projects\Tables;
 
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
+use App\Helpers\FeatureLimitHelper;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
@@ -29,6 +30,10 @@ class ProjectsTable
     public static function configure(Table $table): Table
     {
         $currentTeam = Filament::getTenant();
+
+        // Check plan limit
+        $limit = $currentTeam->featureValue('Projects', 0);
+        $count = $currentTeam->projects()->count();
 
         return $table
             ->columns([
@@ -256,6 +261,7 @@ class ProjectsTable
                         }),
                 ]),
             ])
+            ->contentFooter(fn () => FeatureLimitHelper::alertIfExceeded('Projects', $count, route('filament.tenant.pages.plans', ['tenant' => $currentTeam]), $currentTeam))
             ->defaultSort('created_at', 'desc')
             ->striped()
             ->paginated([10, 25, 50, 100]);

@@ -188,7 +188,7 @@ class TasksTable
                 ]),
             ])
             ->defaultSort('due_date', 'asc')
-            ->contentFooter(fn () => FeatureLimitHelper::alertIfExceeded('Tasks', $count, route('filament.tenant.pages.plans', ['tenant' => filament()->getTenant()])));
+            ->contentFooter(fn () => FeatureLimitHelper::alertIfExceeded('Tasks', $count, route('filament.tenant.pages.plans', ['tenant' => $team]), $team));
     }
 
     public static function canCreate(): bool
