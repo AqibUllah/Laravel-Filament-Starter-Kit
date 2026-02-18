@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Project;
+use App\Models\Team;
 use App\Policies\ProjectPolicy;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
 class StubUser extends AuthUser
