@@ -1,0 +1,14 @@
+{
+    "agents": [
+        "cursor",
+        "phpstorm"
+    ],
+    "editors": [
+        "cursor",
+        "phpstorm",
+        "vscode"
+    ],
+    "guidelines": [
+        "laravel/ai"
+    ]
+}

@@ -6,6 +6,7 @@ use App\Ai\Tools\CreateBlogTool;
 use App\Ai\Tools\CreateProjectTool;
 use App\Ai\Tools\CreateTaskTool;
 use App\Ai\Tools\GenerateImageTool;
+use App\Ai\Tools\ProjectAnalyticsTool;
 use App\Ai\Tools\ProjectSearch;
 use App\Ai\Tools\TaskListTool;
 use App\Ai\Tools\TextToAudioTool;
@@ -75,7 +76,7 @@ class SupportBot implements Agent, Conversational, HasTools
             new TaskListTool,
             new CreateTaskTool,
             new UpdateTaskTool,
-
+            new ProjectAnalyticsTool,
             new CreateBlogTool,
             new GenerateImageTool($this->prompt),
             new TextToAudioTool($this->prompt)
