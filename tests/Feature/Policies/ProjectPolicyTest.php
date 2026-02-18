@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Feature\Policies;
+
 use App\Models\Project;
 use App\Models\Team;
 use App\Policies\ProjectPolicy;
