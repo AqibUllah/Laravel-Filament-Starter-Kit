@@ -51,6 +51,8 @@ class FeatureLimiterPolicyProvider extends ServiceProvider
                 'User' => 'Users',
                 'Project' => 'Projects',
                 'Task' => 'Tasks',
+                'Product' => 'Products',
+                'Category' => 'Categories',
                 default => null,
             };
 

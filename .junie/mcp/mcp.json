@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/Users/aqibullah/Library/Application Support/Herd/bin/php84",
+            "args": [
+                "/Users/aqibullah/developement/Laravel/filament-saas-starter-kit/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}

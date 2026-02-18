@@ -1,0 +1,19 @@
+{
+    "agents": [
+        "claude_code",
+        "codex",
+        "copilot",
+        "cursor",
+        "gemini",
+        "opencode",
+        "phpstorm"
+    ],
+    "editors": [
+        "cursor",
+        "phpstorm",
+        "vscode"
+    ],
+    "guidelines": [
+        "laravel/ai"
+    ]
+}

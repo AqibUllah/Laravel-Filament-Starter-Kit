@@ -125,6 +125,16 @@ class Team extends Model
         return $this->hasMany(Project::class)->withoutGlobalScopes();
     }
 
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class);
+    }
+
     // Check if user can assign tasks
     public function userCanAssignTasks(User $user): bool
     {
