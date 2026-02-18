@@ -7,6 +7,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Image;
 use Laravel\Ai\Tools\Request;
@@ -47,8 +48,8 @@ class GenerateImageTool implements Tool
                 'response' => $response->body()
             ]);
             Notification::make()
-                ->title('Blog Image Not Created')
-                ->body("Feature Image not created for blog {$this->blog->title}")
+                ->title('Image Not Created')
+                ->body("Image not created for blog")
                 ->danger()
                 ->color('danger')
                 ->send();
@@ -74,8 +75,8 @@ class GenerateImageTool implements Tool
         if (! $finalData || empty($finalData['imageUrl'])) {
             logger()->error('Final image URL not found');
             Notification::make()
-                ->title('Blog Image Not Created')
-                ->body("Feature Image not created for blog {$this->blog->title}")
+                ->title('Image Not Created')
+                ->body("Image not created for blog")
                 ->danger()
                 ->color('danger')
                 ->send();
@@ -85,7 +86,7 @@ class GenerateImageTool implements Tool
         // Download generated image
         $imageContents = Http::get($finalData['imageUrl'])->body();
 
-        $filename = 'images/' . \Str::uuid() . '.png';
+        $filename = 'images/' . Str::uuid() . '.png';
 
         Storage::disk('public')->put($filename, $imageContents);
 

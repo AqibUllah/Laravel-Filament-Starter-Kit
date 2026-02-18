@@ -88,7 +88,7 @@ class CreateBlogTool implements Tool
 
         Notification::make()
             ->title('Blog Created')
-            ->body("Blog {$status} created successfully with ID: {$blog->id}")
+            ->body("Blog {$status->value} created successfully with ID: {$blog->id}")
             ->success()
             ->color('success')
             ->send();
@@ -100,7 +100,7 @@ class CreateBlogTool implements Tool
             ->withProperties(['updated_by_ai' => true])
             ->log('Blog created via AI tool');
 
-        return "Blog {$status} created successfully with ID: {$blog->id}";
+        return "Blog {$status->value} created successfully with ID: {$blog->id}";
 
     }
 
