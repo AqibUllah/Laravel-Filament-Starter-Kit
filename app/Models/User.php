@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
@@ -25,7 +26,7 @@ use Stripe\Stripe;
 class User extends Authenticatable implements FilamentUser, HasAppAuthentication, HasAppAuthenticationRecovery, HasDefaultTenant, HasTenants
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasFactory, HasRoles, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -141,6 +142,11 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
     public function currentTeam()
     {
         return $this->belongsToMany(Team::class)->latest()->first(); // Or use session-based
+    }
+
+    public function tenant()
+    {
+        return $this->currentTeam();
     }
 
     public function canAccessTenant(Model $tenant): bool
