@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Alizharb\FilamentThemesManager\Http\Middleware\ThemePreviewMiddleware::class,
             //            \App\Http\Middleware\RedirectIfUserNotSubscribedMiddleware::class
         ]);
-        
+
         $middleware->alias([
             'api.access' => \App\Http\Middleware\ApiAccessMiddleware::class,
         ]);
