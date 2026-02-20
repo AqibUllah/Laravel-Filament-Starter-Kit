@@ -214,6 +214,7 @@ class TenantPanelProvider extends PanelProvider
             ->tenantMiddleware([
                 SyncShieldTenant::class,
                 RedirectIfUserNotSubscribedMiddleware::class,
+                \App\Http\Middleware\CheckStorageLimitMiddleware::class,
             ], isPersistent: true)
             ->middleware([
                 // Existing middleware are above; add usage recording as a global middleware for tenant panel
