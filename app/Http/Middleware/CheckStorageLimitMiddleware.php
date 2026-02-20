@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Events\StorageQuotaExceeded;
+use App\Jobs\SendStorageQuotaNotification;
 use App\Services\FeatureLimiterService;
 use Closure;
 use Illuminate\Http\Request;
@@ -25,18 +27,35 @@ class CheckStorageLimitMiddleware
 
         // Get uploaded file sizes from request
         $totalUploadSize = $this->getUploadSize($request);
-        
+
         if ($totalUploadSize > 0 && !$limiter->canUseStorage($totalUploadSize)) {
             $currentUsage = $limiter->getCurrentStorageUsage();
             $maxStorage = $limiter->getFeatureLimit('max_storage') * 1024 * 1024; // Convert MB to bytes
             $remainingStorage = max(0, $maxStorage - $currentUsage);
-            
+
+            // Create and dispatch storage quota exceeded event
+            $event = new StorageQuotaExceeded(
+                team: $tenant,
+                currentUsage: $currentUsage,
+                maxStorage: $maxStorage,
+                requestedSize: $totalUploadSize,
+                remainingStorage: $remainingStorage,
+                formattedCurrentUsage: $this->formatBytes($currentUsage),
+                formattedMaxStorage: $this->formatBytes($maxStorage),
+                formattedRequestedSize: $this->formatBytes($totalUploadSize),
+                formattedRemainingStorage: $this->formatBytes($remainingStorage)
+            );
+
+            // Send Filament notification and email
+            SendStorageQuotaNotification::dispatch($event);
+
             return response()->json([
                 'message' => 'Storage quota exceeded. You have ' . $this->formatBytes($remainingStorage) . ' remaining.',
                 'current_usage' => $this->formatBytes($currentUsage),
                 'limit' => $this->formatBytes($maxStorage),
                 'requested' => $this->formatBytes($totalUploadSize),
                 'remaining' => $this->formatBytes($remainingStorage),
+                'notification_sent' => true,
             ], 422);
         }
 
@@ -46,8 +65,8 @@ class CheckStorageLimitMiddleware
     private function isFileUploadRequest(Request $request): bool
     {
         // Check if this is a file upload request
-        return $request->hasFile('attachments') || 
-               $request->hasFile('files') || 
+        return $request->hasFile('attachments') ||
+               $request->hasFile('files') ||
                $request->hasFile('file') ||
                str_contains($request->path(), 'projects') && $request->isMethod('POST');
     }
@@ -99,9 +118,9 @@ class CheckStorageLimitMiddleware
         $bytes = max(0, $bytes);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
-        
+
         $bytes /= (1 << (10 * $pow));
-        
+
         return round($bytes, 2) . ' ' . $units[$pow];
     }
 }
