@@ -100,13 +100,14 @@ class SendStorageQuotaNotification implements ShouldQueue
     private function replaceTemplateVariables(string $content, User $user, Team $team): string
     {
         return str_replace([
-            '##user_name##',
-            '##team_name##',
+            '##user.name##',
+            '##team.name##',
             '##current_usage##',
             '##max_storage##',
             '##requested_size##',
             '##remaining_storage##',
             '##upgrade_url##',
+            '##manage_files_url##',
             '##config.app.name##',
         ], [
             $user->name,
@@ -116,6 +117,7 @@ class SendStorageQuotaNotification implements ShouldQueue
             $this->event->formattedRequestedSize,
             $this->event->formattedRemainingStorage,
             route('filament.tenant.pages.plans', ['tenant' => $team]),
+            '', // No manage files route available
             config('app.name'),
         ], $content);
     }
