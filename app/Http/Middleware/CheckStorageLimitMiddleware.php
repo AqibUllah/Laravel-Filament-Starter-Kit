@@ -64,47 +64,31 @@ class CheckStorageLimitMiddleware
 
     private function isFileUploadRequest(Request $request): bool
     {
-        // Check if this is a file upload request
-        return $request->hasFile('attachments') ||
-               $request->hasFile('files') ||
-               $request->hasFile('file') ||
-               str_contains($request->path(), 'projects') && $request->isMethod('POST');
+        // Check if this request contains ANY file uploads
+        // This covers all resources: Users (avatar), Categories (image), 
+        // Products (images), Blogs (featured_image), Projects (attachments), etc.
+        return !empty($request->allFiles());
     }
 
     private function getUploadSize(Request $request): int
     {
         $totalSize = 0;
 
-        // Check for multiple files
-        if ($request->hasFile('attachments')) {
-            $files = $request->file('attachments');
-            if (is_array($files)) {
-                foreach ($files as $file) {
+        // Get ALL uploaded files from the request
+        $allFiles = $request->allFiles();
+        
+        foreach ($allFiles as $fileOrArray) {
+            if (is_array($fileOrArray)) {
+                // Handle array of files (e.g., multiple attachments)
+                foreach ($fileOrArray as $file) {
                     if ($file && $file->isValid()) {
                         $totalSize += $file->getSize();
                     }
                 }
-            } elseif ($files && $files->isValid()) {
-                $totalSize += $files->getSize();
-            }
-        }
-
-        // Check for single file
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            if ($file && $file->isValid()) {
-                $totalSize += $file->getSize();
-            }
-        }
-
-        // Check for files array
-        if ($request->hasFile('files')) {
-            $files = $request->file('files');
-            if (is_array($files)) {
-                foreach ($files as $file) {
-                    if ($file && $file->isValid()) {
-                        $totalSize += $file->getSize();
-                    }
+            } else {
+                // Handle single file (e.g., avatar, image, featured_image)
+                if ($fileOrArray && $fileOrArray->isValid()) {
+                    $totalSize += $fileOrArray->getSize();
                 }
             }
         }
