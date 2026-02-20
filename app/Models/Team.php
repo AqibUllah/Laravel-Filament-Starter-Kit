@@ -172,4 +172,10 @@ class Team extends Model
         return $this->hasMany(\App\Models\Role::class);
     }
 
+    /** @return HasMany<\App\Models\File, self> */
+    public function files(): HasMany
+    {
+        return $this->hasMany(\App\Models\File::class);
+    }
+
 }

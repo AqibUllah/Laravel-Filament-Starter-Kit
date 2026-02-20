@@ -25,6 +25,7 @@
 namespace App\Providers;
 
 use App\Filament\Tenant\Resources\Tasks\Pages\ListTaskActivities;
+use App\Models\File;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -63,6 +64,9 @@ class AppServiceProvider extends ServiceProvider
             'app.filament.tenant.resources.tasks.pages.list-task-activities',
             ListTaskActivities::class
         );
+
+        // Register File observer
+        File::observe(\App\Observers\FileObserver::class);
         //
     }
 }

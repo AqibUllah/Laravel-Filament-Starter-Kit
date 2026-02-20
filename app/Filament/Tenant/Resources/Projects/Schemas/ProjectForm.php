@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources\Projects\Schemas;
 
 use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
+use App\Filament\Components\TrackedFileUpload;
 use App\Settings\TenantGeneralSettings;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;

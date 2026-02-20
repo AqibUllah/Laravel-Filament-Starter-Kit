@@ -31,7 +31,7 @@ class StorageUsageWidget extends BaseWidget
 
         // Find storage usage from the metrics
         $storageUsage = $usageSummary['metrics']
-            ->where('metric_name', 'Storage')
+            ->where('metric_name', 'storage_gb')
             ->first();
 
         $currentUsageGB = $storageUsage ? $storageUsage->total_quantity : 0;
@@ -49,8 +49,8 @@ class StorageUsageWidget extends BaseWidget
         };
 
         return [
-            Stat::make('Storage Usage', number_format($currentUsageGB, 2).' GB')
-                ->description('Limit: '.$storageLimit.' | Remaining: '.number_format($remainingGB, 2).' GB ('.number_format(100 - $usagePercentage, 1).'%)')
+            Stat::make('Storage Usage', number_format($currentUsageGB, 4).' GB')
+                ->description('Limit: '.$storageLimit.' | Remaining: '.number_format($remainingGB, 2).' GB ('.number_format(100 - $usagePercentage, 2).'%)')
                 ->descriptionIcon('heroicon-m-server')
                 ->color($color)
                 ->chart([$currentUsageGB])

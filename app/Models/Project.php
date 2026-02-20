@@ -6,6 +6,7 @@ use App\Enums\PriorityEnum;
 use App\Enums\ProjectStatusEnum;
 use App\Events\ProjectCreated;
 use App\Jobs\RecordProjectUsage;
+use App\Services\FileUploadService;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,6 +48,7 @@ class Project extends Model
         'notes',
         'completed_at',
         'archived_at',
+        'attachments',
     ];
 
     protected $casts = [
@@ -61,6 +63,7 @@ class Project extends Model
         'archived_at' => 'datetime',
         'priority' => PriorityEnum::class,
         'status' => ProjectStatusEnum::class,
+        'attachments' => 'array',
     ];
 
     // Relationships
@@ -79,6 +82,11 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'project_user')
             ->withTimestamps()
             ->withPivot(['role', 'joined_at']);
+    }
+
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function projectManager(): BelongsTo
@@ -277,6 +285,43 @@ class Project extends Model
             // Auto-complete project if progress reaches 100%
             if ($project->progress >= 100 && ! in_array($project->status, [ProjectStatusEnum::Completed, ProjectStatusEnum::Archived])) {
                 $project->markAsCompleted();
+            }
+
+            // Handle file uploads when attachments field changes
+            if ($project->isDirty('attachments')) {
+                $currentAttachments = $project->getOriginal('attachments') ?? [];
+                $newAttachments = $project->attachments ?? [];
+
+                // Process new files
+                if (is_array($newAttachments)) {
+                    foreach ($newAttachments as $attachment) {
+                        if (is_string($attachment) && ! in_array($attachment, $currentAttachments)) {
+                            // This is a new file upload
+                            $team = $project->team;
+                            if ($team) {
+                                $path = $attachment; // Use full path as stored
+                                
+                                // Check if file exists in storage (use default disk)
+                                if (\Storage::exists($path)) {
+                                    $size = \Storage::size($path);
+                                    
+                                    // Create file record
+                                    \App\Models\File::create([
+                                        'team_id' => $team->id,
+                                        'filename' => basename($attachment),
+                                        'original_name' => basename($attachment),
+                                        'path' => $path,
+                                        'size' => $size,
+                                        'mime_type' => \Storage::mimeType($path),
+                                        'fileable_type' => Project::class,
+                                        'fileable_id' => $project->id,
+                                        'uploaded_by' => auth()->id(),
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         });
 

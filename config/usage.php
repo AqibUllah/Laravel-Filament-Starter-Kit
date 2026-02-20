@@ -33,5 +33,15 @@ return [
             'quantity' => 1,
             'unit_price' => 0.0,
         ],
+
+        // Track file uploads
+        [
+            'path_regex' => '#^/tenant/[^/]+/projects/[^/]+.*#',
+            'http' => ['POST'],
+            'metric' => 'file_uploads',
+            'quantity' => 1,
+            'unit_price' => 0.0,
+            'metadata' => null,
+        ],
     ],
 ];
