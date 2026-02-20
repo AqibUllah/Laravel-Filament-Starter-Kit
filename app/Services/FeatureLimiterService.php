@@ -20,7 +20,7 @@ class FeatureLimiterService
         if (! $this->tenant) {
             return true; // Allow creation in test context
         }
-        
+
         $currentUsers = \DB::table('team_user')
             ->where('team_id', $this->tenant->id)
             ->distinct('user_id')
@@ -35,7 +35,7 @@ class FeatureLimiterService
         if (! $this->tenant) {
             return true; // Allow creation in test context
         }
-        
+
         $currentTasks = $this->tenant->tasks()->count();
         $maxTasks = $this->getFeatureLimit('Tasks');
 
@@ -47,7 +47,7 @@ class FeatureLimiterService
         if (! $this->tenant) {
             return true; // Allow creation in test context
         }
-        
+
         $currentProjects = $this->tenant->projects()->count();
         $maxProjects = $this->getFeatureLimit('Projects');
 
@@ -59,7 +59,7 @@ class FeatureLimiterService
         if (! $this->tenant) {
             return true; // Allow creation in test context
         }
-        
+
         $currentProducts = $this->tenant->products()->count();
         $maxProducts = $this->getFeatureLimit('Products');
 
@@ -71,7 +71,7 @@ class FeatureLimiterService
         if (! $this->tenant) {
             return true; // Allow creation in test context
         }
-        
+
         $currentCategories = $this->tenant->categories()->count();
         $maxCategories = $this->getFeatureLimit('Categories');
 
@@ -81,9 +81,66 @@ class FeatureLimiterService
     public function canUseStorage(int $additionalBytes = 0): bool
     {
         $currentStorage = $this->getCurrentStorageUsage();
-        $maxStorage = $this->getFeatureLimit('max_storage') * 1024 * 1024; // Convert MB to bytes
+        $maxStorage = $this->getStorageLimitInBytes();
 
         return ($currentStorage + $additionalBytes) <= $maxStorage;
+    }
+
+    public function getStorageLimitInBytes(): int
+    {
+        // Try to get storage limit from features
+        $storageFeature = $this->tenant->subscription->plan->features
+            ->where('name', 'Storage')
+            ->first();
+        
+        if ($storageFeature) {
+            $limit = $storageFeature->value; // e.g., "10GB"
+            return $this->convertStorageToBytes($limit);
+        }
+        
+        // Fallback to max_storage feature
+        $maxStorageFeature = $this->getFeatureLimit('max_storage');
+        if ($maxStorageFeature > 0) {
+            return $maxStorageFeature * 1024 * 1024; // Convert MB to bytes
+        }
+        
+        // Default limit if no feature found
+        return 10 * 1024 * 1024 * 1024; // 10GB default
+    }
+
+    public function convertStorageToBytes(string $storage): int
+    {
+        $storage = strtoupper(trim($storage));
+        
+        if (str_contains($storage, 'TB')) {
+            $value = (float) str_replace('TB', '', $storage);
+            return (int) ($value * 1024 * 1024 * 1024 * 1024);
+        }
+        
+        if (str_contains($storage, 'GB')) {
+            $value = (float) str_replace('GB', '', $storage);
+            return (int) ($value * 1024 * 1024 * 1024);
+        }
+        
+        if (str_contains($storage, 'MB')) {
+            $value = (float) str_replace('MB', '', $storage);
+            return (int) ($value * 1024 * 1024);
+        }
+        
+        // Assume GB if no unit specified
+        return (int) ((float) $storage * 1024 * 1024 * 1024);
+    }
+
+    public function formatBytes(int $bytes): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB'];
+        $bytes = max(0, $bytes);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+        
+        $bytes /= (1 << (10 * $pow));
+        
+        return round($bytes, 2) . ' ' . $units[$pow];
     }
 
     public function getRemainingUsers(): int
@@ -108,7 +165,7 @@ class FeatureLimiterService
     public function getRemainingStorage(): int
     {
         $currentStorage = $this->getCurrentStorageUsage();
-        $maxStorage = $this->getFeatureLimit('max_storage') * 1024 * 1024;
+        $maxStorage = $this->getStorageLimitInBytes();
 
         return max(0, $maxStorage - $currentStorage);
     }
@@ -118,7 +175,7 @@ class FeatureLimiterService
         if (! $this->tenant) {
             return 999; // Return high limit for test context
         }
-        
+
         return Cache::remember(
             "tenant_{$this->tenant->id}_feature_{$feature}",
             now()->addHours(1),
@@ -126,7 +183,7 @@ class FeatureLimiterService
         );
     }
 
-    protected function getCurrentStorageUsage(): int
+    public function getCurrentStorageUsage(): int
     {
         // Implement your storage calculation logic
         return $this->tenant->files()->sum('size');

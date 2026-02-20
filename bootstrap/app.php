@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'api.access' => \App\Http\Middleware\ApiAccessMiddleware::class,
+            'storage.limit' => \App\Http\Middleware\CheckStorageLimitMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

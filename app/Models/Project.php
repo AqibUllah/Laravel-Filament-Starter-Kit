@@ -89,6 +89,18 @@ class Project extends Model
         return $this->morphMany(File::class, 'fileable');
     }
 
+    private function formatBytes(int $bytes): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB','TB'];
+        $bytes = max(0, $bytes);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+
+        $bytes /= (1 << (10 * $pow));
+
+        return round($bytes, 2) . ' ' . $units[$pow];
+    }
+
     public function projectManager(): BelongsTo
     {
         return $this->belongsTo(User::class, 'project_manager_id');
@@ -300,11 +312,26 @@ class Project extends Model
                             $team = $project->team;
                             if ($team) {
                                 $path = $attachment; // Use full path as stored
-                                
+
                                 // Check if file exists in storage (use default disk)
                                 if (\Storage::exists($path)) {
                                     $size = \Storage::size($path);
-                                    
+
+                                    // Check storage quota before creating file record
+                                    $limiter = app(\App\Services\FeatureLimiterService::class)->forTenant($team);
+                                    if (!$limiter->canUseStorage($size)) {
+                                        $currentUsage = $limiter->getCurrentStorageUsage();
+                                        $maxStorage = $limiter->getFeatureLimit('max_storage') * 1024 * 1024;
+                                        $remainingStorage = max(0, $maxStorage - $currentUsage);
+
+                                        // Throw exception to prevent upload
+                                        throw new \Exception(
+                                            'Storage quota exceeded. You have ' . $this->formatBytes($remainingStorage) . ' remaining, ' .
+                                            'but trying to upload ' . $this->formatBytes($size) . '. ' .
+                                            'Please upgrade your plan or delete some files.'
+                                        );
+                                    }
+
                                     // Create file record
                                     \App\Models\File::create([
                                         'team_id' => $team->id,
