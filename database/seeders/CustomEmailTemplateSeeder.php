@@ -75,6 +75,43 @@ class CustomEmailTemplateSeeder extends Seeder
                 'logo' => 'media/email-templates/logo.png',
                 'team_id' => Team::first()->id,
             ],
+            [
+                'key' => 'storage-quota-exceeded',
+                'language' => 'en_GB',
+                'view' => 'default',
+                'from' => json_encode(['email' => config('mail.from.address'), 'name' => config('mail.from.name')]),
+                'name' => 'Storage Quota Exceeded',
+                'preheader' => 'Your storage quota has been exceeded',
+                'subject' => 'Storage Quota Exceeded - ##team.name##',
+                'title' => 'Storage Quota Exceeded',
+                'content' => '<h2>Storage Quota Exceeded</h2>
+                            <p>Dear ##user.name##,</p>
+                            <p>You attempted to upload a file of ##requested_size## to your team <strong>##team.name##</strong>, but you have exceeded your storage quota.</p>
+                            
+                            <h3>Current Storage Status:</h3>
+                            <ul>
+                                <li><strong>Current Usage:</strong> ##current_usage##</li>
+                                <li><strong>Storage Limit:</strong> ##max_storage##</li>
+                                <li><strong>Remaining Space:</strong> ##remaining_storage##</li>
+                                <li><strong>Requested Upload:</strong> ##requested_size##</li>
+                            </ul>
+                            
+                            <h3>What can you do?</h3>
+                            <p>You have two options to resolve this:</p>
+                            <ol>
+                                <li><strong>Upgrade your plan</strong> to get more storage space</li>
+                                <li><strong>Delete some files</strong> to free up space</li>
+                            </ol>
+                            
+                            <div style="text-align: center; margin: 20px 0;">
+                                <a href="##upgrade_url##" style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-right: 10px;">Upgrade Plan</a>
+                                <a href="##manage_files_url##" style="background-color: #6b7280; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">Manage Files</a>
+                            </div>
+                            
+                            <p>Best regards,<br>##config.app.name##</p>',
+                'logo' => 'media/email-templates/logo.png',
+                'team_id' => null, // Global template
+            ],
         ];
 
         foreach ($templates as $template) {
