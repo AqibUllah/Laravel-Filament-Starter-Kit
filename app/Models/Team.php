@@ -135,6 +135,11 @@ class Team extends Model
         return $this->hasMany(Category::class);
     }
 
+    public function customDomains(): HasMany
+    {
+        return $this->hasMany(CustomDomain::class);
+    }
+
     // Check if user can assign tasks
     public function userCanAssignTasks(User $user): bool
     {

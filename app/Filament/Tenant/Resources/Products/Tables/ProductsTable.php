@@ -2,12 +2,14 @@
 
 namespace App\Filament\Tenant\Resources\Products\Tables;
 
+use App\Helpers\FeatureLimitHelper;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -18,6 +20,9 @@ class ProductsTable
 {
     public static function configure(Table $table): Table
     {
+        $team = Filament::getTenant();
+        $count = $team->products()->count();
+
         return $table
             ->columns([
                 ImageColumn::make('images.0')
@@ -94,6 +99,7 @@ class ProductsTable
                         ->icon('heroicon-o-x-mark')
                         ->action(fn ($records) => $records->each->update(['is_active' => false])),
                 ]),
-            ]);
+            ])
+            ->contentFooter(fn () => FeatureLimitHelper::alertIfExceeded('Products', $count, route('filament.tenant.pages.plans', ['tenant' => $team]), $team));
     }
 }

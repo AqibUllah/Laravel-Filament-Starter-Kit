@@ -6,6 +6,13 @@
         "/Users/aqibullah/developement/Laravel/filament-saas-starter-kit/artisan",
         "boost:mcp"
       ]
+    },
+    "boost": {
+      "command": "php",
+      "args": [
+        "artisan",
+        "boost:mcp"
+      ]
     }
   }
 }

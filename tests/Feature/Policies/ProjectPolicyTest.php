@@ -1,9 +1,14 @@
 <?php
 
+namespace Tests\Feature\Policies;
+
 use App\Models\Project;
+use App\Models\Team;
 use App\Policies\ProjectPolicy;
+use Filament\Facades\Filament;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
+// Helper class for testing
 class StubUser extends AuthUser
 {
     public bool $canValue = false;

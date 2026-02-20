@@ -1,0 +1,1 @@
+{"mcpServers": {"boost": {"command": "php", "args": ["artisan", "boost:mcp"], "cwd": "/Users/aqibullah/developement/Laravel/filament-saas-starter-kit"}}}

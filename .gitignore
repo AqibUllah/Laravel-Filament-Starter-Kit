@@ -19,8 +19,12 @@
 /public/storage
 /storage/*.key
 /storage/pail
+
 bootstrap/cache/*.php
-storage/framework/views/*.php
+!/bootstrap/cache/.gitignore
+
+storage/framework/views/*
+!/storage/framework/views/.gitignore
 /vendor
 Homestead.json
 Homestead.yaml

@@ -19,9 +19,13 @@ class FeatureLimitHelper
     public static function alertIfExceeded(
         string $featureKey,
         ?int $usedValue = null,
-        ?string $upgradeUrl = null
+        ?string $upgradeUrl = null,
+        ?Team $team = null
     ): string|null|View {
-        $team = Filament::getTenant();
+        if (! $team) {
+            $team = Filament::getTenant();
+        }
+        
         if (! $team) {
             return null;
         }
@@ -42,7 +46,7 @@ class FeatureLimitHelper
                 'type' => 'warning',
                 'title' => self::getFeatureTitle($featureKey),
                 'message' => "Your plan allows only {$limit} {$featureKey}. You’ve reached your current limit ({$usedValue}/{$limit}). Upgrade your plan to unlock more.",
-                'upgradeUrl' => $upgradeUrl ?? route('filament.admin.pages.plans'),
+                'upgradeUrl' => $upgradeUrl ?? route('filament.tenant.pages.plans', ['tenant' => $team]),
                 'actionLabel' => 'Upgrade Plan',
             ]);
         }
@@ -68,8 +72,14 @@ class FeatureLimitHelper
     protected static function detectUsage(Team $team, string $key): int
     {
         return match ($key) {
-            'Users' => $team->members()->count(),
-            //            'max_projects', 'max_tasks' => $team->projects()->count() ?? 0,
+            'Users' => \DB::table('team_user')
+                ->where('team_id', $team->id)
+                ->distinct('user_id')
+                ->count('user_id'),
+            'Projects' => $team->projects()->count(),
+            'Tasks' => $team->tasks()->count(),
+            'Products' => $team->products()->count(),
+            'Categories' => $team->categories()->count(),
             'Storage' => self::getStorageUsage($team),
             default => 0,
         };
@@ -105,6 +115,8 @@ class FeatureLimitHelper
             'Users' => 'User Limit Reached',
             'Projects' => 'Project Limit Reached',
             'Tasks' => 'Task Limit Reached',
+            'Products' => 'Product Limit Reached',
+            'Categories' => 'Category Limit Reached',
             'Storage' => 'Storage Limit Reached',
             default => 'Limit Reached',
         };
