@@ -113,6 +113,109 @@ class EmailTemplateSeeder extends Seeder
                                 <p>Kind Regards,<br>##config.app.name##</p>',
                 'team_id' => Team::first()->id,
             ],
+            // Order Email Templates
+            [
+                'key' => 'order-paid',
+                'from' => ['email' => config('mail.from.address'), 'name' => config('mail.from.name')],
+                'name' => 'Order Payment Confirmed',
+                'title' => 'Order ##order.order_number## - Payment Confirmed',
+                'subject' => 'Order ##order.order_number## - Payment Confirmed',
+                'preheader' => 'Thank you for your order',
+                'content' => '<p>Dear ##customerName##,</p>
+                                <p>Great news! Your payment for order ##order.order_number## has been successfully processed. Your order is now being prepared for shipment.</p>
+                                
+                                <h3>Order Details</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr><td><strong>Order Number:</strong></td><td>##order.order_number##</td></tr>
+                                    <tr><td><strong>Payment Status:</strong></td><td>Paid</td></tr>
+                                    <tr><td><strong>Order Status:</strong></td><td>##order.order_status##</td></tr>
+                                    <tr><td><strong>Payment Method:</strong></td><td>##order.payment_method##</td></tr>
+                                    <tr><td><strong>Total Amount:</strong></td><td>##orderTotal##</td></tr>
+                                    <tr><td><strong>Order Date:</strong></td><td>##order.created_at##</td></tr>
+                                </table>
+                                
+                                <h4>Items Ordered:</h4>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr style="background: #f0f0f0;">
+                                        <th style="padding: 10px; text-align: left;">Product</th>
+                                        <th style="padding: 10px; text-align: center;">Quantity</th>
+                                        <th style="padding: 10px; text-align: right;">Price</th>
+                                        <th style="padding: 10px; text-align: right;">Total</th>
+                                    </tr>
+                                    ##orderItems##
+                                    <tr>
+                                        <td colspan="3" style="padding: 10px; text-align: right; border-top: 2px solid #ddd;"><strong>Total:</strong></td>
+                                        <td style="padding: 10px; text-align: right; border-top: 2px solid #ddd;"><strong>##orderTotal##</strong></td>
+                                    </tr>
+                                </table>
+                                
+                                <div style="text-align: center; margin: 30px 0;">
+                                    {{button url=\'##orderUrl##\' title=\'View Order Details\'}}
+                                </div>
+                                
+                                <p><strong>What happens next?</strong></p>
+                                <ul>
+                                    <li>Your order will be processed and shipped within 1-2 business days</li>
+                                    <li>You\'ll receive a shipping confirmation email with tracking information</li>
+                                    <li>You can download your invoice from your order details page</li>
+                                </ul>
+                                
+                                ##orderNotes##
+                                
+                                <p>Thank you for choosing ##config.app.name##!</p>
+                                <p>If you have any questions, please contact our support team.</p>',
+                'team_id' => Team::first()->id,
+            ],
+            [
+                'key' => 'order-shipped',
+                'from' => ['email' => config('mail.from.address'), 'name' => config('mail.from.name')],
+                'name' => 'Order Shipped',
+                'title' => 'Order ##order.order_number## - Shipped',
+                'subject' => 'Order ##order.order_number## - Shipped',
+                'preheader' => 'Your order is on its way',
+                'content' => '<p>Dear ##customerName##,</p>
+                                <p>Great news! Your order ##order.order_number## has been shipped and is on its way to you.</p>
+                                
+                                <h3>Shipping Details</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr><td><strong>Order Number:</strong></td><td>##order.order_number##</td></tr>
+                                    <tr><td><strong>Shipping Date:</strong></td><td>##order.shipped_at##</td></tr>
+                                    <tr><td><strong>Tracking Number:</strong></td><td>##trackingNumber##</td></tr>
+                                    <tr><td><strong>Carrier:</strong></td><td>##carrier##</td></tr>
+                                </table>
+                                
+                                <div style="text-align: center; margin: 30px 0;">
+                                    {{button url=\'##trackingUrl##\' title=\'Track Your Package\'}}
+                                </div>
+                                
+                                <p>You can expect delivery within ##deliveryDays## business days.</p>
+                                <p>Thank you for choosing ##config.app.name##!</p>',
+                'team_id' => Team::first()->id,
+            ],
+            [
+                'key' => 'order-cancelled',
+                'from' => ['email' => config('mail.from.address'), 'name' => config('mail.from.name')],
+                'name' => 'Order Cancelled',
+                'title' => 'Order ##order.order_number## - Cancelled',
+                'subject' => 'Order ##order.order_number## - Cancelled',
+                'preheader' => 'Your order has been cancelled',
+                'content' => '<p>Dear ##customerName##,</p>
+                                <p>Your order ##order.order_number## has been cancelled.</p>
+                                
+                                <h3>Cancellation Details</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr><td><strong>Order Number:</strong></td><td>##order.order_number##</td></tr>
+                                    <tr><td><strong>Cancellation Date:</strong></td><td>##order.cancelled_at##</td></tr>
+                                    <tr><td><strong>Reason:</strong></td><td>##cancellationReason##</td></tr>
+                                    <tr><td><strong>Refund Status:</strong></td><td>##refundStatus##</td></tr>
+                                </table>
+                                
+                                ##refundDetails##
+                                
+                                <p>If you have any questions about this cancellation, please contact our support team.</p>
+                                <p>Thank you for your understanding.</p>',
+                'team_id' => Team::first()->id,
+            ],
         ];
 
         EmailTemplate::factory()

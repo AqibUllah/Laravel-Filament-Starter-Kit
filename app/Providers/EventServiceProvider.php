@@ -2,9 +2,15 @@
 
 namespace App\Providers;
 
+use App\Events\OrderCancelled;
+use App\Events\OrderPaid;
+use App\Events\OrderShipped;
 use App\Events\ProjectCreated;
 use App\Events\TaskAssigned;
 use App\Events\TeamInvitation;
+use App\Listeners\SendOrderCancelledNotification;
+use App\Listeners\SendOrderPaidNotification;
+use App\Listeners\SendOrderShippedNotification;
 use App\Listeners\SendProjectCreatedNotification;
 use App\Listeners\SendTaskAssignedNotification;
 use App\Listeners\SendTeamInvitationNotification;
@@ -31,6 +37,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         TeamInvitation::class => [
             SendTeamInvitationNotification::class,
+        ],
+        OrderPaid::class => [
+            SendOrderPaidNotification::class,
+        ],
+        OrderShipped::class => [
+            SendOrderShippedNotification::class,
+        ],
+        OrderCancelled::class => [
+            SendOrderCancelledNotification::class,
         ],
     ];
 

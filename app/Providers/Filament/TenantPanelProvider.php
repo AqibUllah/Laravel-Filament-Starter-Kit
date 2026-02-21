@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use Alizharb\FilamentThemesManager\FilamentThemesManagerPlugin;
+use App\Filament\Tenant\Navigation\CustomSidebarNavigation;
 use App\Filament\Tenant\Pages\Dashboard;
 use App\Filament\Tenant\Pages\Plans;
 use App\Filament\Tenant\Pages\PlansDashboard;
@@ -164,7 +165,7 @@ class TenantPanelProvider extends PanelProvider
                     ->icon('heroicon-o-credit-card')
                     ->sort(3),
             ])
-            ->viteTheme('resources/css/filament/team/theme.css')
+            ->viteTheme('resources/css/filament/team/theme.css', 'resources/css/filament/team/custom-sidebar.css')
             ->discoverWidgets(in: app_path('Filament/Tenant/Widgets'), for: 'App\Filament\Tenant\Widgets')
             ->widgets([
                 TimeTrackingWidget::class,

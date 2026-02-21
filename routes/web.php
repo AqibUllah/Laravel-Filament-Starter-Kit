@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/coupons/available', [CouponController::class, 'available']);
     Route::get('/api/coupons/stats', [CouponController::class, 'stats']);
 });
+
+// Webhook routes
+Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handleWebhook']);
+Route::post('/webhooks/stripe/test', [StripeWebhookController::class, 'handleTestWebhook']);

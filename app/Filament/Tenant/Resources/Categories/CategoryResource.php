@@ -168,11 +168,6 @@ class CategoryResource extends Resource
         ];
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::query()->active()->count();
-    }
-
     public static function getNavigationBadgeColor(): ?string
     {
         return 'primary';
