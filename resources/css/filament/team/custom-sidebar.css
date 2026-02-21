@@ -1,0 +1,197 @@
+/* Custom Sidebar with Connected Submenus and Vertical Lines */
+
+/* Navigation Group Styling */
+.fi-sidebar .fi-nav-group {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+
+/* Vertical Line Connector for Navigation Groups */
+.fi-sidebar .fi-nav-group::before {
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    top: 2.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: linear-gradient(
+        to bottom,
+        rgb(var(--primary-600) / 0.8),
+        rgb(var(--primary-400) / 0.4)
+    );
+    border-radius: 1px;
+    z-index: 1;
+}
+
+/* Navigation Item Styling */
+.fi-sidebar .fi-nav-item {
+    position: relative;
+    margin-left: 0.5rem;
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+/* Connection Dot for Child Items */
+.fi-sidebar .fi-nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: rgb(var(--primary-500));
+    border: 2px solid rgb(var(--primary-100));
+    border-radius: 50%;
+    z-index: 2;
+    transition: all 0.2s ease;
+}
+
+/* Active State Styling */
+.fi-sidebar .fi-nav-item.active::before {
+    background: rgb(var(--primary-600));
+    border-color: rgb(var(--primary-200));
+    box-shadow: 0 0 0 4px rgb(var(--primary-100));
+}
+
+/* Hover State Styling */
+.fi-sidebar .fi-nav-item:hover::before {
+    background: rgb(var(--primary-400));
+    border-color: rgb(var(--primary-200));
+    transform: translateY(-50%) scale(1.2);
+}
+
+.fi-sidebar .fi-nav-item:hover {
+    background: rgb(var(--primary-50) / 0.5);
+    border-radius: 0.5rem;
+    transform: translateX(2px);
+}
+
+/* Navigation Group Header Styling */
+.fi-sidebar .fi-nav-group-label {
+    background: linear-gradient(
+        135deg,
+        rgb(var(--primary-600)),
+        rgb(var(--primary-500))
+    );
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 4px rgb(var(--primary-600) / 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gradient Overlay for Group Headers */
+.fi-sidebar .fi-nav-group-label::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgb(255, 255, 255, 0.1),
+        transparent
+    );
+    transition: left 0.5s ease;
+}
+
+.fi-sidebar .fi-nav-group:hover .fi-nav-group-label::after {
+    left: 100%;
+}
+
+/* Icon Styling */
+.fi-sidebar .fi-nav-item .fi-nav-item-icon {
+    color: rgb(var(--primary-500));
+    transition: all 0.2s ease;
+}
+
+.fi-sidebar .fi-nav-item:hover .fi-nav-item-icon {
+    color: rgb(var(--primary-600));
+    transform: scale(1.1);
+}
+
+.fi-sidebar .fi-nav-item.active .fi-nav-item-icon {
+    color: rgb(var(--primary-700));
+}
+
+/* Badge Styling */
+.fi-sidebar .fi-nav-item .fi-badge {
+    background: rgb(var(--primary-600));
+    color: white;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 1px 2px rgb(var(--primary-600) / 0.3);
+}
+
+/* Collapsed Sidebar Adjustments */
+.fi-sidebar.collapsed .fi-nav-group::before {
+    display: none;
+}
+
+.fi-sidebar.collapsed .fi-nav-item::before {
+    left: 1.25rem;
+}
+
+.fi-sidebar.collapsed .fi-nav-item {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* Dark Mode Adjustments */
+.dark .fi-sidebar .fi-nav-group::before {
+    background: linear-gradient(
+        to bottom,
+        rgb(var(--primary-400) / 0.6),
+        rgb(var(--primary-600) / 0.3)
+    );
+}
+
+.dark .fi-sidebar .fi-nav-item::before {
+    background: rgb(var(--primary-400));
+    border-color: rgb(var(--primary-900));
+}
+
+.dark .fi-sidebar .fi-nav-item:hover {
+    background: rgb(var(--primary-900) / 0.3);
+}
+
+/* Animation for Vertical Lines */
+@keyframes lineGrow {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+    to {
+        height: 100%;
+        opacity: 1;
+    }
+}
+
+.fi-sidebar .fi-nav-group::before {
+    animation: lineGrow 0.3s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .fi-sidebar .fi-nav-group::before {
+        left: 1rem;
+    }
+
+    .fi-sidebar .fi-nav-item::before {
+        left: 0.5rem;
+    }
+
+    .fi-sidebar .fi-nav-item {
+        margin-left: 0.25rem;
+        padding-left: 1rem;
+    }
+}

@@ -178,4 +178,10 @@ class Team extends Model
         return $this->hasMany(\App\Models\File::class);
     }
 
+    /** @return HasMany<\App\Models\Order, self> */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(\App\Models\Order::class);
+    }
+
 }

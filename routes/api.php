@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\ApiTokenController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -113,4 +115,14 @@ Route::middleware(['auth:sanctum', 'api.access'])->group(function () {
             'categories' => $tenant->categories()->count(),
         ]);
     });
+
+    // Orders endpoints
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/orders/{order}', [OrderController::class, 'show']);
+    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus']);
+    
+    // Payment endpoints
+    Route::get('/payment/success', [OrderController::class, 'paymentSuccess']);
+    Route::get('/payment/cancel', [OrderController::class, 'paymentCancel']);
 });

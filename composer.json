@@ -11,6 +11,7 @@
         "aws/aws-sdk-php": "^3.359",
         "bezhansalleh/filament-shield": "^4.0",
         "codewithdennis/filament-simple-alert": "4.x",
+        "dompdf/dompdf": "^3.1",
         "dutchcodingcompany/filament-socialite": "^3.0",
         "filament/filament": "^4.0",
         "filament/spark-billing-provider": "^4.1",
