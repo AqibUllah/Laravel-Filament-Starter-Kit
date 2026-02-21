@@ -28,12 +28,18 @@ class PaymentManager extends Manager
         return PaymentMethod::Stripe->value;
     }
 
-    public function driver(PaymentMethod|string $method = null): PaymentInterface
+    public function driver($driver = null)
     {
-        if ($method instanceof PaymentMethod) {
-            $method = $method->value;
+        if ($driver && enum_exists(PaymentMethod::class)) {
+            // Try to convert string to PaymentMethod enum if it matches
+            try {
+                $paymentMethod = PaymentMethod::from($driver);
+                $driver = $paymentMethod->value;
+            } catch (\ValueError $e) {
+                // If it's not a valid enum value, use as-is
+            }
         }
 
-        return parent::driver($method);
+        return parent::driver($driver);
     }
 }

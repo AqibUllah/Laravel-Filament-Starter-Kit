@@ -28,6 +28,7 @@ class Product extends Model
         'team_id',
         'is_active',
         'is_featured',
+        'is_public',
         'meta_title',
         'meta_description',
         'tags',
@@ -44,6 +45,7 @@ class Product extends Model
         'dimensions' => 'array',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
+        'is_public' => 'boolean',
         'tags' => 'array',
         'images' => 'array',
         'variants' => 'array',
@@ -80,6 +82,16 @@ class Product extends Model
     public function scopeLowStock($query)
     {
         return $query->whereRaw('quantity <= min_stock_level');
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->where('is_public', true);
+    }
+
+    public function scopePublicAndActive($query)
+    {
+        return $query->where('is_public', true)->where('is_active', true);
     }
 
     // Helper Methods
