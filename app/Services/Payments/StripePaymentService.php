@@ -16,19 +16,20 @@ class StripePaymentService implements PaymentInterface
 {
     public function __construct()
     {
-        Stripe::setApiKey(config('services.stripe.secret_key'));
+        Stripe::setApiKey(config('services.stripe.secret'));
     }
 
     public function createCheckoutSession(Order $order): array
     {
         try {
             $lineItems = $order->items->map(function ($item) {
+                $sku = $item->product->sku ?? 'N/A';
                 return [
                     'price_data' => [
-                        'currency' => strtolower($order->currency),
+                        'currency' => strtolower($item->order->currency),
                         'product_data' => [
                             'name' => $item->product_name,
-                            'description' => "SKU: {$item->product->sku ?? 'N/A'}",
+                            'description' => "SKU: $sku",
                             'images' => $item->product_snapshot['images'] ?? [],
                         ],
                         'unit_amount' => (int) ($item->product_price * 100),
@@ -47,8 +48,8 @@ class StripePaymentService implements PaymentInterface
                 ],
                 'line_items' => $lineItems,
                 'mode' => 'payment',
-                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('payment.cancel') . '?order_id=' . $order->id,
+                'success_url' => route('marketplace.payment.success',['order' => $order]) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('marketplace.payment.cancel',['order' => $order]) . '?order_id=' . $order->id,
                 'metadata' => [
                     'order_id' => $order->id,
                     'team_id' => $order->team_id,
@@ -89,7 +90,7 @@ class StripePaymentService implements PaymentInterface
 
                 if ($order && $order->canBePaid()) {
                     $order->markAsPaid($session->payment_intent);
-                    
+
                     return [
                         'success' => true,
                         'order' => $order,
@@ -119,7 +120,7 @@ class StripePaymentService implements PaymentInterface
     {
         try {
             $webhookSecret = config('services.stripe.webhook_secret');
-            
+
             return Webhook::constructEvent(
                 $payload,
                 $signature,
@@ -175,7 +176,7 @@ class StripePaymentService implements PaymentInterface
 
         if ($order && $order->canBePaid()) {
             $order->markAsPaid($session['payment_intent']);
-            
+
             Log::info('Order marked as paid via webhook', [
                 'order_id' => $order->id,
                 'payment_intent' => $session['payment_intent'],
@@ -190,7 +191,7 @@ class StripePaymentService implements PaymentInterface
 
         if ($order && $order->canBePaid()) {
             $order->markAsPaid($paymentIntent['id']);
-            
+
             Log::info('Order marked as paid via payment intent webhook', [
                 'order_id' => $order->id,
                 'payment_intent' => $paymentIntent['id'],
@@ -206,7 +207,7 @@ class StripePaymentService implements PaymentInterface
         if ($order && $order->payment_status === PaymentStatus::Pending) {
             $order->payment_status = PaymentStatus::Failed;
             $order->save();
-            
+
             Log::info('Order marked as failed via webhook', [
                 'order_id' => $order->id,
                 'payment_intent' => $paymentIntent['id'],
