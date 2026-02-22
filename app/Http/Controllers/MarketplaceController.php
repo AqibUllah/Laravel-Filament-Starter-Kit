@@ -176,6 +176,90 @@ class MarketplaceController extends Controller
     }
 
     /**
+     * Update cart item quantity
+     */
+    public function updateCart(Request $request, Product $product): JsonResponse
+    {
+        try {
+            $quantity = (int) $request->input('quantity', 1);
+
+            // Validate quantity
+            if ($quantity < 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Quantity must be at least 1.',
+                ], 400);
+            }
+
+            // Check if product is in stock
+            if (!$product->isInStock() || $quantity > $product->quantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Requested quantity is not available.',
+                ], 400);
+            }
+
+            $cart = session('marketplace_cart', []);
+            $found = false;
+
+            foreach ($cart as $key => $item) {
+                if ($item['product_id'] == $product->id) {
+                    $cart[$key]['quantity'] = $quantity;
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                // Item not found in cart, add it
+                $cart[] = [
+                    'product_id' => $product->id,
+                    'team_id' => $product->team_id,
+                    'quantity' => $quantity,
+                    'price' => $product->getCurrentPrice(),
+                ];
+            }
+
+            session(['marketplace_cart' => $cart]);
+
+            // Get updated cart data for response
+            $cartItems = [];
+            $totalAmount = 0;
+
+            foreach ($cart as $item) {
+                $cartProduct = Product::find($item['product_id']);
+                if ($cartProduct && $cartProduct->is_public && $cartProduct->team?->status) {
+                    $itemTotal = $cartProduct->getCurrentPrice() * $item['quantity'];
+                    $totalAmount += $itemTotal;
+
+                    $cartItems[] = [
+                        'product' => $cartProduct,
+                        'quantity' => $item['quantity'],
+                        'price' => $cartProduct->getCurrentPrice(),
+                        'total' => $itemTotal,
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cart updated successfully.',
+                'cart_items' => $cartItems,
+                'cart_count' => count($cartItems),
+                'total_amount' => $totalAmount,
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Cart update error: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating cart.',
+            ], 500);
+        }
+    }
+
+    /**
      * Show cart empty page
      */
     public function cartEmpty(): View
@@ -401,17 +485,17 @@ class MarketplaceController extends Controller
     {
         try {
             $sessionId = $request->get('session_id');
-            
+
             // If we have a session_id, verify the payment with Stripe
             if ($sessionId && $order->payment_status !== \App\Enums\PaymentStatus::Paid) {
                 $stripeService = app(\App\Services\Payments\StripePaymentService::class);
                 $paymentResult = $stripeService->processPayment(['session_id' => $sessionId]);
-                
+
                 if ($paymentResult['success']) {
                     $order = $paymentResult['order'];
                 }
             }
-            
+
             // Check payment status and return appropriate view
             if ($order->payment_status === \App\Enums\PaymentStatus::Paid) {
                 return view('marketplace.payment-success', compact('order'));

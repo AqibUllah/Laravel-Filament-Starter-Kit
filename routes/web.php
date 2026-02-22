@@ -25,6 +25,7 @@ Route::prefix('marketplace')->name('marketplace.')->group(function () {
     Route::get('/', [MarketplaceController::class, 'index'])->name('index');
     Route::get('/product/{product}', [MarketplaceController::class, 'show'])->name('show');
     Route::post('/cart/add/{product}', [MarketplaceController::class, 'addToCart'])->name('cart.add');
+    Route::put('/cart/update/{product}', [MarketplaceController::class, 'updateCart'])->name('cart.update');
     Route::get('/cart', [MarketplaceController::class, 'getCart'])->name('cart');
     Route::get('/cart/count', [MarketplaceController::class, 'getCartCount'])->name('cart.count');
     Route::delete('/cart/remove/{product}', [MarketplaceController::class, 'removeFromCart'])->name('cart.remove');
