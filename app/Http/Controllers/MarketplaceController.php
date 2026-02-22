@@ -374,24 +374,13 @@ class MarketplaceController extends Controller
             $currency = $orders->first()->currency;
 
             // Create payment intent for all orders
-            $paymentResult = $paymentService->createPayment([
-                'amount' => $totalAmount,
-                'currency' => $currency,
-                'order_ids' => $orders->pluck('id')->toArray(),
-                'customer_email' => $orders->first()->user?->email,
-                'success_url' => route('marketplace.payment.success', ['order' => $orders->first()->id]),
-                'cancel_url' => route('marketplace.payment.cancel', ['order' => $orders->first()->id]),
-                'metadata' => [
-                    'order_numbers' => $orders->pluck('order_number')->implode(','),
-                    'tenant_ids' => $orders->pluck('team_id')->unique()->implode(','),
-                    'customer_name' => $orders->first()->user?->name,
-                ],
-            ]);
+            $paymentResult = $paymentService->createCheckoutSession($orders->first());
 
             return response()->json([
-                'success' => true,
-                'payment_url' => $paymentResult['payment_url'] ?? null,
-                'payment_intent_id' => $paymentResult['payment_intent_id'] ?? null,
+                'success' => $paymentResult['success'],
+                'error'   => null,
+                'payment_url' => $paymentResult['checkout_url'] ?? null,
+                'session_id' => $paymentResult['session_id'] ?? null,
                 'message' => 'Payment initiated successfully.',
             ]);
 
@@ -408,10 +397,22 @@ class MarketplaceController extends Controller
     /**
      * Payment success callback
      */
-    public function paymentSuccess(Request $request, \App\Models\Order $order): View
+    public function paymentSuccess(\App\Models\Order $order, Request $request): View|JsonResponse
     {
         try {
-            // Verify payment was successful (via webhook or callback)
+            $sessionId = $request->get('session_id');
+            
+            // If we have a session_id, verify the payment with Stripe
+            if ($sessionId && $order->payment_status !== \App\Enums\PaymentStatus::Paid) {
+                $stripeService = app(\App\Services\Payments\StripePaymentService::class);
+                $paymentResult = $stripeService->processPayment(['session_id' => $sessionId]);
+                
+                if ($paymentResult['success']) {
+                    $order = $paymentResult['order'];
+                }
+            }
+            
+            // Check payment status and return appropriate view
             if ($order->payment_status === \App\Enums\PaymentStatus::Paid) {
                 return view('marketplace.payment-success', compact('order'));
             }
@@ -420,7 +421,10 @@ class MarketplaceController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Payment success page error: ' . $e->getMessage());
-            abort(500);
+            return response()->json([
+                'success'   => false,
+                'error'     => $e->getMessage()
+            ]);
         }
     }
 

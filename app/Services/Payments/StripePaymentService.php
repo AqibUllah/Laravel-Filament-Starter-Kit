@@ -26,7 +26,7 @@ class StripePaymentService implements PaymentInterface
                 $sku = $item->product->sku ?? 'N/A';
                 return [
                     'price_data' => [
-                        'currency' => strtolower($order->currency),
+                        'currency' => strtolower($item->order->currency),
                         'product_data' => [
                             'name' => $item->product_name,
                             'description' => "SKU: $sku",
@@ -48,8 +48,8 @@ class StripePaymentService implements PaymentInterface
                 ],
                 'line_items' => $lineItems,
                 'mode' => 'payment',
-                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('payment.cancel') . '?order_id=' . $order->id,
+                'success_url' => route('marketplace.payment.success',['order' => $order]) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('marketplace.payment.cancel',['order' => $order]) . '?order_id=' . $order->id,
                 'metadata' => [
                     'order_id' => $order->id,
                     'team_id' => $order->team_id,

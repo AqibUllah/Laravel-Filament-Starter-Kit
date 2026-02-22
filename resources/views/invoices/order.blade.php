@@ -11,7 +11,7 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
-        
+
         .invoice-container {
             max-width: 800px;
             margin: 0 auto;
@@ -20,7 +20,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .invoice-header {
             display: flex;
             justify-content: space-between;
@@ -29,68 +29,68 @@
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
-        
+
         .company-info h1 {
             color: #2c3e50;
             margin: 0;
             font-size: 28px;
         }
-        
+
         .company-info p {
             margin: 5px 0;
             color: #7f8c8d;
         }
-        
+
         .invoice-details {
             text-align: right;
         }
-        
+
         .invoice-details h2 {
             color: #3498db;
             margin: 0;
             font-size: 24px;
         }
-        
+
         .invoice-details p {
             margin: 5px 0;
             color: #7f8c8d;
         }
-        
+
         .addresses {
             display: flex;
             justify-content: space-between;
             margin-bottom: 30px;
             gap: 20px;
         }
-        
+
         .address-block {
             flex: 1;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 5px;
         }
-        
+
         .address-block h3 {
             margin: 0 0 10px 0;
             color: #2c3e50;
             font-size: 16px;
         }
-        
+
         .address-block p {
             margin: 5px 0;
             color: #7f8c8d;
         }
-        
+
         .order-items {
             margin-bottom: 30px;
         }
-        
+
         .order-items table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
-        
+
         .order-items th {
             background: #3498db;
             color: white;
@@ -98,41 +98,41 @@
             text-align: left;
             font-weight: bold;
         }
-        
+
         .order-items td {
             padding: 12px;
             border-bottom: 1px solid #ecf0f1;
         }
-        
+
         .order-items tr:last-child td {
             border-bottom: none;
         }
-        
+
         .order-items .text-right {
             text-align: right;
         }
-        
+
         .totals {
             text-align: right;
             margin-top: 20px;
         }
-        
+
         .totals table {
             width: 300px;
             border-collapse: collapse;
             margin-left: auto;
         }
-        
+
         .totals td {
             padding: 8px;
         }
-        
+
         .totals .total-row {
             border-top: 2px solid #3498db;
             font-weight: bold;
             font-size: 18px;
         }
-        
+
         .status-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -141,27 +141,27 @@
             font-weight: bold;
             text-transform: uppercase;
         }
-        
+
         .status-paid {
             background: #d4edda;
             color: #155724;
         }
-        
+
         .status-pending {
             background: #fff3cd;
             color: #856404;
         }
-        
+
         .status-shipped {
             background: #d1ecf1;
             color: #0c5460;
         }
-        
+
         .status-cancelled {
             background: #f8d7da;
             color: #721c24;
         }
-        
+
         .footer {
             margin-top: 40px;
             padding-top: 20px;
@@ -186,7 +186,7 @@
                 <h2>INVOICE</h2>
                 <p><strong>Invoice #:</strong> {{ $order->order_number }}</p>
                 <p><strong>Date:</strong> {{ $order->created_at->format('M d, Y') }}</p>
-                <p><strong>Status:</strong> 
+                <p><strong>Status:</strong>
                     <span class="status-badge status-{{ $order->order_status->value }}">
                         {{ $order->order_status->getLabel() }}
                     </span>
@@ -203,7 +203,7 @@
                 @if($billingAddress)
                     <p>{{ $billingAddress['first_name'] }} {{ $billingAddress['last_name'] }}</p>
                     <p>{{ $billingAddress['email'] }}</p>
-                    <p>{{ $billingAddress['phone'] }}</p>
+                    <p>{{ $billingAddress['phone'] ?? 'N/A' }}</p>
                     <p>{{ $billingAddress['address'] }}</p>
                     <p>{{ $billingAddress['city'] }}, {{ $billingAddress['state'] }} {{ $billingAddress['postal_code'] }}</p>
                     <p>{{ $billingAddress['country'] }}</p>
@@ -215,7 +215,7 @@
                 <h3>Shipping Address</h3>
                 @if($shippingAddress)
                     <p>{{ $shippingAddress['first_name'] }} {{ $shippingAddress['last_name'] }}</p>
-                    <p>{{ $shippingAddress['phone'] }}</p>
+                    <p>{{ $shippingAddress['phone'] ?? 'N/A'}}</p>
                     <p>{{ $shippingAddress['address'] }}</p>
                     <p>{{ $shippingAddress['city'] }}, {{ $shippingAddress['state'] }} {{ $shippingAddress['postal_code'] }}</p>
                     <p>{{ $shippingAddress['country'] }}</p>
