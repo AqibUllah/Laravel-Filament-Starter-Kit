@@ -972,7 +972,7 @@
                     </div>
 
                     <!-- Cart Items Container with custom scrollbar -->
-                    <div class="flex-1 overflow-y-auto px-6 py-4 bg-gray-50 dark:bg-gray-800/50 backdrop-blur-sm transition-colors duration-300"
+                    <div class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-800/50 backdrop-blur-sm transition-colors duration-300"
                          id="cart-items-container"
                          style="scrollbar-width: thin; scrollbar-color: #cbd5e0 #f7fafc;"
                          x-data="{ showEmpty: false }">
@@ -1282,15 +1282,15 @@
                 const totalItems = data.cart_items.reduce((sum, item) => sum + item.quantity, 0);
                 cartItemCount.textContent = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
 
-                let html = '<div class="flow-root"><ul class="-my-6 divide-y divide-gray-200">';
+                let html = '<div class="flow-root"><ul class="m-2">';
 
                 data.cart_items.forEach(item => {
                     const itemTotal = (item.quantity * parseFloat(item.price)).toFixed(2);
                     html += `
-                <li class="py-6 cart-item" data-item-id="${item.id}">
+                <li class="cart-item my-4 bg-white dark:bg-gray-700/50 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 group/item" data-item-id="${item.id}">
                     <div class="flex">
                         <!-- Product Image -->
-                        <div class="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+                        <div class="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden shadow-sm">
                             ${item.product.images && item.product.images[0] ?
                         `<img src="${item.product.images[0]}" alt="${item.product.name}" class="w-full h-full object-center object-cover">` :
                         `<div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
@@ -1302,15 +1302,15 @@
                         </div>
 
                         <!-- Product Details -->
-                        <div class="ml-4 flex-1 flex flex-col">
+                        <div class="ml-4 flex-1 flex flex-col p-3">
                             <div class="flex justify-between">
                                 <div>
-                                    <h3 class="text-base font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                                    <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-600 transition-colors">
                                         <a href="{{ url('/marketplace/cart/add') }} /${item.product.id}">${item.product.name}</a>
                                     </h3>
-                                    <p class="mt-1 text-sm text-gray-500">${item.team?.name}</p>
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-100">${item.team?.name}</p>
                                 </div>
-                                <p class="text-base font-bold text-gray-900">$${itemTotal}</p>
+                                <p class="text-base font-bold text-gray-900 dark:text-gray-50">$${itemTotal}</p>
                             </div>
 
                             <!-- Quantity and Remove -->
@@ -1321,8 +1321,8 @@
                                         <select onchange="updateCartItem(${item.product.id}, this.value)"
                                                 class="appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 px-3 py-2">
                                             ${[1,2,3,4,5,6,7,8,9,10].map(num =>
-                        `<option value="${num}" ${item.quantity == num ? 'selected' : ''}>${num}</option>`
-                    ).join('')}
+                                                `<option value="${num}" ${item.quantity == num ? 'selected' : ''}>${num}</option>`
+                                            ).join('')}
                                         </select>
                                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -1332,7 +1332,7 @@
                                     </div>
                                 </div>
                                 <button onclick="removeItemFromCart(${item.product.id})"
-                                        class="text-sm text-red-600 hover:text-red-800 font-medium flex items-center transition-colors duration-200 group">
+                                        class="text-sm text-red-600 hover:cursor-pointer hover:text-red-800 font-medium flex items-center transition-colors duration-200 group">
                                     <svg class="w-4 h-4 mr-1 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                     </svg>
