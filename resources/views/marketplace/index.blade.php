@@ -306,52 +306,6 @@
         }
     </style>
 
-    <!-- products style -->
-    <style>
-
-
-        /* Animation delays */
-        .animation-delay-500 {
-            animation-delay: 0.5s;
-        }
-
-        /* Pulse subtle animation */
-        @keyframes pulse-subtle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .animate-pulse-subtle {
-            animation: pulse-subtle 2s ease-in-out infinite;
-        }
-
-        /* Fade in up animation */
-        @keyframes fade-in-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fade-in-up {
-            animation: fade-in-up 0.6s ease-out forwards;
-            opacity: 0;
-        }
-
-        /* Fade in animation */
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .animate-fade-in {
-            animation: fade-in 0.8s ease-out forwards;
-        }
-    </style>
 @endpush
 
 @section('content')
