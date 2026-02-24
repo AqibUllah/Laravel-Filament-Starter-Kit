@@ -92,18 +92,18 @@ class FeatureLimiterService
         $storageFeature = $this->tenant->subscription->plan->features
             ->where('name', 'Storage')
             ->first();
-        
+
         if ($storageFeature) {
             $limit = $storageFeature->value; // e.g., "10GB"
             return $this->convertStorageToBytes($limit);
         }
-        
+
         // Fallback to max_storage feature
         $maxStorageFeature = $this->getFeatureLimit('max_storage');
         if ($maxStorageFeature > 0) {
             return $maxStorageFeature * 1024 * 1024; // Convert MB to bytes
         }
-        
+
         // Default limit if no feature found
         return 10 * 1024 * 1024 * 1024; // 10GB default
     }
@@ -111,22 +111,22 @@ class FeatureLimiterService
     public function convertStorageToBytes(string $storage): int
     {
         $storage = strtoupper(trim($storage));
-        
+
         if (str_contains($storage, 'TB')) {
             $value = (float) str_replace('TB', '', $storage);
             return (int) ($value * 1024 * 1024 * 1024 * 1024);
         }
-        
+
         if (str_contains($storage, 'GB')) {
             $value = (float) str_replace('GB', '', $storage);
             return (int) ($value * 1024 * 1024 * 1024);
         }
-        
+
         if (str_contains($storage, 'MB')) {
             $value = (float) str_replace('MB', '', $storage);
             return (int) ($value * 1024 * 1024);
         }
-        
+
         // Assume GB if no unit specified
         return (int) ((float) $storage * 1024 * 1024 * 1024);
     }
@@ -137,9 +137,9 @@ class FeatureLimiterService
         $bytes = max(0, $bytes);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
-        
+
         $bytes /= (1 << (10 * $pow));
-        
+
         return round($bytes, 2) . ' ' . $units[$pow];
     }
 
@@ -179,7 +179,7 @@ class FeatureLimiterService
         return Cache::remember(
             "tenant_{$this->tenant->id}_feature_{$feature}",
             now()->addHours(1),
-            fn () => $this->tenant->currentPlan->features->where('name', $feature)->first()?->value ?? 0
+            fn () => $this->tenant->currentPlan?->features->where('name', $feature)->first()?->value ?? 0
         );
     }
 

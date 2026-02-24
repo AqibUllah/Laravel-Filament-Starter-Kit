@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Theme Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Apply saved/system theme ASAP to avoid flash
+        (function() {
+            try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var isDark = stored ? stored === 'dark' : prefersDark;
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Dark Theme Test</h1>
+        
+        <button id="theme-toggle" class="mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+            Toggle Theme
+        </button>
+        
+        <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-4">
+            <h2 class="text-xl font-semibold mb-2">Test Card</h2>
+            <p class="text-gray-600 dark:text-gray-300">
+                This card should change colors when you toggle the theme.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded">
+                <h3 class="font-semibold mb-2">Light/Dark Background</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Background and border should change with theme
+                </p>
+            </div>
+            <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 p-4 rounded">
+                <h3 class="font-semibold mb-2">Blue Variant</h3>
+                <p class="text-sm text-blue-600 dark:text-blue-300">
+                    Blue colors should also adapt
+                </p>
+            </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded">
+            <p class="text-green-800 dark:text-green-200">
+                Current theme: <span id="current-theme" class="font-bold">Loading...</span>
+            </p>
+            <p class="text-green-700 dark:text-green-300 text-sm mt-1">
+                LocalStorage: <span id="storage-theme" class="font-mono">Loading...</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            if (theme === 'dark') {
+                root.classList.add('dark');
+            } else {
+                root.classList.remove('dark');
+            }
+            localStorage.setItem('theme', theme);
+            updateStatus(theme);
+        }
+
+        function getPreferredTheme() {
+            const stored = localStorage.getItem('theme');
+            if (stored === 'light' || stored === 'dark') return stored;
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function updateStatus(theme) {
+            document.getElementById('current-theme').textContent = theme;
+            document.getElementById('storage-theme').textContent = localStorage.getItem('theme') || 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme
+            const initial = getPreferredTheme();
+            applyTheme(initial);
+
+            // Toggle handler
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                applyTheme(current === 'dark' ? 'light' : 'dark');
+            });
+        });
+    </script>
+</body>
+</html>
