@@ -165,7 +165,7 @@ class TenantPanelProvider extends PanelProvider
                     ->icon('heroicon-o-credit-card')
                     ->sort(3),
             ])
-            ->viteTheme('resources/css/filament/team/theme.css', 'resources/css/filament/team/custom-sidebar.css')
+            ->viteTheme('resources/css/filament/team/theme.css')
             ->discoverWidgets(in: app_path('Filament/Tenant/Widgets'), for: 'App\Filament\Tenant\Widgets')
             ->widgets([
                 TimeTrackingWidget::class,

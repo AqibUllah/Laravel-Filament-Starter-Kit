@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel Filament Starter Kit') }} - Multi-Tenant SaaS Platform | @yield('title')</title>
     <meta name="description" content="A powerful multi-tenant SaaS starter kit built with Laravel and Filament. Manage teams, tasks, projects, and subscriptions with ease.">
 
@@ -281,12 +282,12 @@
 
                     // Toggle handlers
                     document.getElementById('theme-toggle')?.addEventListener('click', function() {
-                        const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-                        applyTheme(current === 'dark' ? 'light' : 'dark');
+                        const isDark = document.documentElement.classList.contains('dark');
+                        applyTheme(isDark ? 'light' : 'dark');
                     });
                     document.getElementById('theme-toggle-mobile')?.addEventListener('click', function() {
-                        const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-                        applyTheme(current === 'dark' ? 'light' : 'dark');
+                        const isDark = document.documentElement.classList.contains('dark');
+                        applyTheme(isDark ? 'light' : 'dark');
                     });
                 });
             })();

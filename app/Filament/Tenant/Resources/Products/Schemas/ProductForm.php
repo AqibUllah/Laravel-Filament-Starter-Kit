@@ -108,6 +108,9 @@ class ProductForm
                     Toggle::make('is_active')
                         ->label('Active')
                         ->default(true),
+                    Toggle::make('is_public')
+                        ->label('Publish')
+                        ->default(true),
                     Toggle::make('is_featured')
                         ->label('Featured')
                         ->default(false),

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Toggle Test</title>
+    <link href="/build/assets/app-BVD6O3BA.css" rel="stylesheet">
+    <script>
+        // Apply saved/system theme ASAP to avoid flash
+        (function() {
+            try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var isDark = stored ? stored === 'dark' : prefersDark;
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Theme Toggle Test</h1>
+        
+        <!-- Desktop Theme Toggle -->
+        <button id="theme-toggle" class="mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+            <span id="icon-moon-desktop" class="w-5 h-5">🌙</span>
+            <span id="icon-sun-desktop" class="w-5 h-5 hidden">☀️</span>
+            Toggle Theme
+        </button>
+        
+        <!-- Mobile Theme Toggle -->
+        <button id="theme-toggle-mobile" class="mb-6 ml-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">
+            <span id="icon-moon-mobile" class="w-5 h-5">🌙</span>
+            <span id="icon-sun-mobile" class="w-5 h-5 hidden">☀️</span>
+            Mobile Toggle
+        </button>
+        
+        <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-4">
+            <h2 class="text-xl font-semibold mb-2">Test Card</h2>
+            <p class="text-gray-600 dark:text-gray-300">
+                This card should change colors when you toggle the theme.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded">
+                <h3 class="font-semibold mb-2">Light/Dark Background</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Background and border should change with theme
+                </p>
+            </div>
+            <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 p-4 rounded">
+                <h3 class="font-semibold mb-2">Blue Variant</h3>
+                <p class="text-sm text-blue-600 dark:text-blue-300">
+                    Blue colors should also adapt
+                </p>
+            </div>
+        </div>
+        
+        <div class="mt-6 p-4 bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded">
+            <p class="text-green-800 dark:text-green-200">
+                Current theme: <span id="current-theme" class="font-bold">Loading...</span>
+            </p>
+            <p class="text-green-700 dark:text-green-300 text-sm mt-1">
+                LocalStorage: <span id="storage-theme" class="font-mono">Loading...</span>
+            </p>
+            <p class="text-green-700 dark:text-green-300 text-sm mt-1">
+                HTML class: <span id="html-class" class="font-mono">Loading...</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            console.log('Applying theme:', theme);
+            if (theme === 'dark') {
+                root.classList.add('dark');
+            } else {
+                root.classList.remove('dark');
+            }
+            localStorage.setItem('theme', theme);
+            updateThemeIcons(theme);
+            updateStatus(theme);
+            console.log('Theme applied, dark class present:', root.classList.contains('dark'));
+        }
+
+        function getPreferredTheme() {
+            const stored = localStorage.getItem('theme');
+            if (stored === 'light' || stored === 'dark') return stored;
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function updateThemeIcons(theme) {
+            const isDark = theme === 'dark';
+            const desktopSun = document.getElementById('icon-sun-desktop');
+            const desktopMoon = document.getElementById('icon-moon-desktop');
+            const mobileSun = document.getElementById('icon-sun-mobile');
+            const mobileMoon = document.getElementById('icon-moon-mobile');
+            
+            console.log('Updating icons for theme:', theme, 'isDark:', isDark);
+            
+            if (desktopSun && desktopMoon) {
+                desktopSun.classList.toggle('hidden', !isDark);
+                desktopMoon.classList.toggle('hidden', isDark);
+                console.log('Desktop icons updated - sun hidden:', desktopSun.classList.contains('hidden'), 'moon hidden:', desktopMoon.classList.contains('hidden'));
+            }
+            if (mobileSun && mobileMoon) {
+                mobileSun.classList.toggle('hidden', !isDark);
+                mobileMoon.classList.toggle('hidden', isDark);
+                console.log('Mobile icons updated - sun hidden:', mobileSun.classList.contains('hidden'), 'moon hidden:', mobileMoon.classList.contains('hidden'));
+            }
+        }
+
+        function updateStatus(theme) {
+            document.getElementById('current-theme').textContent = theme;
+            document.getElementById('storage-theme').textContent = localStorage.getItem('theme') || 'none';
+            document.getElementById('html-class').textContent = document.documentElement.className;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme
+            const initial = getPreferredTheme();
+            console.log('Initial theme:', initial);
+            applyTheme(initial);
+
+            // Toggle handlers
+            document.getElementById('theme-toggle')?.addEventListener('click', function() {
+                const isDark = document.documentElement.classList.contains('dark');
+                const newTheme = isDark ? 'light' : 'dark';
+                console.log('Toggle clicked - current is dark:', isDark, 'switching to:', newTheme);
+                applyTheme(newTheme);
+            });
+            document.getElementById('theme-toggle-mobile')?.addEventListener('click', function() {
+                const isDark = document.documentElement.classList.contains('dark');
+                const newTheme = isDark ? 'light' : 'dark';
+                console.log('Mobile toggle clicked - current is dark:', isDark, 'switching to:', newTheme);
+                applyTheme(newTheme);
+            });
+        });
+    </script>
+</body>
+</html>

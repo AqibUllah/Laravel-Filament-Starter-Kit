@@ -36,8 +36,8 @@ class CreateProduct extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['team_id'] = auth()->user()->currentTeam?->id ?? auth()->user()->team_id;
-        
+        $data['team_id'] = auth()->user()->tenant()?->id ?? auth()->user()->team_id;
+
         return $data;
     }
 }
