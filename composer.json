@@ -28,7 +28,6 @@
         "saade/filament-laravel-log": "^4.0",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-settings": "^3.5",
-        "srmklive/paypal": "^3.0",
         "stripe/stripe-php": "^17.6",
         "visualbuilder/email-templates": "^4.0"
     },
