@@ -59,6 +59,21 @@ Ideal for developers looking for a **clean, extensible foundation** with multi-t
 
 ---
 
+## Community Edition
+This edition includes:
+- Multi-tenancy
+- Teams
+- Task management
+- Basic dashboard
+
+## Pro Version (Hosted SaaS)
+Includes:
+- Full marketplace
+- Product management
+- Order system
+- Multiple payment gateways
+- Advanced UI
+
 ## ✨ Features
 
 - 🔐 **Authentication System**
