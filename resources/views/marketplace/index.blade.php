@@ -306,90 +306,6 @@
         }
     </style>
 
-    <!-- cart-drawer styles -->
-    <style>
-        /* Custom Scrollbar */
-        #cart-items-container {
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e0 #f7fafc;
-        }
-
-        #cart-items-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #cart-items-container::-webkit-scrollbar-track {
-            background: #f7fafc;
-            border-radius: 10px;
-        }
-
-        #cart-items-container::-webkit-scrollbar-thumb {
-            background: #cbd5e0;
-            border-radius: 10px;
-        }
-
-        #cart-items-container::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Dark mode scrollbar */
-        .dark #cart-items-container {
-            scrollbar-color: #4b5563 #1f2937;
-        }
-
-        .dark #cart-items-container::-webkit-scrollbar-track {
-            background: #1f2937;
-        }
-
-        .dark #cart-items-container::-webkit-scrollbar-thumb {
-            background: #4b5563;
-        }
-
-        .dark #cart-items-container::-webkit-scrollbar-thumb:hover {
-            background: #6b7280;
-        }
-
-        /* Animation Keyframes */
-        @keyframes float-particle {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-            25% { transform: translateY(-20px) translateX(10px); opacity: 0.6; }
-            50% { transform: translateY(-30px) translateX(-10px); opacity: 0.4; }
-            75% { transform: translateY(-20px) translateX(20px); opacity: 0.6; }
-        }
-
-        .animate-float-particle {
-            animation: float-particle 6s ease-in-out infinite;
-        }
-
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 0.1; transform: scale(1); }
-            50% { opacity: 0.2; transform: scale(1.1); }
-        }
-
-        .animate-pulse-slow {
-            animation: pulse-slow 4s ease-in-out infinite;
-        }
-
-        @keyframes bounce-subtle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .animate-bounce-subtle {
-            animation: bounce-subtle 2s ease-in-out infinite;
-        }
-
-        /* Animation Delays */
-        .animation-delay-1000 {
-            animation-delay: 1s;
-        }
-
-        /* Smooth transitions */
-        * {
-            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-        }
-    </style>
-
 @endpush
 
 @section('content')
@@ -508,12 +424,12 @@
                             <!-- Stats Counter -->
                             <div class="flex items-center justify-center gap-4 text-white/80 dark:text-white/70 mt-4 sm:mt-0 sm:ml-4">
                                 <div class="flex items-center">
-                                    <span class="text-2xl font-bold animate-pulse-subtle">10k+</span>
+                                    <span class="text-2xl font-bold animate-pulse-subtle">{{ number_format($stats['products_count'], 0, '.', ',') }}+</span>
                                     <span class="ml-1 text-sm">Products</span>
                                 </div>
                                 <div class="w-px h-8 bg-white/30 dark:bg-white/20"></div>
                                 <div class="flex items-center">
-                                    <span class="text-2xl font-bold animate-pulse-subtle animation-delay-500">5k+</span>
+                                    <span class="text-2xl font-bold animate-pulse-subtle animation-delay-500">{{ number_format($stats['sellers_count'], 0, '.', ',') }}+</span>
                                     <span class="ml-1 text-sm">Sellers</span>
                                 </div>
                             </div>
@@ -885,53 +801,7 @@
     </div>
 
     <!-- Shopping Cart Drawer -->
-    {{--    <div id="cart-drawer" class="fixed inset-0 overflow-hidden z-50" style="display: none;">--}}
-{{--        <div class="absolute inset-0 overflow-hidden">--}}
-{{--            <div class="absolute inset-0  bg-opacity-30 backdrop-blur-xs transition-opacity" onclick="toggleCart()"></div>--}}
-
-{{--            <div id="cart-panel" class="fixed inset-y-0 right-0 pl-10 max-w-full flex transform translate-x-full transition-transform duration-500 ease-in-out">--}}
-{{--                <div class="w-screen max-w-md h-full flex flex-col bg-white shadow-xl">--}}
-{{--                    <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">--}}
-{{--                        <div class="flex items-start justify-between">--}}
-{{--                            <h2 class="text-lg font-medium text-gray-900">Shopping Cart</h2>--}}
-{{--                            <button onclick="toggleCart()" class="ml-3 h-7 flex items-center">--}}
-{{--                                <svg class="h-6 w-6 text-gray-400 hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">--}}
-{{--                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>--}}
-{{--                                </svg>--}}
-{{--                            </button>--}}
-{{--                        </div>--}}
-
-{{--                        <div class="mt-8" id="cart-content">--}}
-{{--                            <!-- Cart items will be loaded here -->--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                        <div class="border-t border-gray-200 py-6 px-4 sm:px-6">--}}
-{{--                            <div class="flex justify-between text-base font-medium text-gray-900">--}}
-{{--                                <p>Subtotal</p>--}}
-{{--                                <p id="cart-subtotal">$0.00</p>--}}
-{{--                            </div>--}}
-{{--                            <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>--}}
-{{--                            <div class="mt-6">--}}
-{{--                                <a href="{{ route('marketplace.checkout') }}" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700">--}}
-{{--                                    Checkout--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-{{--                            <div class="mt-6 flex justify-center text-sm text-center text-gray-500">--}}
-{{--                                <p>or <button @click="open = false" class="text-blue-600 font-medium hover:text-blue-500">Continue Shopping<span aria-hidden="true"> →</span></button></p>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-
-
-    <!-- Shopping Cart Drawer -->
     <x-cart-drawer />
-
-    <!-- Cart Toggle Button with Badge -->
-
 
     <!-- Success/Error Notification -->
     <div id="cart-notification" class="fixed top-4 right-4 z-50 transform transition-all duration-500 translate-x-full">

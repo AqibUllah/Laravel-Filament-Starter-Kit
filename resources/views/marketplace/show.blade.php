@@ -256,7 +256,7 @@
                                 <h3 class="dark:text-white">Tags</h3>
                                 <div class="flex flex-wrap gap-2 mt-2">
                                     @foreach($product->tags as $tag)
-                                        <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm">{{ $tag['tag'] }}</span>
+                                        <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm">{{ is_array($tag) ? $tag['tag'] : $tag }}</span>
                                     @endforeach
                                 </div>
                             @endif
