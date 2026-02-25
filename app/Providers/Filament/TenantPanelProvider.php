@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use Alizharb\FilamentThemesManager\FilamentThemesManagerPlugin;
-use App\Filament\Tenant\Navigation\CustomSidebarNavigation;
 use App\Filament\Tenant\Pages\Dashboard;
 use App\Filament\Tenant\Pages\Plans;
 use App\Filament\Tenant\Pages\PlansDashboard;
@@ -13,7 +12,6 @@ use App\Filament\Tenant\Pages\Team\Profile as TeamProfile;
 use App\Filament\Tenant\Pages\Tenancy\RegisterTeam;
 use App\Filament\Tenant\Resources\Tasks\Widgets\TimeTrackingWidget;
 use App\Filament\Tenant\Widgets\TaskStatsWidget;
-use App\Http\Middleware\HandleCustomDomain;
 use App\Http\Middleware\RecordUsageMiddleware;
 use App\Http\Middleware\RedirectIfUserNotSubscribedMiddleware;
 use App\Models\Team;
@@ -220,7 +218,6 @@ class TenantPanelProvider extends PanelProvider
             ->middleware([
                 // Existing middleware are above; add usage recording as a global middleware for tenant panel
                 RecordUsageMiddleware::class,
-                HandleCustomDomain::class
             ])
             ->authMiddleware([
                 Authenticate::class,

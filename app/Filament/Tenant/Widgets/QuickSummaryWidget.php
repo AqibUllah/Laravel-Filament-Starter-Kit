@@ -31,18 +31,18 @@ class QuickSummaryWidget extends BaseWidget
         $completedProjects = Project::query()->completed()->count();
         $overdueProjects = Project::query()->overdue()->count();
 
-        $totalTasks = Task::forMe()->count();
-        $completedTasks = Task::forMe()->completed()->count();
-        $overdueTasks = Task::forMe()->overdue()->count();
-        $myPendingTasks = Task::forMe()->pending()->count();
+        $totalTasks = Task::query()->forMe()->count();
+        $completedTasks = Task::query()->forMe()->completed()->count();
+        $overdueTasks = Task::query()->forMe()->overdue()->count();
+        $myPendingTasks = Task::query()->forMe()->pending()->count();
 
         $currentSubscription = Subscription::where('team_id', $currentTeam->id)
             ->where('status', 'active')
             ->first();
         $currentPlan = $currentSubscription?->plan;
 
-        $totalEstimated = Task::forMe()->sum('estimated_hours');
-        $totalActual = Task::forMe()->sum('actual_hours');
+        $totalEstimated = Task::query()->forMe()->sum('estimated_hours');
+        $totalActual = Task::query()->forMe()->sum('actual_hours');
         $efficiency = $totalEstimated > 0 ? ($totalActual / $totalEstimated) * 100 : 0;
 
         return [

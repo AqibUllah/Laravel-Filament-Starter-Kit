@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\CouponController;
-use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Models\Plan;
 use Illuminate\Support\Facades\Route;

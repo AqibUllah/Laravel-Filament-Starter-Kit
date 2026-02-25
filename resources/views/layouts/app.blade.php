@@ -105,7 +105,6 @@
                     </a>
             </div>
             <div class="hidden md:flex items-center space-x-8">
-                <a href="{{ route('marketplace.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Marketplace</a>
                 <a href="{{ route('home') }}#features" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Features</a>
                 <a href="{{ route('home') }}#pricing" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Pricing</a>
                 <a href="{{ route('home') }}#about" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">About</a>
@@ -154,7 +153,6 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
         <div class="px-4 py-4 space-y-4">
-            <a href="{{ route('marketplace.index') }}" class="block text-gray-700 dark:text-gray-300">Marketplace</a>
             <a href="{{ route('home') }}#features" class="block text-gray-700 dark:text-gray-300">Features</a>
             <a href="{{ route('home') }}#pricing" class="block text-gray-700 dark:text-gray-300">Pricing</a>
             <a href="{{ route('home') }}#about" class="block text-gray-700 dark:text-gray-300">About</a>

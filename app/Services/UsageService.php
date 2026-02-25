@@ -105,7 +105,7 @@ class UsageService
             $end = $billingPeriod['end'];
         }
 
-        $usage = Usage::forTeam($team->id)
+        $usage = Usage::query()->forTeam($team->id)
             ->forBillingPeriod($start, $end)
             ->selectRaw('metric_name, SUM(quantity) as total_quantity, SUM(total_amount) as total_amount')
             ->groupBy('metric_name')
