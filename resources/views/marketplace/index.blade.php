@@ -1,311 +1,60 @@
 @extends('layouts.app')
-
+@use(App\Models\Team)
 @push('styles')
-
     <style>
-        /* Slide animations - ADD THESE CLASSES */
-        .slide-in {
-            transform: translateX(0) !important;
-        }
-
-        .slide-out {
-            transform: translateX(100%) !important;
-        }
-
-        /* Initial state for cart panel */
-        #cart-panel {
-            transform: translateX(0);
-        }
-
-        /* Optional: Add a subtle shadow animation */
-        #cart-panel {
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Ensure the backdrop blur works */
-        .backdrop-blur-sm {
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-        }
-
-        /* Cart count badge animation */
-        @keyframes bounce-in {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .animate-bounce-in {
-            animation: bounce-in 0.3s ease-out;
-        }
-
-        /* Custom scrollbar styles */
-        #cart-items-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #cart-items-container::-webkit-scrollbar-track {
-            background: #f7fafc;
-            border-radius: 10px;
-        }
-
-        #cart-items-container::-webkit-scrollbar-thumb {
-            background: #cbd5e0;
-            border-radius: 10px;
-            transition: background 0.2s;
-        }
-
-        #cart-items-container::-webkit-scrollbar-thumb:hover {
-            background: #a0aec0;
-        }
-
-        /* Loading skeleton animation */
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
-            }
-        }
-
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 1000px 100%;
-            animation: shimmer 2s infinite;
-        }
-    </style>
-
-    <style>
-        @keyframes fade-in-down {
-            0% {
+        /* Marketplace specific animations and styles */
+        @keyframes fadeInUp {
+            from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(30px);
             }
-            100% {
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .animate-fade-in-down {
-            animation: fade-in-down 0.5s ease-out;
-        }
-
-        @keyframes pulse-slow {
+        @keyframes float {
             0%, 100% {
-                opacity: 0.4;
+                transform: translateY(0px);
             }
             50% {
-                opacity: 0.6;
+                transform: translateY(-20px);
             }
-        }
-
-        .animate-pulse-slow {
-            animation: pulse-slow 3s infinite;
-        }
-
-        .line-clamp-1 {
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-        }
-
-        .line-clamp-2 {
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-
-        /* Custom animations that can be added to tailwind.config.js */
-        @keyframes float-slow {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-
-        .animate-float-slow {
-            animation: float-slow 8s ease-in-out infinite;
-        }
-
-        .animate-float-slower {
-            animation: float-slow 12s ease-in-out infinite;
-        }
-
-        @keyframes slide {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .animate-slide {
-            animation: slide 8s linear infinite;
-        }
-
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .animate-spin-slow {
-            animation: spin-slow 20s linear infinite;
-        }
-
-        .animate-spin-slower {
-            animation: spin-slow 30s linear infinite;
-        }
-
-        @keyframes gradient-x {
-            0%, 100% { background-size: 200% 200%; background-position: left center; }
-            50% { background-size: 200% 200%; background-position: right center; }
-        }
-
-        .animate-gradient-x {
-            animation: gradient-x 3s ease infinite;
-            background-size: 200% 200%;
-        }
-
-        @keyframes float-particle {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-            25% { transform: translateY(-20px) translateX(10px); opacity: 0.6; }
-            50% { transform: translateY(-30px) translateX(-10px); opacity: 0.4; }
-            75% { transform: translateY(-20px) translateX(20px); opacity: 0.6; }
-        }
-
-        .animate-float-particle {
-            animation: float-particle 6s ease-in-out infinite;
-        }
-
-        @keyframes bounce-subtle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .animate-bounce-subtle {
-            animation: bounce-subtle 2s ease-in-out infinite;
-        }
-
-        @keyframes wave {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-10px); }
-        }
-
-        .animate-wave {
-            animation: wave 5s ease-in-out infinite;
-        }
-
-        /* Animation delays */
-        .animation-delay-500 {
-            animation-delay: 0.5s;
-        }
-
-        .animation-delay-1000 {
-            animation-delay: 1s;
-        }
-
-        .animation-delay-2000 {
-            animation-delay: 2s;
-        }
-
-        .animation-delay-4000 {
-            animation-delay: 4s;
-        }
-
-        /* Grid pattern */
-        .bg-grid-pattern {
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-
-        /* Dark mode grid pattern */
-        .dark .bg-grid-pattern {
-            background-image:
-                linear-gradient(rgba(168, 85, 247, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
-        }
-
-        /* Pulse subtle */
-        @keyframes pulse-subtle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .animate-pulse-subtle {
-            animation: pulse-subtle 2s ease-in-out infinite;
-        }
-
-        /* Fade animations */
-        @keyframes fade-in-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .animate-fade-in-up {
-            animation: fade-in-up 0.8s ease-out forwards;
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        .animate-fade-in {
-            animation: fade-in 1s ease-out forwards;
+        .gradient-bg-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
-        @keyframes slide-down {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .gradient-bg-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
 
-        .animate-slide-down {
-            animation: slide-down 0.6s ease-out forwards;
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        @keyframes slide-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .section-padding {
+            padding: 5rem 0;
         }
 
-        .animate-slide-up {
-            animation: slide-up 0.6s ease-out forwards;
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 3rem 0;
+            }
         }
     </style>
-
 @endpush
 
 @section('content')
@@ -410,16 +159,16 @@
                                 Browse Categories
                             </a>
 
-                            @guest
-                                <a href="#"
-                                   class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-medium rounded-lg text-white bg-gradient-to-r from-yellow-400 to-orange-500 dark:from-purple-500 dark:to-pink-500 hover:from-yellow-500 hover:to-orange-600 dark:hover:from-purple-600 dark:hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 overflow-hidden">
-                                    <span class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-                                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                    </svg>
-                                    Join as Buyer
-                                </a>
-                            @endguest
+{{--                            @guest--}}
+{{--                                <a href="#"--}}
+{{--                                   class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-medium rounded-lg text-white bg-gradient-to-r from-yellow-400 to-orange-500 dark:from-purple-500 dark:to-pink-500 hover:from-yellow-500 hover:to-orange-600 dark:hover:from-purple-600 dark:hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 overflow-hidden">--}}
+{{--                                    <span class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>--}}
+{{--                                    <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">--}}
+{{--                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>--}}
+{{--                                    </svg>--}}
+{{--                                    Join as Buyer--}}
+{{--                                </a>--}}
+{{--                            @endguest--}}
 
                             <!-- Stats Counter -->
                             <div class="flex items-center justify-center gap-4 text-white/80 dark:text-white/70 mt-4 sm:mt-0 sm:ml-4">
@@ -561,28 +310,48 @@
                         </div>
 
                         <!-- Active Filters Display -->
-                        @if(request()->anyFilled(['category', 'team', 'search']))
+                        @if(request()->anyFilled(['category', 'team', 'search','sort']))
                             <div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                                 <span class="text-sm text-gray-600 dark:text-gray-400">Active filters:</span>
                                 @if(request('search'))
                                     <span class="inline-flex items-center px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm">
-                                Search: "{{ request('search') }}"
-                                <a href="{{ route('marketplace.index', array_merge(request()->except('search'), request()->query())) }}" class="ml-2 hover:text-blue-600 dark:hover:text-blue-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                    </svg>
-                                </a>
-                            </span>
+                                        Search: "{{ request('search') }}"
+                                        <a href="{{ route('marketplace.index', request()->except('search')) }}" class="ml-2 hover:text-blue-600 dark:hover:text-blue-400">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </a>
+                                    </span>
                                 @endif
                                 @if(request('category'))
                                     <span class="inline-flex items-center px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full text-sm">
-                                Category: {{ $categories->find(request('category'))?->name }}
-                                <a href="{{ route('marketplace.index', array_merge(request()->except('category'), request()->query())) }}" class="ml-2 hover:text-purple-600 dark:hover:text-purple-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                    </svg>
-                                </a>
-                            </span>
+                                        Category: {{ $categories->find(request('category'))?->name }}
+                                        <a href="{{ route('marketplace.index', request()->except('category')) }}" class="ml-2 hover:text-purple-600 dark:hover:text-purple-400">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                @endif
+                                @if(request('sort'))
+                                    <span class="inline-flex items-center px-3 py-1 bg-purple-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded-full text-sm">
+                                        Sort: {{ request('sort') }}
+                                        <a href="{{ route('marketplace.index', request()->except('sort')) }}" class="ml-2 hover:text-orange-600 dark:hover:text-orange-400">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </a>
+                                    </span>
+                                @endif
+                                @if(request('team'))
+                                    <span class="inline-flex items-center px-3 py-1 bg-purple-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm">
+                                        Seller: {{ Team::find(request('team'))->name }}
+                                        <a href="{{ route('marketplace.index', request()->except('team')) }}" class="ml-2 hover:text-green-600 dark:hover:text-green-400">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </a>
+                                    </span>
                                 @endif
                             </div>
                         @endif
@@ -798,6 +567,23 @@
                 </div>
             </div>
         </section>
+
+        <!-- Newsletter Section -->
+        <section class="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Stay Updated</h2>
+                <p class="text-xl text-blue-100 mb-8">Get the latest products and exclusive offers delivered to your inbox</p>
+
+                <form class="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
+                    <input type="email" placeholder="Enter your email"
+                           class="flex-1 px-6 py-4 bg-gray-100 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white">
+                    <button type="submit" class="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </section>
+
     </div>
 
     <!-- Shopping Cart Drawer -->

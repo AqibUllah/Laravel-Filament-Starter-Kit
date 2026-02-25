@@ -106,9 +106,9 @@
             </div>
             <div class="hidden md:flex items-center space-x-8">
                 <a href="{{ route('marketplace.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Marketplace</a>
-                <a href="#features" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Features</a>
-                <a href="#pricing" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Pricing</a>
-                <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">About</a>
+                <a href="{{ route('home') }}#features" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Features</a>
+                <a href="{{ route('home') }}#pricing" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">Pricing</a>
+                <a href="{{ route('home') }}#about" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">About</a>
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/dashboard') }}" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
@@ -155,9 +155,9 @@
     <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
         <div class="px-4 py-4 space-y-4">
             <a href="{{ route('marketplace.index') }}" class="block text-gray-700 dark:text-gray-300">Marketplace</a>
-            <a href="#features" class="block text-gray-700 dark:text-gray-300">Features</a>
-            <a href="#pricing" class="block text-gray-700 dark:text-gray-300">Pricing</a>
-            <a href="#about" class="block text-gray-700 dark:text-gray-300">About</a>
+            <a href="{{ route('home') }}#features" class="block text-gray-700 dark:text-gray-300">Features</a>
+            <a href="{{ route('home') }}#pricing" class="block text-gray-700 dark:text-gray-300">Pricing</a>
+            <a href="{{ route('home') }}#about" class="block text-gray-700 dark:text-gray-300">About</a>
             @if (Route::has('login'))
                 @auth
                     <a href="{{ url('/dashboard') }}" class="block px-4 py-2 bg-purple-600 text-white rounded-lg text-center">
@@ -182,22 +182,6 @@
             @yield('content')
         </main>
 
-        <!-- Newsletter Section -->
-        <section class="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Stay Updated</h2>
-            <p class="text-xl text-blue-100 mb-8">Get the latest products and exclusive offers delivered to your inbox</p>
-
-            <form class="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
-                <input type="email" placeholder="Enter your email"
-                       class="flex-1 px-6 py-4 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white">
-                <button type="submit" class="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
-                    Subscribe
-                </button>
-            </form>
-        </div>
-    </section>
-
         <!-- Footer -->
         <footer id="about" class="bg-gray-900 text-gray-300 py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -211,8 +195,8 @@
                     <div>
                         <h4 class="text-white font-semibold mb-4">Product</h4>
                         <ul class="space-y-2">
-                            <li><a href="#features" class="hover:text-white transition">Features</a></li>
-                            <li><a href="#pricing" class="hover:text-white transition">Pricing</a></li>
+                            <li><a href="{{ route('home') }}#features" class="hover:text-white transition">Features</a></li>
+                            <li><a href="{{ route('home') }}#pricing" class="hover:text-white transition">Pricing</a></li>
                             <li><a href="#" class="hover:text-white transition">Documentation</a></li>
                         </ul>
                     </div>

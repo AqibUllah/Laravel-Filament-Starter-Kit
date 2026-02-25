@@ -1,47 +1,98 @@
-<!-- Shopping Cart Drawer -->
-{{--    <div id="cart-drawer" class="fixed inset-0 overflow-hidden z-50" style="display: none;">--}}
-{{--        <div class="absolute inset-0 overflow-hidden">--}}
-{{--            <div class="absolute inset-0  bg-opacity-30 backdrop-blur-xs transition-opacity" onclick="toggleCart()"></div>--}}
-
-{{--            <div id="cart-panel" class="fixed inset-y-0 right-0 pl-10 max-w-full flex transform translate-x-full transition-transform duration-500 ease-in-out">--}}
-{{--                <div class="w-screen max-w-md h-full flex flex-col bg-white shadow-xl">--}}
-{{--                    <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">--}}
-{{--                        <div class="flex items-start justify-between">--}}
-{{--                            <h2 class="text-lg font-medium text-gray-900">Shopping Cart</h2>--}}
-{{--                            <button onclick="toggleCart()" class="ml-3 h-7 flex items-center">--}}
-{{--                                <svg class="h-6 w-6 text-gray-400 hover:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">--}}
-{{--                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>--}}
-{{--                                </svg>--}}
-{{--                            </button>--}}
-{{--                        </div>--}}
-
-{{--                        <div class="mt-8" id="cart-content">--}}
-{{--                            <!-- Cart items will be loaded here -->--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                        <div class="border-t border-gray-200 py-6 px-4 sm:px-6">--}}
-{{--                            <div class="flex justify-between text-base font-medium text-gray-900">--}}
-{{--                                <p>Subtotal</p>--}}
-{{--                                <p id="cart-subtotal">$0.00</p>--}}
-{{--                            </div>--}}
-{{--                            <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>--}}
-{{--                            <div class="mt-6">--}}
-{{--                                <a href="{{ route('marketplace.checkout') }}" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700">--}}
-{{--                                    Checkout--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-{{--                            <div class="mt-6 flex justify-center text-sm text-center text-gray-500">--}}
-{{--                                <p>or <button @click="open = false" class="text-blue-600 font-medium hover:text-blue-500">Continue Shopping<span aria-hidden="true"> →</span></button></p>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-
 
 <!-- Shopping Cart Drawer -->
+@push('styles')
+    <style>
+        /* Cart drawer specific styles */
+        .slide-in {
+            transform: translateX(0) !important;
+        }
+
+        .slide-out {
+            transform: translateX(100%) !important;
+        }
+
+        /* Initial state for cart panel */
+        #cart-panel {
+            transform: translateX(0);
+        }
+
+        /* Cart panel transition */
+        #cart-panel {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Cart count badge animation */
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-bounce-in {
+            animation: bounce-in 0.3s ease-out;
+        }
+
+        /* Custom scrollbar for cart items */
+        #cart-items-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #cart-items-container::-webkit-scrollbar-track {
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+
+        #cart-items-container::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        #cart-items-container::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        /* Dark mode scrollbar */
+        .dark #cart-items-container::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        .dark #cart-items-container::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+
+        .dark #cart-items-container::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+
+        /* Loading skeleton animation */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        .dark .skeleton {
+            background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+        }
+    </style>
+@endpush
+
 <div id="cart-drawer" class="fixed inset-0 overflow-hidden z-50" style="display: none;">
     <div class="absolute inset-0 overflow-hidden">
         <!-- Backdrop with blur effect - Fixed missing bg class -->
