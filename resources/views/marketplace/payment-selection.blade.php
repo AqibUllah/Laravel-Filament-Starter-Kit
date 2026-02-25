@@ -265,10 +265,11 @@
         <input type="hidden" name="order_ids" value="{{ $orders->pluck('id')->implode(',') }}">
     </form>
 
-    <!-- Loading Overlay -->
+    <!-- Loading/Error Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden transition-opacity duration-300">
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl dark:shadow-purple-900/30 transform scale-95 animate-modal-pop">
-            <div class="flex flex-col items-center">
+            <!-- Loading State -->
+            <div id="loadingState" class="flex flex-col items-center">
                 <!-- Animated Loader -->
                 <div class="relative mb-4">
                     <div class="w-16 h-16 border-4 border-gray-200 dark:border-gray-700 border-t-blue-600 dark:border-t-purple-600 rounded-full animate-spin"></div>
@@ -278,6 +279,42 @@
                 </div>
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Processing Payment</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400 text-center">Please wait while we redirect you to the payment gateway...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="flex flex-col items-center hidden">
+                <!-- Error Icon -->
+                <div class="relative mb-4">
+                    <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center animate-bounce-subtle">
+                        <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <!-- Animated error rings -->
+                    <div class="absolute inset-0 bg-red-400 dark:bg-red-500 rounded-full animate-ping opacity-25"></div>
+                </div>
+                <h3 id="errorTitle" class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Payment Error</h3>
+                <p id="errorMessage" class="text-sm text-gray-600 dark:text-gray-400 text-center mb-6">An error occurred while processing your payment. Please try again.</p>
+                
+                <!-- Error Details (hidden by default) -->
+                <div id="errorDetails" class="hidden mb-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                    <p id="errorDetailsText" class="text-xs text-red-700 dark:text-red-300 font-mono"></p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3 w-full">
+                    <button id="retryBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-purple-600 dark:to-pink-600 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-indigo-700 dark:hover:from-purple-700 dark:hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            Try Again
+                        </span>
+                    </button>
+                    <button id="closeErrorBtn" class="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300">
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -385,6 +422,15 @@
             animation: modal-pop 0.3s ease-out forwards;
         }
 
+        @keyframes slide-in {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .animate-slide-in {
+            animation: slide-in 0.3s ease-out forwards;
+        }
+
         /* Animation Delays */
         .animation-delay-150 {
             animation-delay: 150ms;
@@ -443,8 +489,62 @@
             const paymentForm = document.getElementById('paymentForm');
             const selectedMethodInput = document.getElementById('selectedPaymentMethod');
             const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingState = document.getElementById('loadingState');
+            const errorState = document.getElementById('errorState');
+            const errorTitle = document.getElementById('errorTitle');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorDetails = document.getElementById('errorDetails');
+            const errorDetailsText = document.getElementById('errorDetailsText');
+            const retryBtn = document.getElementById('retryBtn');
+            const closeErrorBtn = document.getElementById('closeErrorBtn');
 
             let selectedMethod = 'stripe'; // Default selection
+
+            // Show loading state
+            function showLoading() {
+                loadingOverlay.classList.remove('hidden');
+                loadingState.classList.remove('hidden');
+                errorState.classList.add('hidden');
+                
+                // Add entrance animation
+                const modal = loadingOverlay.firstElementChild;
+                modal.classList.add('animate-modal-pop');
+            }
+
+            // Show error state
+            function showError(title = 'Payment Error', message = 'An error occurred while processing your payment. Please try again.', details = null) {
+                loadingOverlay.classList.remove('hidden');
+                loadingState.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                
+                // Update error content
+                errorTitle.textContent = title;
+                errorMessage.textContent = message;
+                
+                if (details) {
+                    errorDetailsText.textContent = details;
+                    errorDetails.classList.remove('hidden');
+                } else {
+                    errorDetails.classList.add('hidden');
+                }
+                
+                // Add entrance animation
+                const modal = loadingOverlay.firstElementChild;
+                modal.classList.add('animate-modal-pop');
+            }
+
+            // Hide overlay
+            function hideOverlay() {
+                const modal = loadingOverlay.firstElementChild;
+                modal.style.transform = 'scale(0.9)';
+                modal.style.opacity = '0';
+                
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                    modal.style.transform = '';
+                    modal.style.opacity = '';
+                }, 300);
+            }
 
             // Handle payment method selection with animation
             paymentCards.forEach(card => {
@@ -494,12 +594,8 @@
                 this.classList.add('opacity-75', 'cursor-not-allowed');
 
                 try {
-                    // Show loading overlay with animation
-                    loadingOverlay.classList.remove('hidden');
-
-                    // Add entrance animation
-                    const modal = loadingOverlay.firstElementChild;
-                    modal.classList.add('animate-modal-pop');
+                    // Show loading overlay
+                    showLoading();
 
                     // Submit form via AJAX
                     const formData = new FormData(paymentForm);
@@ -516,6 +612,7 @@
 
                     if (result.success && result.payment_url) {
                         // Add exit animation before redirect
+                        const modal = loadingOverlay.firstElementChild;
                         modal.style.transform = 'scale(0.9)';
                         modal.style.opacity = '0';
 
@@ -523,30 +620,62 @@
                             window.location.href = result.payment_url;
                         }, 300);
                     } else {
-                        // Hide loading and show error
+                        // Show error state
                         setTimeout(() => {
-                            loadingOverlay.classList.add('hidden');
+                            showError(
+                                'Payment Failed',
+                                result.message || 'Payment initiation failed. Please try again.',
+                                result.error ? JSON.stringify(result.error, null, 2) : null
+                            );
+                            
+                            // Reset button
                             this.innerHTML = originalText;
                             this.disabled = false;
                             this.classList.remove('opacity-75', 'cursor-not-allowed');
-
-                            // Show error message with animation
-                            showNotification(result.message || 'Payment initiation failed. Please try again.', 'error');
                         }, 300);
                     }
                 } catch (error) {
                     console.error('Payment error:', error);
 
-                    // Hide loading and show error
+                    // Show error state
                     setTimeout(() => {
-                        loadingOverlay.classList.add('hidden');
+                        showError(
+                            'Network Error',
+                            'Unable to connect to payment server. Please check your internet connection and try again.',
+                            error.message
+                        );
+                        
+                        // Reset button
                         this.innerHTML = originalText;
                         this.disabled = false;
                         this.classList.remove('opacity-75', 'cursor-not-allowed');
-
-                        showNotification('Payment initiation failed. Please try again.', 'error');
                     }, 300);
                 }
+            });
+
+            // Handle retry button click
+            retryBtn.addEventListener('click', function() {
+                hideOverlay();
+                // Trigger the payment process again
+                continueBtn.click();
+            });
+
+            // Handle close error button click
+            closeErrorBtn.addEventListener('click', function() {
+                hideOverlay();
+                // Reset button
+                const originalText = continueBtn.innerHTML;
+                continueBtn.innerHTML = `
+            <span class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+            <span class="relative flex items-center justify-center gap-2">
+                <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Continue to Payment
+            </span>
+        `;
+                continueBtn.disabled = false;
+                continueBtn.classList.remove('opacity-75', 'cursor-not-allowed');
             });
 
             // Set initial active state with animation
@@ -559,7 +688,27 @@
                 }, 100);
             }
 
-            // Notification function
+            // Close loading overlay on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !loadingOverlay.classList.contains('hidden')) {
+                    if (!errorState.classList.contains('hidden')) {
+                        closeErrorBtn.click();
+                    } else {
+                        hideOverlay();
+                    }
+                }
+            });
+
+            // Show flash messages from session
+            @if(session('error'))
+                showError('Payment Error', '{{ session('error') }}');
+            @endif
+
+            @if(session('success'))
+                showNotification('{{ session('success') }}', 'success');
+            @endif
+
+            // Notification function (for success messages)
             function showNotification(message, type = 'error') {
                 const notification = document.createElement('div');
                 notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transform translate-x-full animate-slide-in ${
@@ -581,13 +730,6 @@
                     }, 300);
                 }, 3000);
             }
-
-            // Close loading overlay on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && !loadingOverlay.classList.contains('hidden')) {
-                    loadingOverlay.classList.add('hidden');
-                }
-            });
         });
     </script>
 @endpush

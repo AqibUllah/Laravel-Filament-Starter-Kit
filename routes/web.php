@@ -46,6 +46,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/coupons/stats', [CouponController::class, 'stats']);
 });
 
+// PayPal Payment Routes
+Route::prefix('payment/paypal')->name('payment.paypal.')->group(function () {
+    Route::get('/return', [MarketplaceController::class, 'paypalReturn'])->name('return');
+    Route::get('/cancel', [MarketplaceController::class, 'paypalCancel'])->name('cancel');
+});
+
 // Webhook routes
 Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handleWebhook']);
 Route::post('/webhooks/stripe/test', [StripeWebhookController::class, 'handleTestWebhook']);

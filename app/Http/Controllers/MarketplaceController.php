@@ -461,13 +461,19 @@ class MarketplaceController extends Controller
             // Create payment intent for all orders
             $paymentResult = $paymentService->createCheckoutSession($orders->first());
 
-            return response()->json([
-                'success' => $paymentResult['success'],
-                'error'   => null,
-                'payment_url' => $paymentResult['checkout_url'] ?? null,
-                'session_id' => $paymentResult['session_id'] ?? null,
-                'message' => 'Payment initiated successfully.',
-            ]);
+            if ($paymentResult['success']) {
+                return response()->json([
+                    'success' => true,
+                    'payment_url' => $paymentResult['approval_url'] ?? null,
+                    'message' => 'Payment initiated successfully.',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $paymentResult['error'] ?? 'Payment initiation failed. Please try again.',
+                    'error' => $paymentResult['error'] ?? null,
+                ]);
+            }
 
         } catch (\Exception $e) {
             \Log::error('Payment initiation error: ' . $e->getMessage());
@@ -543,5 +549,66 @@ class MarketplaceController extends Controller
                 'count' => 0
             ], 500);
         }
+    }
+
+    /**
+     * PayPal return callback
+     */
+    public function paypalReturn(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        try {
+            $token = $request->get('token');
+            $payerId = $request->get('PayerID');
+
+            if (!$token) {
+                return redirect()->route('marketplace.payment.cancel', ['order' => $request->get('order_id')])
+                    ->with('error', 'Invalid PayPal response.');
+            }
+
+            // Find the order by PayPal order ID
+            $order = \App\Models\Order::where('paypal_order_id', $token)->first();
+
+            if (!$order) {
+                return redirect()->route('marketplace.payment.cancel', ['order' => $request->get('order_id')])
+                    ->with('error', 'Order not found.');
+            }
+
+            // Process the PayPal payment
+            $paymentService = $this->paymentManager->driver('paypal');
+            $result = $paymentService->processPayment([
+                'token' => $token,
+                'PayerID' => $payerId,
+            ]);
+
+            if ($result['success']) {
+                return redirect()->route('marketplace.payment.success', ['order' => $order->id])
+                    ->with('success', 'Payment completed successfully!');
+            }
+
+            return redirect()->route('marketplace.payment.cancel', ['order' => $order->id])
+                ->with('error', $result['error'] ?? 'Payment failed.');
+
+        } catch (\Exception $e) {
+            \Log::error('PayPal return error: ' . $e->getMessage());
+            
+            return redirect()->route('marketplace.payment.cancel', ['order' => $request->get('order_id')])
+                ->with('error', 'An error occurred while processing your payment.');
+        }
+    }
+
+    /**
+     * PayPal cancel callback
+     */
+    public function paypalCancel(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $orderId = $request->get('order_id');
+        
+        if ($orderId) {
+            return redirect()->route('marketplace.payment.cancel', ['order' => $orderId])
+                ->with('info', 'Payment was cancelled.');
+        }
+
+        return redirect()->route('marketplace.cart')
+            ->with('info', 'Payment was cancelled.');
     }
 }
