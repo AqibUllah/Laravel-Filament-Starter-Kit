@@ -464,7 +464,7 @@ class MarketplaceController extends Controller
             if ($paymentResult['success']) {
                 return response()->json([
                     'success' => true,
-                    'payment_url' => $paymentResult['approval_url'] ?? null,
+                    'payment_url' => $paymentResult['checkout_url'] ?? null,
                     'message' => 'Payment initiated successfully.',
                 ]);
             } else {
@@ -590,7 +590,7 @@ class MarketplaceController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('PayPal return error: ' . $e->getMessage());
-            
+
             return redirect()->route('marketplace.payment.cancel', ['order' => $request->get('order_id')])
                 ->with('error', 'An error occurred while processing your payment.');
         }
@@ -602,7 +602,7 @@ class MarketplaceController extends Controller
     public function paypalCancel(Request $request): \Illuminate\Http\RedirectResponse
     {
         $orderId = $request->get('order_id');
-        
+
         if ($orderId) {
             return redirect()->route('marketplace.payment.cancel', ['order' => $orderId])
                 ->with('info', 'Payment was cancelled.');

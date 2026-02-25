@@ -50,14 +50,14 @@ class PayPalPaymentService implements PaymentInterface
                 // Store PayPal order ID
                 $order->paypal_order_id = $response['id'];
                 $order->save();
-                
+
                 $approvalUrl = collect($response['links'])
                     ->firstWhere('rel', 'approve')['href'] ?? null;
 
                 return [
                     'success' => true,
                     'order_id' => $response['id'],
-                    'approval_url' => $approvalUrl,
+                    'checkout_url' => $approvalUrl,
                 ];
             }
 
@@ -121,14 +121,14 @@ class PayPalPaymentService implements PaymentInterface
     {
         $webhookId = config('services.paypal.webhook_id');
         $certId = config('services.paypal.cert_id');
-        
+
         $headers = getallheaders();
         $authAlgo = $headers['PAYPAL-AUTH-ALGO'] ?? '';
         $transmissionId = $headers['PAYPAL-TRANSMISSION-ID'] ?? '';
         $certUrl = $headers['PAYPAL-CERT-ID'] ?? '';
         $transmissionSig = $headers['PAYPAL-TRANSMISSION-SIG'] ?? '';
         $transmissionTime = $headers['PAYPAL-TRANSMISSION-TIME'] ?? '';
-        
+
         $verificationData = [
             'cert_id' => $certId,
             'auth_algo' => $authAlgo,
@@ -174,13 +174,13 @@ class PayPalPaymentService implements PaymentInterface
     {
         $customId = $resource['custom_id'] ?? null;
         $orderId = (int) $customId;
-        
+
         $order = Order::find($orderId);
-        
+
         if ($order && $order->canBePaid()) {
             $transactionId = $resource['id'] ?? null;
             $order->markAsPaid($transactionId);
-            
+
             Log::info('Order marked as paid via PayPal webhook', [
                 'order_id' => $order->id,
                 'transaction_id' => $transactionId,
@@ -192,13 +192,13 @@ class PayPalPaymentService implements PaymentInterface
     {
         $customId = $resource['custom_id'] ?? null;
         $orderId = (int) $customId;
-        
+
         $order = Order::find($orderId);
-        
+
         if ($order && $order->payment_status === PaymentStatus::Pending) {
             $order->payment_status = PaymentStatus::Failed;
             $order->save();
-            
+
             Log::info('Order marked as failed via PayPal webhook', [
                 'order_id' => $order->id,
             ]);
@@ -277,13 +277,13 @@ class PayPalPaymentService implements PaymentInterface
             $purchaseUnit = $response['purchase_units'][0] ?? [];
             $customId = $purchaseUnit['custom_id'] ?? null;
             $orderId = (int) $customId;
-            
+
             $order = Order::find($orderId);
-            
+
             if ($order && $order->canBePaid()) {
                 $captureId = $purchaseUnit['payments']['captures'][0]['id'] ?? null;
                 $order->markAsPaid($captureId);
-                
+
                 return $order;
             }
         }
