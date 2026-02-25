@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\PriorityEnum;
 use App\Enums\TaskStatusEnum;
 use App\Events\TaskAssigned;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -87,34 +89,41 @@ class Task extends Model
     }
 
     // Scopes
-    public function scopePending($query)
+
+    #[Scope]
+    public function pending(Builder $query): void
     {
-        return $query->where('status', TaskStatusEnum::Pending);
+        $query->where('status', TaskStatusEnum::Pending);
     }
 
-    public function scopeInProgress($query)
+    #[Scope]
+    public function inProgress(Builder $query): void
     {
-        return $query->where('status', TaskStatusEnum::InProgress);
+        $query->where('status', TaskStatusEnum::InProgress);
     }
 
-    public function scopeCompleted($query)
+    #[Scope]
+    public function completed(Builder $query): void
     {
-        return $query->where('status', TaskStatusEnum::Completed);
+        $query->where('status', TaskStatusEnum::Completed);
     }
 
-    public function scopeOverdue($query)
+    #[Scope]
+    public function overdue(Builder $query): void
     {
-        return $query->where('due_date', '<', now())->whereNotIn('status', ['completed', 'cancelled']);
+        $query->where('due_date', '<', now())->whereNotIn('status', ['completed', 'cancelled']);
     }
 
-    public function scopeForUser($query, $userId)
+    #[Scope]
+    public function forUser(Builder $query, int $userId): void
     {
-        return $query->where('assigned_to', $userId);
+        $query->where('assigned_to', $userId);
     }
 
-    public function scopeForMe($query)
+    #[Scope]
+    public function forMe(Builder $query): void
     {
-        return $query->where('assigned_to', auth()->id());
+        $query->where('assigned_to', auth()->id());
     }
 
     // Helper methods

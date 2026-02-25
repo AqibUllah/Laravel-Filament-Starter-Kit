@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -62,26 +63,28 @@ class Usage extends Model
      * Scope to get usage for a specific billing period
      */
     #[Scope]
-    public function forBillingPeriod($query, $start, $end)
+    public function forBillingPeriod(Builder $query, $start, $end): void
     {
-        return $query->whereBetween('billing_period_start', [$start, $end])
+        $query->whereBetween('billing_period_start', [$start, $end])
             ->orWhereBetween('billing_period_end', [$start, $end]);
     }
 
     /**
      * Scope to get usage for a specific metric
      */
-    public function scopeForMetric($query, $metricName)
+    #[Scope]
+    public function forMetric(Builder $query, string $metricName): void
     {
-        return $query->where('metric_name', $metricName);
+        $query->where('metric_name', $metricName);
     }
 
     /**
      * Scope to get usage for a specific team
      */
-    public function scopeForTeam($query, $teamId)
+    #[Scope]
+    public function forTeam(Builder $query, int $teamId): void
     {
-        return $query->where('team_id', $teamId);
+        $query->where('team_id', $teamId);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,19 +52,23 @@ class Category extends Model
     }
 
     // Scopes
-    public function scopeActive($query)
+
+    #[Scope]
+    public function active(Builder $query): void
     {
-        return $query->where('is_active', true);
+        $query->where('is_active', true);
     }
 
-    public function scopeRoot($query)
+    #[Scope]
+    public function root(Builder $query): void
     {
-        return $query->whereNull('parent_id');
+        $query->whereNull('parent_id');
     }
 
-    public function scopeOrdered($query)
+    #[Scope]
+    public function ordered(Builder $query): void
     {
-        return $query->orderBy('sort_order')->orderBy('name');
+        $query->orderBy('sort_order')->orderBy('name');
     }
 
     // Helper Methods

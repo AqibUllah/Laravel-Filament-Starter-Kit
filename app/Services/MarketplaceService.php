@@ -212,12 +212,41 @@ class MarketplaceService
     }
 
     /**
+     * Get marketplace stats (products and sellers count) with caching
+     */
+    public function getMarketplaceStats(): array
+    {
+        return Cache::remember('marketplace_stats', now()->addMinutes(15), function () {
+            // Get public products count (optimized query)
+            $productsCount = Product::query()
+                ->public()
+                ->active()
+                ->whereHas('team', function (Builder $query) {
+                    $query->where('status', true);
+                })
+                ->count();
+
+            // Get active sellers count (tenants with public products)
+            $sellersCount = Team::query()
+                ->where('status', true)
+                ->whereHas('products', fn (Builder $query) => $query->public()->active())
+                ->count();
+
+            return [
+                'products_count' => $productsCount,
+                'sellers_count' => $sellersCount,
+            ];
+        });
+    }
+
+    /**
      * Clear marketplace cache
      */
     public function clearCache(): void
     {
         Cache::forget('marketplace_public_categories');
         Cache::forget('marketplace_featured_products');
+        Cache::forget('marketplace_stats');
 
         // Clear all product cache keys
         $cacheKeys = Cache::getRedis()?->keys('marketplace_public_products_*') ?? [];

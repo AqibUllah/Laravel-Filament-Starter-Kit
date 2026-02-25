@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,34 +66,41 @@ class Product extends Model
     }
 
     // Scopes
-    public function scopeActive($query)
+
+    #[Scope]
+    public function active(Builder $query): void
     {
-        return $query->where('is_active', true);
+        $query->where('is_active', true);
     }
 
-    public function scopeFeatured($query)
+    #[Scope]
+    public function featured(Builder $query): void
     {
-        return $query->where('is_featured', true);
+        $query->where('is_featured', true);
     }
 
-    public function scopeInStock($query)
+    #[Scope]
+    public function inStock(Builder $query): void
     {
-        return $query->where('quantity', '>', 0);
+        $query->where('quantity', '>', 0);
     }
 
-    public function scopeLowStock($query)
+    #[Scope]
+    public function lowStock(Builder $query): void
     {
-        return $query->whereRaw('quantity <= min_stock_level');
+        $query->whereRaw('quantity <= min_stock_level');
     }
 
-    public function scopePublic($query)
+    #[Scope]
+    public function public(Builder $query): void
     {
-        return $query->where('is_public', true);
+        $query->where('is_public', true);
     }
 
-    public function scopePublicAndActive($query)
+    #[Scope]
+    public function publicAndActive(Builder $query): void
     {
-        return $query->where('is_public', true)->where('is_active', true);
+        $query->where('is_public', true)->where('is_active', true);
     }
 
     // Helper Methods

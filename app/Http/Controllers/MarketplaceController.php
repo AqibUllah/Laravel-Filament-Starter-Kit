@@ -30,8 +30,9 @@ class MarketplaceController extends Controller
         $categories = $this->marketplaceService->getPublicCategories();
         $featuredProducts = $this->marketplaceService->getFeaturedProducts();
         $teams = $this->marketplaceService->getPublicTeams();
+        $stats = $this->marketplaceService->getMarketplaceStats();
 
-        return view('marketplace.index', compact('products', 'categories', 'featuredProducts', 'teams'));
+        return view('marketplace.index', compact('products', 'categories', 'featuredProducts', 'teams', 'stats'));
     }
 
     /**

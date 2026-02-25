@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -55,15 +57,19 @@ class File extends Model
     }
 
     // Scope for team files
-    public function scopeForTeam($query, $teamId)
+
+    #[Scope]
+    public function forTeam(Builder $query, int $teamId): void
     {
-        return $query->where('team_id', $teamId);
+        $query->where('team_id', $teamId);
     }
 
     // Scope for specific fileable type
-    public function scopeForFileable($query, $fileableType, $fileableId)
+
+    #[Scope]
+    public function forFileable(Builder $query, string $fileableType, int $fileableId): void
     {
-        return $query->where('fileable_type', $fileableType)
+        $query->where('fileable_type', $fileableType)
                     ->where('fileable_id', $fileableId);
     }
 }

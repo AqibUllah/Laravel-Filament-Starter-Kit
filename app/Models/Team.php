@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,6 +50,15 @@ class Team extends Model
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class)->withoutGlobalScopes();
+    }
+
+    /**
+     * Scope a query to only include popular users.
+     */
+    #[Scope]
+    protected function popular(Builder $query): void
+    {
+        $query->where('status',  true);
     }
 
     public function hasActiveSubscription(): bool

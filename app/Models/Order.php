@@ -8,6 +8,8 @@ use App\Enums\PaymentStatus;
 use App\Events\OrderCancelled;
 use App\Events\OrderPaid;
 use App\Events\OrderShipped;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -86,19 +88,22 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function scopeForTeam($query, $teamId)
+    #[Scope]
+    public function forTeam(Builder $query, int $teamId): void
     {
-        return $query->where('team_id', $teamId);
+        $query->where('team_id', $teamId);
     }
 
-    public function scopeWithStatus($query, OrderStatus $status)
+    #[Scope]
+    public function withStatus(Builder $query, OrderStatus $status): void
     {
-        return $query->where('order_status', $status->value);
+        $query->where('order_status', $status->value);
     }
 
-    public function scopeWithPaymentStatus($query, PaymentStatus $status)
+    #[Scope]
+    public function withPaymentStatus(Builder $query, PaymentStatus $status): void
     {
-        return $query->where('payment_status', $status->value);
+        $query->where('payment_status', $status->value);
     }
 
     public function isPaid(): bool

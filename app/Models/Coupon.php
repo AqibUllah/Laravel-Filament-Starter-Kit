@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -63,9 +65,11 @@ class Coupon extends Model
     }
 
     // Scopes
-    public function scopeActive($query)
+
+    #[Scope]
+    public function active(Builder $query): void
     {
-        return $query->where('is_active', true)
+        $query->where('is_active', true)
             ->where('valid_from', '<=', now())
             ->where(function ($q) {
                 $q->whereNull('valid_until')
@@ -73,22 +77,25 @@ class Coupon extends Model
             });
     }
 
-    public function scopeGlobal($query)
+    #[Scope]
+    public function global(Builder $query): void
     {
-        return $query->whereNull('team_id');
+        $query->whereNull('team_id');
     }
 
-    public function scopeForTeam($query, $teamId)
+    #[Scope]
+    public function forTeam(Builder $query, int $teamId): void
     {
-        return $query->where(function ($q) use ($teamId) {
+        $query->where(function ($q) use ($teamId) {
             $q->whereNull('team_id')
                 ->orWhere('team_id', $teamId);
         });
     }
 
-    public function scopeForPlan($query, $planId)
+    #[Scope]
+    public function forPlan(Builder $query, int $planId): void
     {
-        return $query->where(function ($q) use ($planId) {
+        $query->where(function ($q) use ($planId) {
             $q->whereNull('plan_id')
                 ->orWhere('plan_id', $planId);
         });
