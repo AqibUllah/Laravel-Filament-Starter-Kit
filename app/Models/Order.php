@@ -24,6 +24,7 @@ class Order extends Model
         'team_id',
         'user_id',
         'order_number',
+        'paypal_order_id',
         'total_amount',
         'subtotal_amount',
         'tax_amount',

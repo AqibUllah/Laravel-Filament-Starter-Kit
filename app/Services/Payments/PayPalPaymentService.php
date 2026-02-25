@@ -5,13 +5,22 @@ namespace App\Services\Payments;
 use App\Enums\PaymentStatus;
 use App\Models\Order;
 use Illuminate\Support\Facades\Log;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class PayPalPaymentService implements PaymentInterface
 {
+    protected PayPalClient $provider;
+
+    public function __construct()
+    {
+        $this->provider = new PayPalClient();
+        $this->provider->setApiCredentials(config('paypal'));
+        $this->provider->getAccessToken();
+    }
     public function createCheckoutSession(Order $order): array
     {
         try {
-            $payload = [
+            $data = [
                 'intent' => 'CAPTURE',
                 'purchase_units' => [
                     [
@@ -35,9 +44,13 @@ class PayPalPaymentService implements PaymentInterface
                 ],
             ];
 
-            $response = $this->makeRequest('/v2/checkout/orders', 'POST', $payload);
+            $response = $this->provider->createOrder($data);
 
             if (isset($response['id'])) {
+                // Store PayPal order ID
+                $order->paypal_order_id = $response['id'];
+                $order->save();
+                
                 $approvalUrl = collect($response['links'])
                     ->firstWhere('rel', 'approve')['href'] ?? null;
 
@@ -69,16 +82,15 @@ class PayPalPaymentService implements PaymentInterface
     {
         try {
             $paypalOrderId = $data['token'] ?? null;
-            $payerId = $data['PayerID'] ?? null;
 
-            if (!$paypalOrderId || !$payerId) {
+            if (!$paypalOrderId) {
                 return [
                     'success' => false,
                     'error' => 'Missing required PayPal parameters',
                 ];
             }
 
-            $order = $this->capturePayment($paypalOrderId, $payerId);
+            $order = $this->capturePayment($paypalOrderId);
 
             if ($order) {
                 return [
@@ -196,14 +208,14 @@ class PayPalPaymentService implements PaymentInterface
     public function refundPayment(string $transactionId, float $amount): array
     {
         try {
-            $payload = [
+            $data = [
                 'amount' => [
                     'currency_code' => 'USD',
                     'value' => (string) $amount,
                 ],
             ];
 
-            $response = $this->makeRequest("/v2/payments/captures/{$transactionId}/refund", 'POST', $payload);
+            $response = $this->provider->refundCapturedPayment($transactionId, $data);
 
             if (isset($response['id'])) {
                 return [
@@ -234,7 +246,7 @@ class PayPalPaymentService implements PaymentInterface
     public function getPaymentDetails(string $transactionId): array
     {
         try {
-            $response = $this->makeRequest("/v2/payments/captures/{$transactionId}", 'GET');
+            $response = $this->provider->showCapturedPaymentDetails($transactionId);
 
             return [
                 'success' => true,
@@ -257,9 +269,9 @@ class PayPalPaymentService implements PaymentInterface
         }
     }
 
-    protected function capturePayment(string $paypalOrderId, string $payerId): ?Order
+    protected function capturePayment(string $paypalOrderId): ?Order
     {
-        $response = $this->makeRequest("/v2/checkout/orders/{$paypalOrderId}/capture", 'POST');
+        $response = $this->provider->capturePaymentOrder($paypalOrderId);
 
         if (isset($response['status']) && $response['status'] === 'COMPLETED') {
             $purchaseUnit = $response['purchase_units'][0] ?? [];
@@ -277,60 +289,5 @@ class PayPalPaymentService implements PaymentInterface
         }
 
         return null;
-    }
-
-    protected function makeRequest(string $endpoint, string $method = 'GET', array $data = []): array
-    {
-        $baseUrl = config('services.paypal.sandbox') 
-            ? 'https://api-m.sandbox.paypal.com' 
-            : 'https://api-m.paypal.com';
-
-        $accessToken = $this->getAccessToken();
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $baseUrl . $endpoint);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $accessToken,
-        ]);
-
-        if ($method === 'POST') {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        }
-
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if ($httpCode >= 200 && $httpCode < 300) {
-            return json_decode($response, true);
-        }
-
-        throw new \Exception("PayPal API request failed: HTTP {$httpCode}");
-    }
-
-    protected function getAccessToken(): string
-    {
-        $baseUrl = config('services.paypal.sandbox') 
-            ? 'https://api-m.sandbox.paypal.com' 
-            : 'https://api-m.paypal.com';
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $baseUrl . '/v1/oauth2/token');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERPWD, 
-            config('services.paypal.client_id') . ':' . config('services.paypal.client_secret')
-        );
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'grant_type=client_credentials');
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $data = json_decode($response, true);
-        
-        return $data['access_token'] ?? '';
     }
 }
